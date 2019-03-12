@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "yamovie server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yamovie/server.git"
+  },
+  "author": "yamovie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yamovie/server/issues"
+  },
+  "homepage": "https://github.com/yamovie/server#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "lowdb": "^1.0.0",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
