@@ -1,0 +1,402 @@
+{
+  "movies": [
+    {
+      "vote_count": 4,
+      "id": 556173,
+      "video": false,
+      "vote_average": 10,
+      "title": "Requiem for a Fighter",
+      "popularity": 2.107,
+      "poster_path": "/7GR9aqiFp1e6YVEvHz1W8BQWhBG.jpg",
+      "original_language": "en",
+      "original_title": "Requiem for a Fighter",
+      "genre_ids": [18],
+      "backdrop_path": "/jBCnv5yicOasoVQ8ysrBv7Z3ar3.jpg",
+      "adult": false,
+      "overview": "Lucas A former Danish Army Officer has traveled to Derry, Northern Ireland to clear up details of his estranged son's death and finds that there was another side to his son's life and the people he was partied with. These include Michael who has been fighting in unlicensed boxing matches to raise quick cash, trained by his Father who doesn't know Michael is questioning his sexuality. The fights have been building to a final fight against Brian Beru, undefeated King of the gypsy's and a wrecking machine, Michael will need Lucas help if he is to survive.",
+      "release_date": "2018-11-12"
+    },
+    {
+      "vote_count": 3,
+      "id": 550286,
+      "video": false,
+      "vote_average": 10,
+      "title": "Don't Open Your Eyes",
+      "popularity": 4.292,
+      "poster_path": "/fIYTqODecTdoKcY0Gk9g0T0XEpw.jpg",
+      "original_language": "en",
+      "original_title": "Don't Open Your Eyes",
+      "genre_ids": [18, 27],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "A home-care nurse takes a job, but as it proves to be his toughest yet; he is inadvertently pulled into something much more sinister.",
+      "release_date": "2018-10-31"
+    },
+    {
+      "vote_count": 3,
+      "id": 514826,
+      "video": false,
+      "vote_average": 10,
+      "title": "Distant Sky: Nick Cave & The Bad Seeds - Live in Copenhagen",
+      "popularity": 2.206,
+      "poster_path": "/sifqLhz1ZXbmYHll2gryciHA2Sc.jpg",
+      "original_language": "en",
+      "original_title": "Distant Sky: Nick Cave & The Bad Seeds - Live in Copenhagen",
+      "genre_ids": [99],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "Recorded at Copenhagen’s Royal Arena in October 2017, Distant Sky captures an extraordinary and triumphant live concert from Nick Cave & The Bad Seeds. Performing new album Skeleton Tree’s exquisite compositions alongside their essential catalogue, the band’s first shows in 3 years provoked an ecstatic response in fans, critics and band alike, renewing a profound and intimate relationship wherever they played. The band’s acclaimed tour started in Australia in January 2017 before tearing across the USA and ending in Europe, with some of the best reviews of their decorated career.",
+      "release_date": "2018-04-12"
+    },
+    {
+      "vote_count": 3,
+      "id": 496332,
+      "video": false,
+      "vote_average": 10,
+      "title": "KHATA-Kaash Humse Na Hoti",
+      "popularity": 2.444,
+      "poster_path": "/hElu4XTHxbGT2JKMZtrUbvDCpAy.jpg",
+      "original_language": "hi",
+      "original_title": "KHATA-Kaash Humse Na Hoti",
+      "genre_ids": [],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "An upcoming crime movie starring Shahid Kapoor.",
+      "release_date": "2018-08-14"
+    },
+    {
+      "vote_count": 3,
+      "id": 491628,
+      "video": false,
+      "vote_average": 10,
+      "title": "Chanda Mama Door Ke",
+      "popularity": 1.592,
+      "poster_path": null,
+      "original_language": "hi",
+      "original_title": "Chanda Mama Door Ke",
+      "genre_ids": [878, 18],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "A biopic about the Indian space programme.",
+      "release_date": "2018-01-26"
+    },
+    {
+      "vote_count": 3,
+      "id": 491626,
+      "video": false,
+      "vote_average": 10,
+      "title": "Gustakhiyan",
+      "popularity": 1.96,
+      "poster_path": null,
+      "original_language": "hi",
+      "original_title": "Gustakhiyan",
+      "genre_ids": [],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "Based on the life of poet Sahir Ludhianvi.",
+      "release_date": "2018-12-01"
+    },
+    {
+      "vote_count": 3,
+      "id": 415085,
+      "video": false,
+      "vote_average": 10,
+      "title": "All Creatures Here Below",
+      "popularity": 3.224,
+      "poster_path": "/gWhhbE2V1r0YMGH696SpfJ8WDcE.jpg",
+      "original_language": "en",
+      "original_title": "All Creatures Here Below",
+      "genre_ids": [18],
+      "backdrop_path": "/8XdK8BT8You8YYb4eTrVIrLRNah.jpg",
+      "adult": false,
+      "overview": "The story of a desperate young couple on the run, who seek refuge in Kansas City.",
+      "release_date": "2018-10-18"
+    },
+    {
+      "vote_count": 2,
+      "id": 568257,
+      "video": false,
+      "vote_average": 10,
+      "title": "Adventure Time: Come Along With Me",
+      "popularity": 0.744,
+      "poster_path": "/jPk5BAUmHhetBzz1SCBHhfyNVMJ.jpg",
+      "original_language": "en",
+      "original_title": "Adventure Time: Come Along With Me",
+      "genre_ids": [14, 35, 16, 12],
+      "backdrop_path": "/cB1PE4z51rIVSwg6hIbT7obZ483.jpg",
+      "adult": false,
+      "overview": "BMO narrates \"The Great Gum War\" in which Finn, Jake, Marceline, PB and the Candy Kingdom go to war against Gumbald and his army that will determine the fate of Ooo once and for all.",
+      "release_date": "2018-09-03"
+    },
+    {
+      "vote_count": 2,
+      "id": 564449,
+      "video": false,
+      "vote_average": 10,
+      "title": "Ultra-Girl",
+      "popularity": 3.485,
+      "poster_path": "/vLcbX4Z7QWfrmxraSh1FxI2C3FE.jpg",
+      "original_language": "en",
+      "original_title": "Ultra-Girl",
+      "genre_ids": [18, 14],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "After sinking into a deep depression, riddled with writer's block and frustration, a comic creator is visited by his own caped creation: Ultra-Girl. Will she be able to inspire the man who made her? Or is this the end for both of them?",
+      "release_date": "2018-11-01"
+    },
+    {
+      "vote_count": 2,
+      "id": 560034,
+      "video": false,
+      "vote_average": 10,
+      "title": "Pocketman and Cargoboy",
+      "popularity": 3.562,
+      "poster_path": "/8MzviwR6DfdCt0izHbj0DKtKZ1p.jpg",
+      "original_language": "en",
+      "original_title": "Pocketman and Cargoboy",
+      "genre_ids": [12, 35, 878],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "Teenage secret agents must travel to the past and stop an evil doctor from creating a virus that wipes out all life in the future.",
+      "release_date": "2018-10-12"
+    },
+    {
+      "vote_count": 2,
+      "id": 549550,
+      "video": false,
+      "vote_average": 10,
+      "title": "Brutal",
+      "popularity": 0.604,
+      "poster_path": "/uAl6Q47rrPYJvqVzFnKVbAZoOap.jpg",
+      "original_language": "fr",
+      "original_title": "Brutal",
+      "genre_ids": [27, 28, 14],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "",
+      "release_date": "2018-04-21"
+    },
+    {
+      "vote_count": 2,
+      "id": 548876,
+      "video": false,
+      "vote_average": 10,
+      "title": "Mother and I",
+      "popularity": 0.6,
+      "poster_path": "/zjGC2twdjQl2UM5rM7N4b5GXEfu.jpg",
+      "original_language": "en",
+      "original_title": "Mother and I",
+      "genre_ids": [53],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "A young man uncovers the dark reality of a traumatic event.",
+      "release_date": "2018-05-05"
+    },
+    {
+      "vote_count": 2,
+      "id": 548682,
+      "video": false,
+      "vote_average": 10,
+      "title": "No One Would Tell",
+      "popularity": 4.759,
+      "poster_path": "/cqx875MTqawWQFDLWrKR1KkSZ9e.jpg",
+      "original_language": "en",
+      "original_title": "No One Would Tell",
+      "genre_ids": [18, 53, 9648, 10770],
+      "backdrop_path": "/lupaY5QeER9J954azDn9YYV3pyU.jpg",
+      "adult": false,
+      "overview": "Laura Collins (Shannen Doherty), single mom to daughter Sarah (Matreya Scarrwener), has had a history of rocky relationships, so when Sarah begins dating the popular and charismatic Rob Tennison (Callan Potter), Laura is thrilled with what she sees. But when it becomes increasingly clear that Rob has a darker, possessive side, Laura lives in a state of denial about her daughter’s relationship until Sarah goes missing. Laura must find the will to fight for justice for Sarah when a case against Rob is brought to trial and presided over by a powerful judge (Mira Sorvino).",
+      "release_date": "2018-09-16"
+    },
+    {
+      "vote_count": 2,
+      "id": 544308,
+      "video": false,
+      "vote_average": 10,
+      "title": "Foreign Body",
+      "popularity": 3.126,
+      "poster_path": "/wtVfS0Y8sWcb1DSpnRKRQEL4RBF.jpg",
+      "original_language": "sr",
+      "original_title": "Strano telo",
+      "genre_ids": [18],
+      "backdrop_path": "/6tBZJ9z5zv0gU3E3N0sRRLyXoeM.jpg",
+      "adult": false,
+      "overview": "Willing to prove his manhood to his handsome buddies, Marko tries to find a girl. In the encounter with a victim of a past sexual trauma he discovers an aggressive part of himself.",
+      "release_date": "2018-08-30"
+    },
+    {
+      "vote_count": 2,
+      "id": 541076,
+      "video": false,
+      "vote_average": 10,
+      "title": "The Revenge of Lemonade Bill",
+      "popularity": 0.799,
+      "poster_path": "/t1TKPNL72QHUIcYWSuQdRBhgb13.jpg",
+      "original_language": "pt",
+      "original_title": "A Vingança de Bill Limonada",
+      "genre_ids": [35, 37],
+      "backdrop_path": "/wl76pYwHXwMOVK3wkaBVYFIlNPP.jpg",
+      "adult": false,
+      "overview": "Limeville, the city of lime, fears it's legacy might be destroyed when the heirs of the land show up to claim the town and replace the lime with oranges. But there's only place for one fruit in this town...",
+      "release_date": "2018-08-11"
+    },
+    {
+      "vote_count": 2,
+      "id": 536720,
+      "video": false,
+      "vote_average": 10,
+      "title": "Winter Will Not Be",
+      "popularity": 2.67,
+      "poster_path": "/ryGCkTvluSNynS8Nu5N3yakHCZj.jpg",
+      "original_language": "ru",
+      "original_title": "Зимы не будет",
+      "genre_ids": [10402],
+      "backdrop_path": "/dYwvl6n4U6DERioNVsOgLg3JNRB.jpg",
+      "adult": false,
+      "overview": "\"There will be no winters\" - a film consisting of 14 short novels, each with its own plot and a musical theme. In fact, this is a screen version of the same album of Russian avant-garde singer Leonid Fedorov.",
+      "release_date": "2018-06-08"
+    },
+    {
+      "vote_count": 2,
+      "id": 536650,
+      "video": false,
+      "vote_average": 10,
+      "title": "Solo",
+      "popularity": 0.6,
+      "poster_path": "/uucyc7PsmvSd5Ser3Uhn22aUnBY.jpg",
+      "original_language": "pt",
+      "original_title": "Solo",
+      "genre_ids": [9648],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "\"Solo\" tells the story of J, a saxophonist who finds a heart beating in his saxophone case, on the eve of his big concert at the International Jazz Show.",
+      "release_date": "2018-06-23"
+    },
+    {
+      "vote_count": 2,
+      "id": 536163,
+      "video": false,
+      "vote_average": 10,
+      "title": "Ace Walker",
+      "popularity": 0.6,
+      "poster_path": "/icTbKr3yIYabbQIGI5r2j22omRF.jpg",
+      "original_language": "en",
+      "original_title": "Ace Walker",
+      "genre_ids": [28],
+      "backdrop_path": "/mHzPoEqhsOMoWuAecq85y8fkBLL.jpg",
+      "adult": false,
+      "overview": "CIA agent Ace Walker (Eddie Daou) is on his latest mission - retrieve a drive containing the names of every CIA agent ever.",
+      "release_date": "2018-03-18"
+    },
+    {
+      "vote_count": 2,
+      "id": 534719,
+      "video": false,
+      "vote_average": 10,
+      "title": "Bossferatu",
+      "popularity": 0.6,
+      "poster_path": "/6mHVcXB44OOku0y82EHUNNJSRW5.jpg",
+      "original_language": "de",
+      "original_title": "Bossferatu",
+      "genre_ids": [35, 99, 18],
+      "backdrop_path": "/bOPs76Jji2KrwTq2xXlDy5AxTm9.jpg",
+      "adult": false,
+      "overview": "The true story of Germany's biggest Boy Band.  Follow Adam and Tjark on their miraculous quest to bring the band back together.  Includes exclusive Interviews and brand new behind-the-scenes material.",
+      "release_date": "2018-07-13"
+    },
+    {
+      "vote_count": 2,
+      "id": 532448,
+      "video": false,
+      "vote_average": 10,
+      "title": "Samantha Hudson, a story about faith, sex and electro-queer",
+      "popularity": 0.6,
+      "poster_path": "/5bOQ7JaVTi5ZJVA5qXwfsoSzhFe.jpg",
+      "original_language": "es",
+      "original_title": "Samantha Hudson, una historia de fe, sexo y electro-queer",
+      "genre_ids": [99],
+      "backdrop_path": null,
+      "adult": false,
+      "overview": "He was a high school icon and now he's an Instagram icon. Many people admire him, others hate him, but he doesn't leave anyone indifferent. Neither will do this astonishing documentary film where there is a lot of sex, faith and all the queer electronic music in the world.",
+      "release_date": "2018-06-28"
+    }
+  ],
+  "genres": [
+    {
+      "id": 28,
+      "name": "Action"
+    },
+    {
+      "id": 12,
+      "name": "Adventure"
+    },
+    {
+      "id": 16,
+      "name": "Animation"
+    },
+    {
+      "id": 35,
+      "name": "Comedy"
+    },
+    {
+      "id": 80,
+      "name": "Crime"
+    },
+    {
+      "id": 99,
+      "name": "Documentary"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    },
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 36,
+      "name": "History"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 10402,
+      "name": "Music"
+    },
+    {
+      "id": 9648,
+      "name": "Mystery"
+    },
+    {
+      "id": 10749,
+      "name": "Romance"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 10770,
+      "name": "TV Movie"
+    },
+    {
+      "id": 53,
+      "name": "Thriller"
+    },
+    {
+      "id": 10752,
+      "name": "War"
+    },
+    {
+      "id": 37,
+      "name": "Western"
+    }
+  ]
+}
