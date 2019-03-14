@@ -5,12 +5,12 @@ const express = require('express');
 
 const logger = require('./middleware/logger');
 const apiRouter = require('./routes/api');
-
-const fs = require('fs');
-const path = require('path');
-const marked = require('marked');
+const seed = require('./routes/seed');
 
 const app = express();
+
+// Seed
+seed();
 
 // Middleware
 app.use(logger);

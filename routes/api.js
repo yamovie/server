@@ -21,18 +21,6 @@ const db = require('../data/db');
  * @return  data of every movie
  */
 router.get('/movies', (req, res) => {
-  if (
-    !db.has('movies').value() ||
-    db
-      .get('movies')
-      .size()
-      .value() === 0
-  ) {
-    console.log('Calling TMDB...');
-    tmdb.seedMovies();
-  }
-
-  console.log('Getting movies...');
   return res.json(db.get('movies').value());
 });
 
@@ -56,20 +44,10 @@ router.get('/movies/:id', (req, res) => {
 
 /**
  * Returns an array of movie genres
+ *
+ * @return  genres
  */
 router.get('/genres', (req, res) => {
-  if (
-    !db.has('genres').value() ||
-    db
-      .get('genres')
-      .size()
-      .value() === 0
-  ) {
-    console.log('Calling TMDB...');
-    tmdb.seedGenres();
-  }
-
-  console.log('GET genres...');
   return res.json(db.get('genres').value());
 });
 
