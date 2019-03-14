@@ -1,22 +1,30 @@
 require('dotenv').config();
-const PORT = process.env.PORT || 5000;
-
-const TMDB_SEARCH_URL = 'https://api.themoviedb.org/3/search/movie?api_key=';
-const TMDB_QUERY_URL =
-  'https://api.themoviedb.org/3/movie/{id}?api_key={api_key}';
+const PORT = process.env.PORT || 5005;
 
 const express = require('express');
 
-const tmdbRouter = require('./routes/tmdb');
+const logger = require('./middleware/logger');
+const apiRouter = require('./routes/api');
+
+const fs = require('fs');
+const path = require('path');
+const marked = require('marked');
 
 const app = express();
 
-const seedDB = require('./data/seed');
-seedDB();
+// Middleware
+app.use(logger);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/tmdb/', tmdbRouter);
+app.get('/', (req, res) => {
+  fs.readFile(path.join(__dirname, 'docs', 'docs.md'), 'utf8', (err, data) => {
+    if (err) console.log(err);
+    res.send(marked(data.toString()));
+  });
+});
+
+app.use('/api', apiRouter);
 
 app.listen(PORT, () => console.log(`Server listening on PORT ${PORT}`));
