@@ -15,6 +15,13 @@ options.init = {
   body: '{}'
 };
 
+options.movie = {
+  method: 'GET',
+  url: 'https://api.themoviedb.org/3/discover/movie',
+  json: true,
+  body: '{}'
+};
+
 options.genres = {
   method: 'GET',
   url: 'https://api.themoviedb.org/3/genre/movie/list',

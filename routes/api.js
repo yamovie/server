@@ -30,16 +30,19 @@ router.get('/movies', (req, res) => {
  * @param   id  the movie id, found in request
  * @return      movie data
  */
-router.get('/movies/:id', (req, res) => {
+router.get('/movies/:id', async (req, res) => {
   const movie = db
     .get('movies')
     .find({ id: parseInt(req.params.id) })
     .value();
 
-  console.log(movie);
-  movie
-    ? res.json(movie)
-    : res.status(404).json({ Error: 'Bad request: Invalid ID' });
+  if (!movie) {
+    res.status(404).json({ Error: 'Bad request: Invalid ID' });
+  } else if (!movie.details) {
+  }
+  await tmdb.getMovieDetails(parseInt(req.params.id));
+
+  res.json(movie);
 });
 
 /**
