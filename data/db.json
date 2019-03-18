@@ -3,22 +3,7 @@
     {
       "id": 550286,
       "title": "Don't Open Your Eyes",
-      "poster_path": "http://image.tmdb.org/t/p/fIYTqODecTdoKcY0Gk9g0T0XEpw.jpg",
-      "details": {
-        "release_date": "2018-10-31",
-        "genres": [
-          {
-            "id": 18,
-            "name": "Drama"
-          },
-          {
-            "id": 27,
-            "name": "Horror"
-          }
-        ],
-        "plot": "A home-care nurse takes a job, but as it proves to be his toughest yet; he is inadvertently pulled into something much more sinister.",
-        "runtime": 87
-      }
+      "poster_path": "http://image.tmdb.org/t/p/fIYTqODecTdoKcY0Gk9g0T0XEpw.jpg"
     },
     {
       "id": 415085,

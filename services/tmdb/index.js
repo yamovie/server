@@ -1,57 +1,78 @@
-const requestPromise = require('request-promise-native');
-const request = require('request');
+const axios = require('axios');
 const db = require('../../data/db');
-const options = require('./options');
 const parser = require('./parser');
 
 let tmdb = {};
 
 tmdb.seedMovies = () => {
-  request(options.init, (err, res, body) => {
-    if (err) throw new Error(err);
+  const qs = {
+    params: {
+      api_key: process.env.TMDB_KEY,
+      region: 'US',
+      language: 'en-US',
+      primary_release_year: 2018,
+      sort_by: 'vote_average.desc',
+      page: 1
+    }
+  };
 
-    // Seed 20 movies
-    body.results.forEach(movie => {
-      const newMovie = parser.movie(movie);
-
-      db.get('movies')
-        .push(newMovie)
-        .write();
+  axios
+    .get('https://api.themoviedb.org/3/discover/movie', qs)
+    .then(res => {
+      res.data.results.forEach(movie => {
+        const newMovie = parser.movie(movie);
+        db.get('movies')
+          .push(newMovie)
+          .write();
+      });
+    })
+    .catch(error => {
+      throw new Error(error);
     });
-  });
 };
 
 tmdb.getMovieDetails = async id => {
-  const options = {
-    method: 'GET',
-    url: `https://api.themoviedb.org/3/movie/${id}`,
-    qs: {
+  const qs = {
+    params: {
       api_key: process.env.TMDB_KEY
-    },
-    json: true,
-    body: '{}'
+    }
   };
 
-  await requestPromise(options).then(body => {
-    const details = parser.details(body);
+  await axios
+    .get(`https://api.themoviedb.org/3/movie/${id}`, qs)
+    .then(res => {
+      const details = parser.details(res.data);
 
-    db.get('movies')
-      .find({ id })
-      .assign({ details })
-      .write();
-  });
+      db.get('movies')
+        .find({ id })
+        .assign({ details })
+        .write();
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
 };
 
 tmdb.seedGenres = () => {
-  request(options.genres, (err, res, body) => {
-    if (err) throw new Error(err);
+  const qs = {
+    params: {
+      language: 'en-US',
+      api_key: process.env.TMDB_KEY
+    }
+  };
 
-    body.genres.forEach(genre => {
-      db.get('genres')
-        .push(genre)
-        .write();
+  axios
+    .get('https://api.themoviedb.org/3/genre/movie/list', qs)
+    .then(res => {
+      res.data.genres.forEach(genre => {
+        db.get('genres')
+          .push(genre)
+          .write();
+      });
+    })
+    .catch(error => {
+      throw new Error(error);
     });
-  });
 };
 
 module.exports = tmdb;
