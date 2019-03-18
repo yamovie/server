@@ -1,11 +1,10 @@
 require('dotenv').config();
-const PORT = process.env.PORT || 5005;
+const PORT = process.env.PORT || 5000;
 
 const express = require('express');
-
 const logger = require('./middleware/logger');
 const apiRouter = require('./routes/api');
-const seed = require('./routes/seed');
+const seed = require('./data/seed');
 
 const app = express();
 

@@ -1,7 +1,7 @@
-const tmdb = require('./tmdb');
-const db = require('../data/db');
+const tmdb = require('../services/tmdb');
+const db = require('./db');
 
-seed = () => {
+const seed = () => {
   if (
     !db.has('movies').value() ||
     db

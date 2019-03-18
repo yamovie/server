@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const tmdb = require('./tmdb');
-const db = require('../data/db');
+const movieController = require('../controllers/movieController');
+const genreController = require('../controllers/genreController');
 
 /**
  * NOTES:
@@ -15,43 +15,9 @@ const db = require('../data/db');
  * All data will be formatted in JSON.
  */
 
-/**
- * Returns all data from every movie.
- *
- * @return  data of every movie
- */
-router.get('/movies', (req, res) => {
-  return res.json(db.get('movies').value());
-});
+router.get('/movies', movieController.movieList);
+router.get('/movies/:id', movieController.movieDetail);
 
-/**
- * Returns all data of a specific movie
- *
- * @param   id  the movie id, found in request
- * @return      movie data
- */
-router.get('/movies/:id', async (req, res) => {
-  const movie = db
-    .get('movies')
-    .find({ id: parseInt(req.params.id) })
-    .value();
-
-  if (!movie) {
-    res.status(404).json({ Error: 'Bad request: Invalid ID' });
-  } else if (!movie.details) {
-  }
-  await tmdb.getMovieDetails(parseInt(req.params.id));
-
-  res.json(movie);
-});
-
-/**
- * Returns an array of movie genres
- *
- * @return  genres
- */
-router.get('/genres', (req, res) => {
-  return res.json(db.get('genres').value());
-});
+router.get('/genres', genreController.genreList);
 
 module.exports = router;

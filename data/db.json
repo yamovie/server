@@ -3,7 +3,22 @@
     {
       "id": 550286,
       "title": "Don't Open Your Eyes",
-      "poster_path": "http://image.tmdb.org/t/p/fIYTqODecTdoKcY0Gk9g0T0XEpw.jpg"
+      "poster_path": "http://image.tmdb.org/t/p/fIYTqODecTdoKcY0Gk9g0T0XEpw.jpg",
+      "details": {
+        "release_date": "2018-10-31",
+        "genres": [
+          {
+            "id": 18,
+            "name": "Drama"
+          },
+          {
+            "id": 27,
+            "name": "Horror"
+          }
+        ],
+        "plot": "A home-care nurse takes a job, but as it proves to be his toughest yet; he is inadvertently pulled into something much more sinister.",
+        "runtime": 87
+      }
     },
     {
       "id": 415085,
@@ -16,9 +31,14 @@
       "poster_path": "http://image.tmdb.org/t/p/jPk5BAUmHhetBzz1SCBHhfyNVMJ.jpg"
     },
     {
-      "id": 564449,
-      "title": "Ultra-Girl",
-      "poster_path": "http://image.tmdb.org/t/p/vLcbX4Z7QWfrmxraSh1FxI2C3FE.jpg"
+      "id": 566522,
+      "title": "The Emperor's Newest Clothes",
+      "poster_path": "http://image.tmdb.org/t/p/qLZJ6tKWLuNJ4PXpVEeHDkXXODf.jpg"
+    },
+    {
+      "id": 564296,
+      "title": "When Calls the Heart: The Greatest Christmas Blessing",
+      "poster_path": "http://image.tmdb.org/t/p/jm77yxjjOtgJf3qekvpya1gmGYZ.jpg"
     },
     {
       "id": 560034,
@@ -94,11 +114,6 @@
       "id": 587603,
       "title": "Frog Dog Log",
       "poster_path": "http://image.tmdb.org/t/p/oRJv4vasP5elCn9H6LKKhD90YAP.jpg"
-    },
-    {
-      "id": 584794,
-      "title": "I'm Dreaming",
-      "poster_path": "http://image.tmdb.org/t/pnull"
     }
   ],
   "genres": [
