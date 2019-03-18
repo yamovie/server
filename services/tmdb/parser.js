@@ -1,4 +1,4 @@
-const TMDB_POSTER_BASE_URL = 'http://image.tmdb.org/t/p';
+const TMDB_POSTER_BASE_URL = 'http://image.tmdb.org/t/p/original';
 
 const parser = {};
 
