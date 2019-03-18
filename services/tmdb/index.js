@@ -1,6 +1,6 @@
 const axios = require('axios');
 const db = require('../../data/db');
-const parser = require('./parser');
+const parser = require('../../utils/parser');
 
 let tmdb = {};
 
@@ -8,11 +8,9 @@ tmdb.seedMovies = () => {
   const qs = {
     params: {
       api_key: process.env.TMDB_KEY,
-      region: 'US',
-      language: 'en-US',
-      primary_release_year: 2018,
-      sort_by: 'vote_average.desc',
-      page: 1
+      region: 'us',
+      year: 2018,
+      sort_by: 'release_date'
     }
   };
 
@@ -20,11 +18,12 @@ tmdb.seedMovies = () => {
     .get('https://api.themoviedb.org/3/discover/movie', qs)
     .then(res => {
       res.data.results.forEach(movie => {
-        const newMovie = parser.movie(movie);
+        const newMovie = parser.list(movie);
         db.get('movies')
           .push(newMovie)
           .write();
       });
+      console.log(db.get('movies').value());
     })
     .catch(error => {
       throw new Error(error);
@@ -40,8 +39,15 @@ tmdb.getMovieDetails = async id => {
 
   await axios
     .get(`https://api.themoviedb.org/3/movie/${id}`, qs)
-    .then(res => {
-      const details = parser.details(res.data);
+    .then(tmdbRes => {
+      return axios.get(
+        `http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&i=${
+          tmdbRes.data.imdb_id
+        }`
+      );
+    })
+    .then(omdbRes => {
+      const details = parser.details(omdbRes.data);
 
       db.get('movies')
         .find({ id })
