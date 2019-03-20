@@ -1,4 +1,6 @@
 const db = require('../data/db');
+const Movie = require('../models/movie');
+const Detail = require('../models/detail');
 const tmdb = require('../services/tmdb');
 
 /**
@@ -7,7 +9,13 @@ const tmdb = require('../services/tmdb');
  * @return  data of every movie
  */
 exports.movieList = (req, res) => {
-  return res.json(db.get('movies').value());
+  // return res.json(db.get('movies').value());
+
+  Movie.find({}, (err, allMovies) => {
+    if (err) throw new Error(err);
+
+    res.json(allMovies);
+  });
 };
 
 /**
@@ -16,17 +24,13 @@ exports.movieList = (req, res) => {
  * @param   id  the movie id, found in request
  * @return      movie data
  */
-exports.movieDetail = async (req, res) => {
-  const movie = db
-    .get('movies')
-    .find({ id: parseInt(req.params.id) })
-    .value();
+exports.movieDetail = (req, res) => {
+  Detail.findOne({ tmdb_id: req.params.id }).exec(async (err, foundDetail) => {
+    if (err) throw new Error(err);
+    else if (!foundDetail) {
+      foundDetail = await tmdb.getMovieDetails(parseInt(req.params.id));
+    }
 
-  if (!movie) {
-    res.status(404).json({ Error: 'Bad request: Invalid ID' });
-  } else if (!movie.details) {
-  }
-  await tmdb.getMovieDetails(parseInt(req.params.id));
-
-  res.json(movie);
+    res.json(foundDetail);
+  });
 };

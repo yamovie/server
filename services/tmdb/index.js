@@ -1,5 +1,6 @@
 const axios = require('axios');
-const db = require('../../data/db');
+// const db = require('../../data/db');
+const db = require('../../models');
 const parser = require('../../utils/parser');
 
 let tmdb = {};
@@ -17,13 +18,14 @@ tmdb.seedMovies = () => {
   axios
     .get('https://api.themoviedb.org/3/discover/movie', qs)
     .then(res => {
-      res.data.results.forEach(movie => {
-        const newMovie = parser.list(movie);
-        db.get('movies')
-          .push(newMovie)
-          .write();
+      res.data.results.forEach(data => {
+        const movie = parser.list(data);
+        try {
+          db.Movie.create(movie);
+        } catch (err) {
+          throw new Error(err);
+        }
       });
-      console.log(db.get('movies').value());
     })
     .catch(error => {
       throw new Error(error);
@@ -31,13 +33,14 @@ tmdb.seedMovies = () => {
 };
 
 tmdb.getMovieDetails = async id => {
+  console.log('getting details..');
   const qs = {
     params: {
       api_key: process.env.TMDB_KEY
     }
   };
 
-  await axios
+  return await axios
     .get(`https://api.themoviedb.org/3/movie/${id}`, qs)
     .then(tmdbRes => {
       return axios.get(
@@ -47,12 +50,12 @@ tmdb.getMovieDetails = async id => {
       );
     })
     .then(omdbRes => {
-      const details = parser.details(omdbRes.data);
-
-      db.get('movies')
-        .find({ id })
-        .assign({ details })
-        .write();
+      const details = parser.details(omdbRes.data, id);
+      try {
+        return db.Detail.create(details);
+      } catch (err) {
+        throw new Error(err);
+      }
     })
     .catch(error => {
       throw new Error(error);
@@ -70,10 +73,13 @@ tmdb.seedGenres = () => {
   axios
     .get('https://api.themoviedb.org/3/genre/movie/list', qs)
     .then(res => {
-      res.data.genres.forEach(genre => {
-        db.get('genres')
-          .push(genre)
-          .write();
+      res.data.genres.forEach(data => {
+        const genre = parser.genre(data);
+        try {
+          db.Genre.create(genre);
+        } catch (err) {
+          throw new Error(err);
+        }
       });
     })
     .catch(error => {

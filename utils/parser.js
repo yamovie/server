@@ -6,13 +6,13 @@ parser.list = movie => {
   const { id, title } = movie;
 
   return {
-    id,
+    tmdb_id: id,
     title,
     poster_path: `${TMDB_POSTER_BASE_URL}${movie.poster_path}`
   };
 };
 
-parser.details = data => {
+parser.details = (data, tmdb_id) => {
   const { Year, Rated, Runtime, Genre, Director, Actors, Plot, Ratings } = data;
 
   const ratings = Ratings.map(elem => {
@@ -23,6 +23,7 @@ parser.details = data => {
   });
 
   return {
+    tmdb_id,
     release_year: Year,
     cast: Actors,
     director: Director,
@@ -30,6 +31,15 @@ parser.details = data => {
     ratings,
     plot: Plot,
     runtime: Runtime
+  };
+};
+
+parser.genre = data => {
+  const { name, id } = data;
+
+  return {
+    genre: name,
+    tmdb_id: id
   };
 };
 
