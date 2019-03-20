@@ -1,18 +1,8 @@
 const axios = require('axios');
-const urls = require('../../utils/urls');
+const uri = require('../../utils/uri');
 
-exports.discoverMovies = () => {
-  const qs = {
-    params: {
-      api_key: process.env.TMDB_KEY,
-      region: 'us',
-      year: 2018,
-      sort_by: 'release_date'
-    }
-  };
-
-  return axios
-    .get(urls.TMDB_DISCOVER, qs)
+exports.discoverMovies = async () => {
+  return await axios(uri.TMDB_DISCOVER)
     .then(res => {
       return res.data;
     })
@@ -22,18 +12,9 @@ exports.discoverMovies = () => {
 };
 
 exports.getMovieDetails = async id => {
-  const qs = {
-    params: {
-      api_key: process.env.TMDB_KEY
-    }
-  };
-
-  return await axios
-    .get(`${urls.TMDB_DETAIL}${id}`, qs)
+  return await axios(`${uri.TMDB_DETAIL.path}${id}`, uri.TMDB_DETAIL)
     .then(tmdbRes => {
-      return axios.get(
-        `${urls.OMDB}?apikey=${process.env.OMDB_KEY}&i=${tmdbRes.data.imdb_id}`
-      );
+      return axios.get(`${uri.OMDB_MOVIE}${tmdbRes.data.imdb_id}`);
     })
     .then(omdbRes => {
       return omdbRes.data;
@@ -43,16 +24,8 @@ exports.getMovieDetails = async id => {
     });
 };
 
-exports.getGenres = () => {
-  const qs = {
-    params: {
-      language: 'en-US',
-      api_key: process.env.TMDB_KEY
-    }
-  };
-
-  axios
-    .get(urls.TMDB_GENRES, qs)
+exports.getGenres = async () => {
+  return await axios(uri.TMDB_GENRES)
     .then(res => {
       return res.data;
     })

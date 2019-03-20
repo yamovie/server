@@ -21,8 +21,8 @@ module.exports = seed = () => {
     if (err) throw new Error(err);
     else if (allGenres.length === 0) {
       console.log('Seeding genres...');
-      const genres = await tmdb.getGenres();
-      genres.results.forEach(genre => {
+      const data = await tmdb.getGenres();
+      data.genres.forEach(genre => {
         controllers.genre.create(parser.genre(genre));
       });
     } else console.log('Genres exists...');
