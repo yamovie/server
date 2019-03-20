@@ -23,6 +23,13 @@ parser.details = (data, tmdb_id) => {
     };
   });
 
+  ratings.push({
+    source: 'MPAA',
+    rating: Rated
+  });
+
+  console.log(ratings);
+
   return {
     tmdb_id,
     release_year: Year,

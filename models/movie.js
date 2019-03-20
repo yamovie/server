@@ -11,7 +11,8 @@ const movieSchema = new mongoose.Schema(
     },
     tmdb_id: {
       type: Number,
-      required: true
+      required: true,
+      unique: true
     },
     genre_ids: [Number]
   },

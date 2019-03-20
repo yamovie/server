@@ -1,4 +1,3 @@
-const db = require('../data/db');
 const Movie = require('../models/movie');
 const Detail = require('../models/detail');
 const tmdb = require('../services/tmdb');

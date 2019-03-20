@@ -1,5 +1,4 @@
 const axios = require('axios');
-// const db = require('../../data/db');
 const db = require('../../models');
 const parser = require('../../utils/parser');
 
