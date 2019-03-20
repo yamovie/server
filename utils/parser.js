@@ -3,12 +3,13 @@ const TMDB_POSTER_BASE_URL = 'http://image.tmdb.org/t/p/original';
 const parser = {};
 
 parser.list = movie => {
-  const { id, title } = movie;
+  const { id, title, poster_path, genre_ids } = movie;
 
   return {
     tmdb_id: id,
     title,
-    poster_path: `${TMDB_POSTER_BASE_URL}${movie.poster_path}`
+    poster_path: `${TMDB_POSTER_BASE_URL}${poster_path}`,
+    genre_ids
   };
 };
 

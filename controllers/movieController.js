@@ -34,3 +34,11 @@ exports.movieDetail = (req, res) => {
     res.json(foundDetail);
   });
 };
+
+exports.movieFilterByGenre = (req, res) => {
+  Movie.find({ genre_ids: req.params.id }).exec((err, foundMovies) => {
+    if (err) throw new Error(err);
+
+    res.json(foundMovies);
+  });
+};

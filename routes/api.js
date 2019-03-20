@@ -17,6 +17,7 @@ const genreController = require('../controllers/genreController');
 
 router.get('/movies', movieController.movieList);
 router.get('/movies/:id', movieController.movieDetail);
+router.get('/movies/genres/:id', movieController.movieFilterByGenre);
 router.get('/genres', genreController.genreList);
 
 module.exports = router;
