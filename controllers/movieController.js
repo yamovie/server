@@ -1,15 +1,10 @@
 const Movie = require('../models/movie');
-const Detail = require('../models/detail');
-const tmdb = require('../services/tmdb');
 
 /**
  * Returns all data from every movie.
- *
- * @return  data of every movie
+ * @return  array of movies
  */
-exports.movieList = (req, res) => {
-  // return res.json(db.get('movies').value());
-
+exports.getAll = (req, res) => {
   Movie.find({}, (err, allMovies) => {
     if (err) throw new Error(err);
 
@@ -18,26 +13,22 @@ exports.movieList = (req, res) => {
 };
 
 /**
- * Returns all data of a specific movie
- *
- * @param   id  the movie id, found in request
- * @return      movie data
+ * Return array of movies that match genre
+ * @param   id  the genre id, found in request
+ * @return      array of movies
  */
-exports.movieDetail = (req, res) => {
-  Detail.findOne({ tmdb_id: req.params.id }).exec(async (err, foundDetail) => {
-    if (err) throw new Error(err);
-    else if (!foundDetail) {
-      foundDetail = await tmdb.getMovieDetails(parseInt(req.params.id));
-    }
-
-    res.json(foundDetail);
-  });
-};
-
-exports.movieFilterByGenre = (req, res) => {
+exports.getAllByGenre = (req, res) => {
   Movie.find({ genre_ids: req.params.id }).exec((err, foundMovies) => {
     if (err) throw new Error(err);
 
     res.json(foundMovies);
   });
 };
+
+exports.create = movie => {
+  Movie.create(movie);
+};
+
+exports.update = () => {};
+
+exports.delete = () => {};

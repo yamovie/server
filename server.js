@@ -5,11 +5,10 @@ const express = require('express');
 const cors = require('cors');
 const logger = require('./middleware/logger');
 const apiRouter = require('./routes/api');
-const seed = require('./data/seed');
+const seed = require('./utils/seed');
 
 const app = express();
 
-// Seed
 seed();
 
 // Middleware

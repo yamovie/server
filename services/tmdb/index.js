@@ -1,10 +1,7 @@
 const axios = require('axios');
-const db = require('../../models');
-const parser = require('../../utils/parser');
+const urls = require('../../utils/urls');
 
-let tmdb = {};
-
-tmdb.seedMovies = () => {
+exports.discoverMovies = () => {
   const qs = {
     params: {
       api_key: process.env.TMDB_KEY,
@@ -14,25 +11,17 @@ tmdb.seedMovies = () => {
     }
   };
 
-  axios
-    .get('https://api.themoviedb.org/3/discover/movie', qs)
+  return axios
+    .get(urls.TMDB_DISCOVER, qs)
     .then(res => {
-      res.data.results.forEach(data => {
-        const movie = parser.list(data);
-        try {
-          db.Movie.create(movie);
-        } catch (err) {
-          throw new Error(err);
-        }
-      });
+      return res.data;
     })
     .catch(error => {
       throw new Error(error);
     });
 };
 
-tmdb.getMovieDetails = async id => {
-  console.log('getting details..');
+exports.getMovieDetails = async id => {
   const qs = {
     params: {
       api_key: process.env.TMDB_KEY
@@ -40,28 +29,21 @@ tmdb.getMovieDetails = async id => {
   };
 
   return await axios
-    .get(`https://api.themoviedb.org/3/movie/${id}`, qs)
+    .get(`${urls.TMDB_DETAIL}${id}`, qs)
     .then(tmdbRes => {
       return axios.get(
-        `http://www.omdbapi.com/?apikey=${process.env.OMDB_KEY}&i=${
-          tmdbRes.data.imdb_id
-        }`
+        `${urls.OMDB}?apikey=${process.env.OMDB_KEY}&i=${tmdbRes.data.imdb_id}`
       );
     })
     .then(omdbRes => {
-      const details = parser.details(omdbRes.data, id);
-      try {
-        return db.Detail.create(details);
-      } catch (err) {
-        throw new Error(err);
-      }
+      return omdbRes.data;
     })
     .catch(error => {
       throw new Error(error);
     });
 };
 
-tmdb.seedGenres = () => {
+exports.getGenres = () => {
   const qs = {
     params: {
       language: 'en-US',
@@ -70,20 +52,11 @@ tmdb.seedGenres = () => {
   };
 
   axios
-    .get('https://api.themoviedb.org/3/genre/movie/list', qs)
+    .get(urls.TMDB_GENRES, qs)
     .then(res => {
-      res.data.genres.forEach(data => {
-        const genre = parser.genre(data);
-        try {
-          db.Genre.create(genre);
-        } catch (err) {
-          throw new Error(err);
-        }
-      });
+      return res.data;
     })
     .catch(error => {
       throw new Error(error);
     });
 };
-
-module.exports = tmdb;

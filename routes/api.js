@@ -1,12 +1,31 @@
 const express = require('express');
+const controllers = require('../controllers');
 const router = express.Router();
 
-const movieController = require('../controllers/movieController');
-const genreController = require('../controllers/genreController');
+/**
+ * GET request for movie list
+ * @return  array of movies
+ */
+router.get('/movies', controllers.movie.getAll);
 
-router.get('/movies', movieController.movieList);
-router.get('/movies/:id', movieController.movieDetail);
-router.get('/movies/genres/:id', movieController.movieFilterByGenre);
-router.get('/genres', genreController.genreList);
+/**
+ * GET request for specific movie
+ * @param   id  movie id
+ * @return     movie details
+ */
+router.get('/movies/:id', controllers.detail.getOne);
+
+/**
+ * GET request for movie list filtered by genre
+ * @param   id  genre id
+ * @return      array of movies
+ */
+router.get('/movies/genres/:id', controllers.movie.getAllByGenre);
+
+/**
+ * GET request for genre list
+ * @return  array of genres
+ */
+router.get('/genres', controllers.genre.getAll);
 
 module.exports = router;

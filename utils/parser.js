@@ -28,8 +28,6 @@ parser.details = (data, tmdb_id) => {
     rating: Rated
   });
 
-  console.log(ratings);
-
   return {
     tmdb_id,
     release_year: Year,
