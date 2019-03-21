@@ -9,7 +9,7 @@ const parser = require('../utils/parser');
  * @return      movie data
  */
 module.exports.getOne = (req, res) => {
-  Detail.findOne({ movie_id: req.params.id }, '-__v')
+  Detail.findOne({ movie_id: req.params.id }, '-_private -__v')
     .exec()
     .then(async foundDetail => {
       if (!foundDetail) {
