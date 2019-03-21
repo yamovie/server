@@ -18,11 +18,12 @@ module.exports.movies = movie => {
 
 module.exports.details = (data, movie_id) => {
   const { tmdbData, omdbData } = data;
-  const { credits, overview, runtime, videos } = tmdbData;
+  const { title, credits, overview, runtime, videos } = tmdbData;
   const { Ratings } = omdbData;
 
   return {
     movie_id,
+    title,
     cast: credits.cast,
     crew: credits.crew,
     plot: overview,
@@ -53,10 +54,6 @@ module.exports.genres = data => {
 
   return {
     genre: name,
-    _private: {
-      external_ids: {
-        tmdb: id
-      }
-    }
+    key: id
   };
 };

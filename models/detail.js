@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const detailSchema = new mongoose.Schema(
   {
     movie_id: mongoose.Schema.Types.ObjectId,
+    title: {
+      type: String,
+      required: true
+    },
     cast: [
       {
         type: Object,
