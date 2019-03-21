@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 mongoose.set('debut', true);
 mongoose.set('useCreateIndex', true);
 mongoose.Promise = Promise;
-mongoose.connect(uri, { useNewUrlParser: true }).catch(err => {
-  throw new Error(err);
+mongoose.connect(uri, { useNewUrlParser: true }).catch(error => {
+  throw new Error(error);
 });
 
 module.exports.Movie = require('./movie');

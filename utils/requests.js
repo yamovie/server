@@ -14,9 +14,8 @@ module.exports = requests = {
     url: '',
     params: {
       api_key: process.env.TMDB_KEY,
-      region: 'us',
-      year: 2018,
-      sort_by: 'release_date'
+      region: 'US',
+      year: 2018
     }
   },
   TMDB_DETAIL: {

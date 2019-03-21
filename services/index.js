@@ -2,7 +2,7 @@ const tmdb = require('./tmdb');
 const omdb = require('./omdb');
 
 exports.getMovies = async () => {
-  return tmdb.getNowPlayingMovies();
+  return await tmdb.discoverMovies();
 };
 
 exports.getMovieDetails = async id => {

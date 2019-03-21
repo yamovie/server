@@ -1,13 +1,12 @@
 const TMDB_POSTER_BASE_URL = 'http://image.tmdb.org/t/p/original';
 
 module.exports.movies = movie => {
-  const { title, poster_path, genre_ids, release_date, id } = movie;
+  const { title, poster_path, genre_ids, id } = movie;
 
   return {
     title,
     poster_path: `${TMDB_POSTER_BASE_URL}${poster_path}`,
-    genre_ids,
-    release_date,
+    genre_keys: genre_ids,
     _private: {
       external_ids: {
         tmdb: id
@@ -17,9 +16,14 @@ module.exports.movies = movie => {
 };
 
 module.exports.details = (data, movie_id) => {
-  const { tmdbData, omdbData } = data;
-  const { title, credits, overview, runtime, videos } = tmdbData;
-  const { Ratings } = omdbData;
+  const {
+    title = '',
+    credits = {},
+    overview = '',
+    runtime = 0,
+    videos = []
+  } = data.tmdbData;
+  const { Ratings = [] } = data.omdbData;
 
   return {
     movie_id,

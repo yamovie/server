@@ -9,12 +9,9 @@ const movieSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    genre_ids: {
+    genre_keys: {
       type: [Number],
       required: true
-    },
-    release_date: {
-      type: String
     },
     _private: {
       external_ids: {

@@ -1,11 +1,9 @@
 const axios = require('axios');
 const requests = require('../../utils/requests');
 
-exports.getMovieDetails = async id => {
+exports.getMovieDetails = id => {
   requests.OMDB_DETAIL.params.i = id;
-  return await axios(requests.OMDB_DETAIL)
-    .then(res => {
-      return res.data;
-    })
+  return axios(requests.OMDB_DETAIL)
+    .then(response => response.data)
     .catch(error => console.log(error.stack));
 };

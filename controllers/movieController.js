@@ -14,32 +14,14 @@ module.exports.getAll = (req, res) => {
 };
 
 /**
- * DEPRECATED!
- *
- * Return array of movies that match genre
- * @param   id  genre id, found in request
- * @return      array of movies
- */
-module.exports.getAllByGenre = (req, res) => {
-  Movie.find({ genre_ids: req.params.id })
-    .exec()
-    .then(foundMovies => {
-      res.json(foundMovies);
-    })
-    .catch(error => console.log(error.stack));
-};
-
-/**
- * Returns promise of finding specific movie
+ * Returns data of specific movie
  * @param   id  movie id
  * @return      promise, movie
  */
 module.exports.getOne = id => {
   return Movie.findById(id)
     .exec()
-    .then(foundMovie => {
-      return foundMovie;
-    })
+    .then(foundMovie => foundMovie)
     .catch(error => console.log(error.stack));
 };
 
