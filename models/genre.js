@@ -5,10 +5,11 @@ const genreSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    tmdb_id: {
-      type: Number,
-      required: true,
-      unique: true
+    _private: {
+      external_ids: {
+        type: Object,
+        required: true
+      }
     }
   },
   { collection: 'genres' }

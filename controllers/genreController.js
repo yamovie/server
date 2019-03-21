@@ -5,11 +5,12 @@ const Genre = require('../models/genre');
  * @return  genres
  */
 module.exports.getAll = (req, res) => {
-  Genre.find({}, (err, allGenres) => {
-    if (err) throw new Error(err);
-
-    res.json(allGenres);
-  });
+  Genre.find({}, '-_private -__v')
+    .exec()
+    .then(allGenres => {
+      res.json(allGenres);
+    })
+    .catch(error => console.log(error.stack));
 };
 
 /**

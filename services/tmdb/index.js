@@ -7,9 +7,7 @@ exports.getNowPlayingMovies = async () => {
     .then(res => {
       return res.data;
     })
-    .catch(error => {
-      throw new Error(error);
-    });
+    .catch(error => console.log(error.stack));
 };
 
 exports.discoverMovies = async () => {
@@ -17,9 +15,7 @@ exports.discoverMovies = async () => {
     .then(res => {
       return res.data;
     })
-    .catch(error => {
-      throw new Error(error);
-    });
+    .catch(error => console.log(error.stack));
 };
 
 exports.getMovieDetails = async id => {
@@ -28,9 +24,7 @@ exports.getMovieDetails = async id => {
     .then(async res => {
       return res.data;
     })
-    .catch(error => {
-      console.log(error.stack);
-    });
+    .catch(error => console.log(error.stack));
 };
 
 exports.getGenres = async () => {
@@ -38,7 +32,5 @@ exports.getGenres = async () => {
     .then(res => {
       return res.data;
     })
-    .catch(error => {
-      throw new Error(error);
-    });
+    .catch(error => console.log(error.stack));
 };

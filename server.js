@@ -24,8 +24,8 @@ app.get('/', (req, res) => {
 
 app.use('/api', apiRoutes);
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.log('Unhandled Rejection at:', reason.stack || reason);
+process.on('unhandledRejection', (error, promise) => {
+  console.log('Unhandled Rejection at:', error.stack || error);
 });
 
 app.listen(PORT, () => console.log(`Server listening on PORT ${PORT}`));

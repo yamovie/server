@@ -1,8 +1,6 @@
 const TMDB_POSTER_BASE_URL = 'http://image.tmdb.org/t/p/original';
 
-const parser = {};
-
-parser.list = movie => {
+module.exports.movies = movie => {
   const { title, poster_path, genre_ids, release_date, id } = movie;
 
   return {
@@ -18,7 +16,7 @@ parser.list = movie => {
   };
 };
 
-parser.details = (data, movie_id) => {
+module.exports.details = (data, movie_id) => {
   const { tmdbData, omdbData } = data;
   const { credits, overview, runtime, videos } = tmdbData;
   const { Ratings } = omdbData;
@@ -50,13 +48,15 @@ parser.details = (data, movie_id) => {
   };
 };
 
-parser.genre = data => {
+module.exports.genres = data => {
   const { name, id } = data;
 
   return {
     genre: name,
-    tmdb_id: id
+    _private: {
+      external_ids: {
+        tmdb: id
+      }
+    }
   };
 };
-
-module.exports = parser;
