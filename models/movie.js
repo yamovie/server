@@ -9,12 +9,19 @@ const movieSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    tmdb_id: {
-      type: Number,
-      required: true,
-      unique: true
+    genre_ids: {
+      type: [Number],
+      required: true
     },
-    genre_ids: [Number]
+    release_date: {
+      type: String
+    },
+    _private: {
+      external_ids: {
+        type: Object,
+        required: true
+      }
+    }
   },
   { collection: 'movies' }
 );

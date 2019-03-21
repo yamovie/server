@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 5000;
 const express = require('express');
 const cors = require('cors');
 const logger = require('./middleware/logger');
-const apiRouter = require('./routes/api');
+const apiRoutes = require('./routes/api');
 const seed = require('./utils/seed');
 
 const app = express();
@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
   res.send('YaMovie Server');
 });
 
-app.use('/api', apiRouter);
+app.use('/api', apiRoutes);
 
 process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection at:', reason.stack || reason);

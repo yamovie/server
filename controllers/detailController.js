@@ -1,6 +1,6 @@
 const Detail = require('../models/detail');
 const controllers = require('../controllers');
-const tmdb = require('../services/tmdb');
+const services = require('../services');
 const parser = require('../utils/parser');
 
 /**
@@ -8,24 +8,31 @@ const parser = require('../utils/parser');
  * @param   id  the movie id, found in request
  * @return      movie data
  */
-exports.getOne = (req, res) => {
-  const id = parseInt(req.params.id);
-  Detail.findOne({ tmdb_id: req.params.id }).exec(async (err, foundDetail) => {
-    if (err) throw new Error(err);
-    else if (!foundDetail) {
-      foundDetail = await tmdb.getMovieDetails(id);
-      foundDetail = parser.details(foundDetail, id);
-      controllers.detail.create(foundDetail);
-    }
+module.exports.getOne = (req, res) => {
+  Detail.findOne({ movie_id: req.params.id })
+    .exec()
+    .then(async foundDetail => {
+      if (!foundDetail) {
+        const movie = await controllers.movie.getOne(req.params.id);
+        const movieData = await services.getMovieDetails(
+          movie._private.external_ids.tmdb
+        );
+        foundDetail = parser.details(movieData, movie._id);
+        controllers.detail.create(foundDetail);
+      }
 
-    res.json(foundDetail);
-  });
+      res.json(foundDetail);
+    })
+    .catch(error => console.log(error.stack));
 };
 
-exports.create = details => {
+/**
+ * Create new Detail document
+ */
+module.exports.create = details => {
   Detail.create(details);
 };
 
-exports.update = () => {};
+module.exports.update = () => {};
 
-exports.delete = () => {};
+module.exports.delete = () => {};

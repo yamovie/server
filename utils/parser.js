@@ -3,40 +3,50 @@ const TMDB_POSTER_BASE_URL = 'http://image.tmdb.org/t/p/original';
 const parser = {};
 
 parser.list = movie => {
-  const { id, title, poster_path, genre_ids } = movie;
+  const { title, poster_path, genre_ids, release_date, id } = movie;
 
   return {
-    tmdb_id: id,
     title,
     poster_path: `${TMDB_POSTER_BASE_URL}${poster_path}`,
-    genre_ids
+    genre_ids,
+    release_date,
+    _private: {
+      external_ids: {
+        tmdb: id
+      }
+    }
   };
 };
 
-parser.details = (data, tmdb_id) => {
-  const { Year, Rated, Runtime, Genre, Director, Actors, Plot, Ratings } = data;
-
-  const ratings = Ratings.map(elem => {
-    return {
-      source: elem.Source,
-      rating: elem.Value
-    };
-  });
-
-  ratings.push({
-    source: 'MPAA',
-    rating: Rated
-  });
+parser.details = (data, movie_id) => {
+  const { tmdbData, omdbData } = data;
+  const { credits, overview, runtime, videos } = tmdbData;
+  const { Ratings } = omdbData;
 
   return {
-    tmdb_id,
-    release_year: Year,
-    cast: Actors,
-    director: Director,
-    genres: Genre,
-    ratings,
-    plot: Plot,
-    runtime: Runtime
+    movie_id,
+    cast: credits.cast,
+    crew: credits.crew,
+    plot: overview,
+    ratings: Ratings.map(rating => {
+      return {
+        source: rating.Source,
+        value: rating.Value
+      };
+    }),
+    runtime,
+    videos: videos.results.map(video => {
+      return {
+        name: video.name,
+        site: video.site,
+        size: video.size,
+        type: video.trailer,
+        src:
+          video.site === 'YouTube'
+            ? `https://www.youtube.com/embed/${video.key}`
+            : `${video.key}`
+      };
+    })
   };
 };
 

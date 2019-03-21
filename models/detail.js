@@ -1,24 +1,20 @@
 const mongoose = require('mongoose');
 const detailSchema = new mongoose.Schema(
   {
-    tmdb_id: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    release_year: {
-      type: String,
-      required: true
-    },
-    cast: {
-      type: String,
-      required: true
-    },
-    director: {
-      type: String,
-      required: true
-    },
-    genres: {
+    movie_id: mongoose.Schema.Types.ObjectId,
+    cast: [
+      {
+        type: Object,
+        required: true
+      }
+    ],
+    crew: [
+      {
+        type: Object,
+        required: true
+      }
+    ],
+    plot: {
       type: String,
       required: true
     },
@@ -31,12 +27,17 @@ const detailSchema = new mongoose.Schema(
       ],
       required: true
     },
-    plot: {
+    runtime: {
       type: String,
       required: true
     },
-    runtime: {
-      type: String,
+    videos: {
+      type: [
+        {
+          type: Map,
+          of: String
+        }
+      ],
       required: true
     }
   },

@@ -4,7 +4,7 @@ const Genre = require('../models/genre');
  * Returns an array of movie genres
  * @return  genres
  */
-exports.getAll = (req, res) => {
+module.exports.getAll = (req, res) => {
   Genre.find({}, (err, allGenres) => {
     if (err) throw new Error(err);
 
@@ -12,10 +12,13 @@ exports.getAll = (req, res) => {
   });
 };
 
-exports.create = genre => {
+/**
+ * Create new Genre document
+ */
+module.exports.create = genre => {
   Genre.create(genre);
 };
 
-exports.update = () => {};
+module.exports.update = () => {};
 
-exports.delete = () => {};
+module.exports.delete = () => {};

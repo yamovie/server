@@ -1,8 +1,19 @@
 const axios = require('axios');
-const uri = require('../../utils/uri');
+const requests = require('../../utils/requests');
+const omdb = require('../omdb');
+
+exports.getNowPlayingMovies = async () => {
+  return await axios(requests.TMDB_NOW_PLAYING)
+    .then(res => {
+      return res.data;
+    })
+    .catch(error => {
+      throw new Error(error);
+    });
+};
 
 exports.discoverMovies = async () => {
-  return await axios(uri.TMDB_DISCOVER)
+  return await axios(requests.TMDB_DISCOVER)
     .then(res => {
       return res.data;
     })
@@ -12,20 +23,18 @@ exports.discoverMovies = async () => {
 };
 
 exports.getMovieDetails = async id => {
-  return await axios(`${uri.TMDB_DETAIL.path}${id}`, uri.TMDB_DETAIL)
-    .then(tmdbRes => {
-      return axios.get(`${uri.OMDB_MOVIE}${tmdbRes.data.imdb_id}`);
-    })
-    .then(omdbRes => {
-      return omdbRes.data;
+  requests.TMDB_DETAIL.url = requests.TMDB_DETAIL.url.concat(id);
+  return await axios(requests.TMDB_DETAIL)
+    .then(async res => {
+      return res.data;
     })
     .catch(error => {
-      throw new Error(error);
+      console.log(error.stack);
     });
 };
 
 exports.getGenres = async () => {
-  return await axios(uri.TMDB_GENRES)
+  return await axios(requests.TMDB_GENRES)
     .then(res => {
       return res.data;
     })

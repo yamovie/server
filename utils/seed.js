@@ -1,4 +1,4 @@
-const tmdb = require('../services/tmdb');
+const services = require('../services');
 const db = require('../models');
 const controllers = require('../controllers');
 const parser = require('./parser');
@@ -9,7 +9,7 @@ module.exports = seed = () => {
     if (err) throw new Error(err);
     else if (allMovies.length === 0) {
       console.log('Seeding movies...');
-      const movies = await tmdb.discoverMovies();
+      const movies = await services.getMovies();
       movies.results.forEach(movie => {
         controllers.movie.create(parser.list(movie));
       });
@@ -21,7 +21,7 @@ module.exports = seed = () => {
     if (err) throw new Error(err);
     else if (allGenres.length === 0) {
       console.log('Seeding genres...');
-      const data = await tmdb.getGenres();
+      const data = await services.getGenres();
       data.genres.forEach(genre => {
         controllers.genre.create(parser.genre(genre));
       });
