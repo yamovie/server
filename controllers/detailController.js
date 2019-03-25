@@ -15,9 +15,9 @@ module.exports.getOne = (req, res) => {
       if (!foundDetail) {
         const movie = await controllers.movie.getOne(req.params.id);
         const movieData = await services.getMovieDetails(
-          movie._private.external_ids.tmdb
+          movie.private.external_ids.tmdb,
         );
-        foundDetail = parser.details(movieData, movie._id);
+        foundDetail = parser.details(movieData, movie.id);
         controllers.detail.create(foundDetail);
       }
 

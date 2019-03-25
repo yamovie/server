@@ -1,51 +1,52 @@
 const mongoose = require('mongoose');
+
 const detailSchema = new mongoose.Schema(
   {
     movie_id: mongoose.Schema.Types.ObjectId,
     title: {
       type: String,
-      required: true
+      required: true,
     },
     cast: [
       {
         type: Object,
-        required: true
-      }
+        required: true,
+      },
     ],
     crew: [
       {
         type: Object,
-        required: true
-      }
+        required: true,
+      },
     ],
     plot: {
       type: String,
-      required: true
+      required: true,
     },
     ratings: {
       type: [
         {
           source: String,
-          rating: String
-        }
+          rating: String,
+        },
       ],
-      required: true
+      required: true,
     },
     runtime: {
       type: String,
-      required: true
+      required: true,
     },
     videos: {
       type: [
         {
           type: Map,
-          of: String
-        }
+          of: String,
+        },
       ],
-      required: true
-    }
+      required: true,
+    },
   },
-  { collection: 'details' }
+  { collection: 'details' },
 );
 
 const Detail = mongoose.model('Detail', detailSchema);

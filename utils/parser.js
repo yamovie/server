@@ -7,11 +7,11 @@ module.exports.movies = movie => {
     title,
     poster_path: `${TMDB_POSTER_BASE_URL}${poster_path}`,
     genre_keys: genre_ids,
-    _private: {
+    private: {
       external_ids: {
-        tmdb: id
-      }
-    }
+        tmdb: id,
+      },
+    },
   };
 };
 
@@ -21,7 +21,7 @@ module.exports.details = (data, movie_id) => {
     credits = {},
     overview = '',
     runtime = 0,
-    videos = []
+    videos = [],
   } = data.tmdbData;
   const { Ratings = [] } = data.omdbData;
 
@@ -34,7 +34,7 @@ module.exports.details = (data, movie_id) => {
     ratings: Ratings.map(rating => {
       return {
         source: rating.Source,
-        value: rating.Value
+        value: rating.Value,
       };
     }),
     runtime,
@@ -47,9 +47,9 @@ module.exports.details = (data, movie_id) => {
         src:
           video.site === 'YouTube'
             ? `https://www.youtube.com/embed/${video.key}`
-            : `${video.key}`
+            : `${video.key}`,
       };
-    })
+    }),
   };
 };
 
@@ -58,6 +58,6 @@ module.exports.genres = data => {
 
   return {
     genre: name,
-    key: id
+    key: id,
   };
 };

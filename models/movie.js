@@ -1,26 +1,27 @@
 const mongoose = require('mongoose');
+
 const movieSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     poster_path: {
       type: String,
-      required: true
+      required: true,
     },
     genre_keys: {
       type: [Number],
-      required: true
+      required: true,
     },
-    _private: {
+    private: {
       external_ids: {
         type: Object,
-        required: true
-      }
-    }
+        required: true,
+      },
+    },
   },
-  { collection: 'movies' }
+  { collection: 'movies' },
 );
 
 const Movie = mongoose.model('Movie', movieSchema);

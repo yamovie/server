@@ -3,7 +3,7 @@ const { Movie, Genre } = require('../models');
 const controllers = require('../controllers');
 const parser = require('./parser');
 
-module.exports = seed = () => {
+module.exports = () => {
   // Seed movies
   Movie.find({})
     .exec()

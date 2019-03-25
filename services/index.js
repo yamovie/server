@@ -1,9 +1,7 @@
 const tmdb = require('./tmdb');
 const omdb = require('./omdb');
 
-exports.getMovies = async () => {
-  return await tmdb.discoverMovies();
-};
+exports.getMovies = async () => tmdb.discoverMovies();
 
 exports.getMovieDetails = async id => {
   const tmdbData = await tmdb.getMovieDetails(id);
@@ -11,10 +9,8 @@ exports.getMovieDetails = async id => {
 
   return {
     tmdbData,
-    omdbData
+    omdbData,
   };
 };
 
-exports.getGenres = async () => {
-  return await tmdb.getGenres();
-};
+exports.getGenres = async () => tmdb.getGenres();

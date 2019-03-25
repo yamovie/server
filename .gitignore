@@ -155,3 +155,4 @@ $RECYCLE.BIN/
 # Misc
 # *****
 .env
+.vscode
