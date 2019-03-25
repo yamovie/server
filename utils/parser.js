@@ -21,7 +21,9 @@ module.exports.details = (data, movie_id) => {
     credits = {},
     overview = '',
     runtime = 0,
-    videos = [],
+    videos = {
+      results: [],
+    },
   } = data.tmdbData;
   const { Ratings = [] } = data.omdbData;
 
