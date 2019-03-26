@@ -25,6 +25,15 @@ module.exports.getOne = id => {
     .catch(error => console.log(error.stack));
 };
 
+module.exports.getByGenre = id => {
+  Movie.find({ genre_keys: req.params.id })
+    .exec()
+    .then(foundMovies => {
+      res.json(foundMovies);
+    })
+    .catch(error => console.log(error.stack));
+};
+
 /**
  * Create new Movie document
  */
