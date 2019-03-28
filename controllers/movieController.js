@@ -1,4 +1,5 @@
 const Movie = require('../models/movie');
+const DetailedMovie = require('../models/detailedMovie');
 
 /**
  * Returns all data from every movie.
@@ -34,11 +35,24 @@ module.exports.getByGenre = id => {
     .catch(error => console.log(error.stack));
 };
 
+module.exports.getAllDetailed = (req, res) => {
+  DetailedMovie.find({}, '-_private -__v')
+    .exec()
+    .then(allMovies => {
+      res.json(allMovies);
+    })
+    .catch(error => console.log(error.stack));
+};
+
 /**
  * Create new Movie document
  */
 module.exports.create = movie => {
   Movie.create(movie);
+};
+
+module.exports.createDetailed = movie => {
+  DetailedMovie.create(movie);
 };
 
 module.exports.update = () => {};

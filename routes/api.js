@@ -18,6 +18,8 @@ router.get('/movies/:id', controllers.detail.getOne);
 
 router.get('/movies/genre/:id', controllers.movie.getByGenre);
 
+router.get('/detailedmovies/', controllers.movie.getAllDetailed);
+
 /**
  * GET request for genre list
  * @return  array of genres

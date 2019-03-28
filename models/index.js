@@ -14,3 +14,4 @@ mongoose.connect(uri, { useNewUrlParser: true }).catch(error => {
 module.exports.Movie = require('./movie');
 module.exports.Genre = require('./genre');
 module.exports.Detail = require('./detail');
+module.exports.DetailedMovie = require('./detailedMovie');

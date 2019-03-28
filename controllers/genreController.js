@@ -13,6 +13,13 @@ module.exports.getAll = (req, res) => {
     .catch(error => console.log(error.stack));
 };
 
+module.exports.getOne = id => {
+  return Genre.findById(id).then();
+};
+
+module.exports.getOneByKey = key => {
+  return Genre.findOne({ key }).exec();
+};
 /**
  * Create new Genre document
  */

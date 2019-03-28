@@ -7,7 +7,7 @@ const genreSchema = new mongoose.Schema(
       required: true,
     },
     key: {
-      type: String,
+      type: Number,
       required: true,
     },
   },

@@ -1,4 +1,13 @@
 module.exports = {
+  TMDB_CONFIG: {
+    method: 'get',
+    baseURL: 'https://api.themoviedb.org/3/configuration',
+    url: '',
+    responseType: 'stream',
+    params: {
+      api_key: process.env.TMDB_KEY,
+    },
+  },
   TMDB_NOW_PLAYING: {
     method: 'get',
     baseURL: 'https://api.themoviedb.org/3/movie/now_playing',
@@ -24,7 +33,7 @@ module.exports = {
     url: '',
     params: {
       api_key: process.env.TMDB_KEY,
-      append_to_response: 'credits,external_ids,videos',
+      append_to_response: 'credits,images,videos,external_ids',
     },
   },
   TMDB_GENRES: {
