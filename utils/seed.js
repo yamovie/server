@@ -6,9 +6,6 @@ const parser = require('./parser');
 module.exports = () => {
   console.log('Preparing to seed...');
 
-  // console.log('Updating external configurations');
-  // services.storeConfigurations();
-
   // Seed genres
   Genre.find({})
     .exec()
@@ -29,10 +26,13 @@ module.exports = () => {
     .then(async allMovies => {
       if (allMovies.length === 0) {
         console.log('Seeding movies...');
-        const movieData = await services.getDetailedMovies();
+        const results = await services.getDetailedMovies();
 
-        for await (let datum of movieData) {
-          controllers.movie.createDetailed(await parser.detailedMovie(datum));
+        for await (let datum of results.data) {
+          controllers.movie.createDetailed(
+            await parser.detailedMovie(datum, results.config),
+          );
+          // console.log(await parser.detailedMovie(datum, results.config));
         }
 
         console.log('Movies seeded.');

@@ -4,16 +4,14 @@ const tmdb = require('./tmdb');
 const omdb = require('./omdb');
 const fs = require('fs');
 
-const tmdbConfigPath = path.join(__dirname, 'tmdb', 'config.json');
-
-exports.storeConfigurations = async () => {
-  const configs = await tmdb.getConfigurations();
-  configs.data.pipe(fs.createWriteStream(tmdbConfigPath));
-};
+exports.storeConfigurations = async () => {};
 
 exports.getMovies = async () => tmdb.discoverMovies();
 
 exports.getDetailedMovies = async () => {
+  const configRequest = await tmdb.getConfigurations();
+  const config = configRequest.data;
+
   const discovery = await tmdb.discoverMovies();
 
   const tmdbRequests = discovery.results.map(result =>
@@ -31,7 +29,7 @@ exports.getDetailedMovies = async () => {
     datum.ratings = omdbRequest.data.Ratings;
   }
 
-  return movieData;
+  return { data: movieData, config };
 };
 
 exports.getMovieDetails = async id => {

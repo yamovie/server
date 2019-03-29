@@ -2,6 +2,8 @@ const controllers = require('../controllers');
 
 const TMDB_POSTER_BASE_URL = 'http://image.tmdb.org/t/p/original';
 
+const YT_EMBED_BASE_URL = 'https://www.youtube.com/embed/';
+
 module.exports.movies = movie => {
   const { title, poster_path, genre_ids, id } = movie;
 
@@ -17,7 +19,7 @@ module.exports.movies = movie => {
   };
 };
 
-module.exports.detailedMovie = async data => {
+module.exports.detailedMovie = async (data, config) => {
   const {
     adult,
     homepage,
@@ -65,7 +67,13 @@ module.exports.detailedMovie = async data => {
       )).map(res => res._id),
       production_companies: data.production_companies.map(
         ({ name, logo_path, origin_country }) => {
-          return { name, logo_path, origin_country };
+          return {
+            name,
+            origin_country,
+            url: `${config.images.secure_base_url}${
+              config.images.logo_sizes[6]
+            }${logo_path}`,
+          };
         },
       ),
       ratings: ratings.map(({ Source, Value }) => {
@@ -74,17 +82,37 @@ module.exports.detailedMovie = async data => {
       images: {
         backdrops: data.images.backdrops.map(
           ({ aspect_ratio, file_path, height, width }) => {
-            return { aspect_ratio, file_path, height, width };
+            return {
+              aspect_ratio,
+              height,
+              width,
+              url: `${config.images.secure_base_url}${
+                config.images.backdrop_sizes[3]
+              }${file_path}`,
+            };
           },
         ),
         posters: data.images.posters.map(
           ({ aspect_ratio, file_path, height, width }) => {
-            return { aspect_ratio, file_path, height, width };
+            return {
+              aspect_ratio,
+              height,
+              width,
+              url: `${config.images.secure_base_url}${
+                config.images.poster_sizes[6]
+              }${file_path}`,
+            };
           },
         ),
       },
       videos: data.videos.results.map(({ key, name, site, size, type }) => {
-        return { key, name, site, size, type };
+        return {
+          name,
+          site,
+          size,
+          type,
+          url: site.includes('YouTube') ? `${YT_EMBED_BASE_URL}${key}` : key,
+        };
       }),
     },
   );

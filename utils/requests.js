@@ -3,7 +3,6 @@ module.exports = {
     method: 'get',
     baseURL: 'https://api.themoviedb.org/3/configuration',
     url: '',
-    responseType: 'stream',
     params: {
       api_key: process.env.TMDB_KEY,
     },
