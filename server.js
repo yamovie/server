@@ -3,12 +3,15 @@ const express = require('express');
 const cors = require('cors');
 const logger = require('./middleware/logger');
 const apiRoutes = require('./routes/api');
-const seed = require('./utils/seed');
+const { seed } = require('./utils');
+const tests = require('./tests');
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
+// Test
+// test();
 
+// Seed
 seed();
 
 // Middleware
@@ -16,7 +19,7 @@ app.use(cors());
 app.use(logger);
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   res.send('YaMovie Server');
@@ -29,4 +32,6 @@ process.on('unhandledRejection', (error, promise) => {
   console.log('Promise:', promise);
 });
 
-app.listen(PORT, () => console.log(`Server listening on PORT ${PORT}`));
+app.listen(process.env.PORT || 5500, () =>
+  console.log(`Server listening on PORT ${process.env.PORT || 5500}`),
+);

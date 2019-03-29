@@ -1,7 +1,5 @@
-const express = require('express');
+const router = require('express').Router();
 const controllers = require('../controllers');
-
-const router = express.Router();
 
 /**
  * GET request for movie list
@@ -12,18 +10,18 @@ router.get('/movies', controllers.movie.getAll);
 /**
  * GET request for specific movie
  * @param   id  movie id
- * @return     movie details
+ * @return      movie details
  */
-router.get('/movies/:id', controllers.detail.getOne);
+router.get('/movies/:id', controllers.movie.getOne);
 
 router.get('/movies/genre/:id', controllers.movie.getByGenre);
-
-router.get('/detailedmovies/', controllers.movie.getAllDetailed);
 
 /**
  * GET request for genre list
  * @return  array of genres
  */
 router.get('/genres', controllers.genre.getAll);
+
+router.get('/genres/:id', controllers.genre.getOne);
 
 module.exports = router;

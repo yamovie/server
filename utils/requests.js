@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = requests = {
   TMDB_CONFIG: {
     method: 'get',
     baseURL: 'https://api.themoviedb.org/3/configuration',

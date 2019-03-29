@@ -1,16 +1,13 @@
 const Movie = require('../models/movie');
-const DetailedMovie = require('../models/detailedMovie');
 
 /**
  * Returns all data from every movie.
  * @return  array of movies
  */
 module.exports.getAll = (req, res) => {
-  Movie.find({}, '-_private -__v')
+  Movie.find({})
     .exec()
-    .then(allMovies => {
-      res.json(allMovies);
-    })
+    .then(allMovies => res.json(allMovies))
     .catch(error => console.log(error.stack));
 };
 
@@ -19,41 +16,26 @@ module.exports.getAll = (req, res) => {
  * @param   id  movie id
  * @return      promise, movie
  */
-module.exports.getOne = id => {
-  return Movie.findById(id)
+module.exports.getOne = (req, res) => {
+  Movie.findById(req.params.id)
     .exec()
-    .then(foundMovie => foundMovie)
+    .then(foundMovie => res.json(foundMovie))
     .catch(error => console.log(error.stack));
 };
 
-module.exports.getByGenre = id => {
+module.exports.getByGenre = (req, res) => {
   Movie.find({ genre_keys: req.params.id })
     .exec()
-    .then(foundMovies => {
-      res.json(foundMovies);
-    })
-    .catch(error => console.log(error.stack));
-};
-
-module.exports.getAllDetailed = (req, res) => {
-  DetailedMovie.find({}, '-_private -__v')
-    .exec()
-    .then(allMovies => {
-      res.json(allMovies);
-    })
+    .then(foundMovies => res.json(foundMovies))
     .catch(error => console.log(error.stack));
 };
 
 /**
+ * INTERNAL USE ONLY
+ *
  * Create new Movie document
  */
-module.exports.create = movie => {
-  Movie.create(movie);
-};
-
-module.exports.createDetailed = movie => {
-  DetailedMovie.create(movie);
-};
+module.exports.create = movie => Movie.create(movie);
 
 module.exports.update = () => {};
 
