@@ -1,42 +1,50 @@
-const services = require('../services');
-const { Movie, Genre, DetailedMovie } = require('../models/');
 const controllers = require('../controllers');
-const parser = require('./parser');
+const services = require('../services');
+const { parser, configs } = require('../utils');
 
-module.exports = () => {
-  console.log('Preparing to seed...');
+const seed = async () => {
+  console.log('Seeding...');
 
-  // console.log('Updating external configurations');
-  // services.storeConfigurations();
+  await seedGenres();
+  await seedMovies();
 
-  // Seed genres
-  Genre.find({})
-    .exec()
-    .then(async allGenres => {
-      if (allGenres.length === 0) {
-        console.log('Seeding genres...');
-        const data = await services.getGenres();
-        data.genres.forEach(genre => {
-          controllers.genre.create(parser.genres(genre));
-        });
-        console.log('Genres seeded.');
-      }
-    })
-    .catch(error => console.log(error.stack));
-
-  DetailedMovie.find({})
-    .exec()
-    .then(async allMovies => {
-      if (allMovies.length === 0) {
-        console.log('Seeding movies...');
-        const movieData = await services.getDetailedMovies();
-
-        for await (let datum of movieData) {
-          controllers.movie.createDetailed(await parser.detailedMovie(datum));
-        }
-
-        console.log('Movies seeded.');
-      }
-    })
-    .catch(error => console.log(error.stack));
+  console.log('Seeding completed.');
 };
+
+const seedGenres = async () => {
+  const allGenres = await controllers.genre.readAll();
+  if (!allGenres || allGenres.length === 0) {
+    await console.log('Seeding genres...');
+
+    const seed = await services.getGenres();
+
+    for await (let genre of seed.genres) {
+      await controllers.genre.create(await parser.genres(genre));
+    }
+
+    await console.log('Genres seeded.');
+  }
+};
+
+const seedMovies = async () => {
+  const allMovies = await controllers.movie.readAll();
+  if (!allMovies || allMovies.length === 0) {
+    await console.log('Seeding movies...');
+
+    const movieConfigs = Object.assign(
+      await services.updateConfigurations(),
+      configs.movies,
+    );
+
+    const seed = await services.getMovies();
+    const data = await services.getMoviesData(seed.results);
+
+    for await (let datum of data) {
+      await controllers.movie.create(await parser.movie(datum, movieConfigs));
+    }
+
+    await console.log('Movies seeded.');
+  }
+};
+
+module.exports = seed;

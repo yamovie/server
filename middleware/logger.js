@@ -1,8 +1,10 @@
 /**
- * Logs endpoint access
+ * Logs requests
  */
 const logger = (req, res, next) => {
-  console.log(`${Date.now()} Accessed ${req.url}`);
+  const timestamp = Date(Date.now()).toString();
+
+  console.log(`${timestamp} ${req.headers.host} ${req.method} ${req.url}`);
   next();
 };
 
