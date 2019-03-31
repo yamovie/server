@@ -12,8 +12,7 @@ const options = {
   promiseLibrary: Promise,
 };
 
-mongoose.set('debug', true);
-mongoose.set('objectIdGetter', true);
+mongoose.set('debug', false);
 
 mongoose.connect(
   `${process.env.DB_SCHEME}${process.env.DB_HOST}${process.env.DB_NAME}`,

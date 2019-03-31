@@ -14,6 +14,7 @@ module.exports = {
     params: {
       api_key: process.env.TMDB_KEY,
       region: 'US',
+      // page: specify which page to query
     },
   },
   TMDB_DISCOVER: {
@@ -23,7 +24,7 @@ module.exports = {
     params: {
       api_key: process.env.TMDB_KEY,
       region: 'US',
-      year: 2018,
+      year: 2019,
     },
   },
   TMDB_DETAIL: {

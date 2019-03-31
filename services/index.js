@@ -7,8 +7,8 @@ module.exports.updateConfigurations = async () => {
   return configResponse.data;
 };
 
-module.exports.getMovies = async () => {
-  const nowPlayingResponse = await tmdb.requestNowPlayingMovies();
+module.exports.getMovies = async page => {
+  const nowPlayingResponse = await tmdb.requestNowPlayingMovies(page);
   return nowPlayingResponse.data;
 };
 

@@ -9,7 +9,8 @@ exports.requestConfigurations = () => {
  * Requests TMDB API for movie data
  * @return  {Object}  movie data
  */
-exports.requestNowPlayingMovies = () => {
+exports.requestNowPlayingMovies = page => {
+  requests.TMDB_NOW_PLAYING.params.page = page;
   return axios(requests.TMDB_NOW_PLAYING);
 };
 
