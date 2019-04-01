@@ -3,21 +3,21 @@ const cors = require('cors');
 const express = require('express');
 const { logger, errorHandler } = require('./middleware');
 const { seed } = require('./utils');
-const server = express();
+const app = express();
 
 // Seed
 // seed();
 
-server.use(cors());
-server.use(logger);
+app.use(cors());
+app.use(logger);
 
-server.use(express.json());
-server.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-server.use('/', require('./routes'));
+app.use('/', require('./routes'));
 
-server.use(errorHandler);
+app.use(errorHandler);
 
-server.listen(process.env.PORT || 5500, () => {
+app.listen(process.env.PORT || 5500, () => {
   console.log(`Server listening on PORT ${process.env.PORT || 5500}`);
 });
