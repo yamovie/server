@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "yamovie server",
   "main": "server.js",
+  "engines": {
+    "node": "11.9.0"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
