@@ -19,7 +19,7 @@ const seed = async () => {
   await seedGenres();
 
   while (state.movies.hasMore) {
-    await new Promise(resolve => setTimeout(resolve, 10000));
+    await new Promise(resolve => setTimeout(resolve, 15000));
 
     await seedMovies();
   }
@@ -42,7 +42,6 @@ const seedGenres = async () => {
     const seed = await services.getGenres();
 
     for await (let genre of seed.genres) {
-      ``;
       await controllers.genre.create(await parser.genres(genre));
     }
 
@@ -68,9 +67,9 @@ const seedMovies = async () => {
   const data = await services.getMoviesData(seed.results);
 
   for await (let datum of data) {
-    // await controllers.movie.create(await parser.movie(datum, movieConfigs));
+    await controllers.movie.create(await parser.movie(datum, movieConfigs));
     console.log(`Parsing ${datum.title}`);
-    await parser.movie(datum, movieConfigs);
+    // await parser.movie(datum, movieConfigs);
   }
 
   await console.log('Movies seeded.');

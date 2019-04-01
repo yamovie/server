@@ -1,5 +1,20 @@
 const controllers = require('../controllers');
 
+module.exports.qs = async url => {
+  const index = url.indexOf('?');
+
+  if (index === -1) return {};
+
+  const qs = url.substring(index + 1);
+  const queries = qs.split('&');
+
+  return queries.reduce((acc, curr) => {
+    const query = curr.split('=');
+    acc[query[0]] = query[1];
+    return acc;
+  }, {});
+};
+
 module.exports.genres = async ({ name, id }) => {
   return {
     name,

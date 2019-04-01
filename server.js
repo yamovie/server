@@ -6,7 +6,7 @@ const { seed } = require('./utils');
 const server = express();
 
 // Seed
-seed();
+// seed();
 
 server.use(cors());
 server.use(logger);

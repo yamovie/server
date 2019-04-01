@@ -8,8 +8,8 @@ module.exports.updateConfigurations = async () => {
 };
 
 module.exports.getMovies = async page => {
-  const nowPlayingResponse = await tmdb.requestNowPlayingMovies(page);
-  return nowPlayingResponse.data;
+  const response = await tmdb.requestDiscoverMovies(page);
+  return response.data;
 };
 
 module.exports.getMoviesData = async movies => {
@@ -19,11 +19,14 @@ module.exports.getMoviesData = async movies => {
   let movieData = tmdbResponses.map(response => response.data);
 
   for await (let datum of movieData) {
-    const omdbResponse = await omdb.requestMovieDetails(
-      datum.external_ids.imdb_id,
-    );
-    datum.ratings = omdbResponse.data.Ratings;
     datum.external_ids.tmdb_id = datum.id;
+
+    if (datum.external_ids.imdb_id) {
+      const omdbResponse = await omdb.requestMovieDetails(
+        datum.external_ids.imdb_id,
+      );
+      datum.ratings = omdbResponse.data.Ratings;
+    }
   }
 
   return movieData;
