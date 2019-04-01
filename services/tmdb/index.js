@@ -14,7 +14,8 @@ exports.requestNowPlayingMovies = page => {
   return axios(requests.TMDB_NOW_PLAYING);
 };
 
-exports.requestDiscoverMovies = () => {
+exports.requestDiscoverMovies = page => {
+  requests.TMDB_DISCOVER.params.page = page;
   return axios(requests.TMDB_DISCOVER);
 };
 

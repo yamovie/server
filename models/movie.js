@@ -1,77 +1,85 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
+const { configs } = require('../utils');
 
 const movieSchema = new mongoose.Schema(
   {
     adult: {
       type: Boolean,
-      required: true,
     },
     genre_ids: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'Genre',
       required: true,
     },
-    homepage: String,
+    homepage: {
+      type: String,
+      default: '',
+    },
     original_language: {
       type: String,
-      required: true,
+      default: '',
     },
     original_title: {
       type: String,
-      required: true,
+      default: '',
     },
     overview: {
       type: String,
-      required: true,
+      default: '',
     },
     production_companies: {
       type: [Object],
-      required: true,
+      default: [],
     },
     ratings: {
       type: Object,
-      required: true,
+      default: {},
     },
     release_date: {
       type: String,
-      required: true,
+      default: '',
     },
     runtime: {
       type: Number,
-      required: true,
+      default: 0,
     },
     status: {
       type: String,
-      required: true,
+      default: '',
     },
-    tagline: String,
+    tagline: {
+      type: String,
+      default: '',
+    },
     title: {
       type: String,
       required: true,
+      default: '',
     },
     credits: {
       cast: {
         type: [Object],
-        required: true,
+        default: [],
       },
       crew: {
         type: [Object],
-        required: true,
+        default: [],
       },
     },
     images: {
       backdrops: {
         type: [Object],
-        required: true,
+        default: [],
       },
       posters: {
         type: [Object],
-        required: true,
+        default: [],
       },
     },
     videos: {
       type: [Object],
-      required: true,
+      default: [],
     },
     external_ids: {
       tmdb_id: {
@@ -81,15 +89,32 @@ const movieSchema = new mongoose.Schema(
       },
       imdb_id: {
         type: String,
-        required: true,
       },
-      facebook_id: String,
-      instagram_id: String,
-      twitter_id: String,
+      facebook_id: {
+        type: String,
+        default: '',
+      },
+      instagram_id: {
+        type: String,
+        default: '',
+      },
+      twitter_id: {
+        type: String,
+        default: '',
+      },
     },
   },
   { collection: 'movies' },
 );
+
+mongoosePaginate.paginate.options = {
+  limit: 20,
+  lean: true,
+  leanWithId: true,
+  customLabels: configs.models.labels,
+};
+
+movieSchema.plugin(mongoosePaginate);
 
 const Movie = mongoose.model('Movie', movieSchema);
 module.exports = Movie;

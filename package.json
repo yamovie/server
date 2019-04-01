@@ -35,6 +35,7 @@
     "passport": "^0.4.0",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
+    "mongoose-paginate-v2": "^1.0.24",
     "shortid": "^2.2.14"
   },
   "devDependencies": {

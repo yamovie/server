@@ -1,14 +1,16 @@
 const { Movie } = require('../models');
+const { configs } = require('../utils');
+const parser = require('../utils/parser');
 
 /**
  * Returns all data from every movie.
  * @return  array of movies
  */
 module.exports.readAll = async (req, res) => {
-  const allMovies = await Movie.find({});
+  const qs = await parser.qs(req.url);
+  const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
 
-  if (res) res.json(allMovies);
-  else return allMovies;
+  res.json(allMovies);
 };
 
 /**
@@ -22,7 +24,12 @@ module.exports.readOne = async (req, res) => {
 };
 
 module.exports.readByGenre = async (req, res) => {
-  const foundMovies = await Movie.find({ genre_ids: req.params.id });
+  const qs = await parser.qs(req.url);
+
+  const foundMovies = await Movie.paginate(
+    { genre_ids: req.params.id },
+    { page: qs.page || 1 },
+  );
   res.json(foundMovies);
 };
 
