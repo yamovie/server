@@ -24,6 +24,7 @@ module.exports = {
     params: {
       api_key: process.env.TMDB_KEY,
       region: 'US',
+      language: 'en-US',
       primary_release_year: 2018,
     },
   },
@@ -34,6 +35,7 @@ module.exports = {
     params: {
       api_key: process.env.TMDB_KEY,
       append_to_response: 'credits,images,videos,external_ids',
+      include_image_language: 'en,null',
     },
   },
   TMDB_GENRES: {
