@@ -14,6 +14,7 @@ require('./config/passport');
 // Test
 // test();
 
+const { seed } = require('./utils');
 const app = express();
 
 // Seed
@@ -26,11 +27,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(session({
-  secret: 'Hello there!',
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(
+  session({
+    secret: 'Hello there!',
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -43,6 +46,10 @@ app.use('/', require('./routes'));
 // static middleware
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/', require('./routes'));
 
 app.use(errorHandler);
 
