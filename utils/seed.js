@@ -19,7 +19,7 @@ const seed = async () => {
   await seedGenres();
 
   while (state.movies.hasMore) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
 
     await seedMovies();
   }
@@ -85,7 +85,7 @@ const setMovieState = (page, results, totalPages, totalResults) => {
     updatedAt: new Date().toLocaleString('en-US', {
       timeZone: 'America/Los_Angeles',
     }),
-    hasMore: state.movies.results + results < totalResults,
+    hasMore: page < totalPages,
   };
 
   console.info(state.movies);

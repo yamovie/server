@@ -35,7 +35,7 @@ module.exports.movie = async (data, configs) => {
   );
 };
 
-const parseMovieCredits = async ({ cast, crew }) => {
+const parseMovieCredits = async ({ cast = [], crew = [] }) => {
   return {
     credits: {
       cast: cast.map(({ character, name, order }) => {
@@ -48,7 +48,7 @@ const parseMovieCredits = async ({ cast, crew }) => {
   };
 };
 
-const parseMovieGenres = async genres => {
+const parseMovieGenres = async (genres = []) => {
   return {
     genre_ids: (await Promise.all(
       genres
@@ -58,7 +58,7 @@ const parseMovieGenres = async genres => {
   };
 };
 
-const parseMovieProductionCompanies = async (companies, configs) => {
+const parseMovieProductionCompanies = async (companies = [], configs) => {
   return {
     production_companies: companies.map(
       ({ name, logo_path, origin_country }) => {
@@ -74,7 +74,7 @@ const parseMovieProductionCompanies = async (companies, configs) => {
   };
 };
 
-const parseMovieRatings = async ratings => {
+const parseMovieRatings = async (ratings = []) => {
   return {
     ratings: ratings.map(({ Source, Value }) => {
       return { source: Source, value: Value };
@@ -82,7 +82,7 @@ const parseMovieRatings = async ratings => {
   };
 };
 
-const parseMovieImages = async ({ backdrops, posters }, configs) => {
+const parseMovieImages = async ({ backdrops = [], posters = [] }, configs) => {
   return {
     images: {
       backdrops: backdrops.map(({ aspect_ratio, file_path, height, width }) => {
@@ -109,7 +109,7 @@ const parseMovieImages = async ({ backdrops, posters }, configs) => {
   };
 };
 
-const parseMovieVideos = async (videos, configs) => {
+const parseMovieVideos = async (videos = [], configs) => {
   return {
     videos: videos.map(({ key, name, site, size, type }) => {
       return {
