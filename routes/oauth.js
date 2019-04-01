@@ -15,7 +15,7 @@ const addSocketIdtoSession = (req, res, next) => {
 
 // Routes that are triggered by the React client
 router.get('/google', addSocketIdtoSession, googleAuth);
-
+router.get('/hi', (req, res) => console.log('hi'));
 // Routes that are triggered by callbacks from OAuth providers once 
 // the user has authenticated successfully
 router.get('/google/callback', googleAuth, oauthController.google);

@@ -1,4 +1,4 @@
-module.exports = requests = {
+module.exports = {
   TMDB_CONFIG: {
     method: 'get',
     baseURL: 'https://api.themoviedb.org/3/configuration',
@@ -14,6 +14,7 @@ module.exports = requests = {
     params: {
       api_key: process.env.TMDB_KEY,
       region: 'US',
+      // page: specify which page to query
     },
   },
   TMDB_DISCOVER: {
@@ -23,7 +24,7 @@ module.exports = requests = {
     params: {
       api_key: process.env.TMDB_KEY,
       region: 'US',
-      year: 2018,
+      year: 2019,
     },
   },
   TMDB_DETAIL: {

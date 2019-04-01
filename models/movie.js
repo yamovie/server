@@ -9,7 +9,7 @@ const movieSchema = new mongoose.Schema(
     genre_ids: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'Genre',
-      required: false,
+      required: true,
     },
     homepage: String,
     original_language: {
@@ -71,10 +71,6 @@ const movieSchema = new mongoose.Schema(
     },
     videos: {
       type: [Object],
-      required: true,
-    },
-    external_ids: {
-      type: Object,
       required: true,
     },
     external_ids: {

@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
     ref: 'Preference',
     required: false,
   },
+  googleId: String, 
 });
 
 const User = mongoose.model('User', userSchema);

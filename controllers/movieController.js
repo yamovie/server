@@ -1,14 +1,14 @@
-const Movie = require('../models/movie');
+const { Movie } = require('../models');
 
 /**
  * Returns all data from every movie.
  * @return  array of movies
  */
-module.exports.getAll = (req, res) => {
-  Movie.find({})
-    .exec()
-    .then(allMovies => res.json(allMovies))
-    .catch(error => console.log(error.stack));
+module.exports.readAll = async (req, res) => {
+  const allMovies = await Movie.find({});
+
+  if (res) res.json(allMovies);
+  else return allMovies;
 };
 
 /**
@@ -16,18 +16,14 @@ module.exports.getAll = (req, res) => {
  * @param   id  movie id
  * @return      promise, movie
  */
-module.exports.getOne = (req, res) => {
-  Movie.findById(req.params.id)
-    .exec()
-    .then(foundMovie => res.json(foundMovie))
-    .catch(error => console.log(error.stack));
+module.exports.readOne = async (req, res) => {
+  const foundMovie = await Movie.findById(req.params.id);
+  res.json(foundMovie);
 };
 
-module.exports.getByGenre = (req, res) => {
-  Movie.find({ genre_keys: req.params.id })
-    .exec()
-    .then(foundMovies => res.json(foundMovies))
-    .catch(error => console.log(error.stack));
+module.exports.readByGenre = async (req, res) => {
+  const foundMovies = await Movie.find({ genre_ids: req.params.id });
+  res.json(foundMovies);
 };
 
 /**
@@ -36,7 +32,3 @@ module.exports.getByGenre = (req, res) => {
  * Create new Movie document
  */
 module.exports.create = movie => Movie.create(movie);
-
-module.exports.update = () => {};
-
-module.exports.delete = () => {};

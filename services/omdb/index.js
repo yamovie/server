@@ -1,5 +1,5 @@
 const axios = require('axios');
-const requests = require('../../utils/requests');
+const { requests } = require('../../utils');
 
 exports.requestMovieDetails = id => {
   requests.OMDB_DETAIL.params.i = id;

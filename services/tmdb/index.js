@@ -1,5 +1,5 @@
 const axios = require('axios');
-const requests = require('../../utils/requests');
+const { requests } = require('../../utils');
 
 exports.requestConfigurations = () => {
   return axios(requests.TMDB_CONFIG);
@@ -9,7 +9,8 @@ exports.requestConfigurations = () => {
  * Requests TMDB API for movie data
  * @return  {Object}  movie data
  */
-exports.requestNowPlayingMovies = () => {
+exports.requestNowPlayingMovies = page => {
+  requests.TMDB_NOW_PLAYING.params.page = page;
   return axios(requests.TMDB_NOW_PLAYING);
 };
 
@@ -23,6 +24,5 @@ exports.requestMovieDetails = id => {
 };
 
 exports.requestGenres = () => {
-  console.log(requests.TMDB_GENRES);
   return axios(requests.TMDB_GENRES);
 };
