@@ -12,27 +12,22 @@ passport.use(new GoogleStrategy({
     if (user) {
       return done(null, user);
     }
-    const newUser = new User({
+    const newUser = {
       name: profile.displayName,
       email: profile.emails[0].value,
-      photo: profile.photos[0].value,
+      birthday: profile.birthday,
       googleId: profile.id,
       token: accessToken,
-    });
-    newUser.save((err) => {
-      if (err) return done(err);
-      return done(null, newUser);
-    });
-    
+    };
+    User.create(newUser);
+    return done(null, newUser);
   });
 }));
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
 });

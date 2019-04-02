@@ -6,16 +6,16 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  age: String,
+  birthday: String,
   streamingService: { 
-    type: { Boolean }, 
+    type: Object, 
     default: false,
   },
   watchlist: {
     type: [Object],
   },
   preferenceId: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Preference',
     required: false,
   },
