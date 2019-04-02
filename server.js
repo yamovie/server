@@ -5,9 +5,8 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const http = require('http');
 
-const server = http.Server(app);
 const passport = require('passport');
-const io = require('socket.io')(server);
+// const io = require('socket.io')(server);
 const { logger, errorHandler } = require('./middleware');
 const apiRoutes = require('./routes/api');
 const oauthRoutes = require('./routes/api');
@@ -21,7 +20,8 @@ require('./config/passport');
 // test();
 
 const app = express();
-server.listen(80);
+const server = http.Server(app);
+// server.listen(80);
 // Seed
 // seed();
 
@@ -44,14 +44,12 @@ app.use(methodOverride('_method', { methods: ['GET', 'POST'] }));
 // Connecting sockets to the server and adding them to the request 
 // so that we can access them later in the controller
 // const io = socketio.listen(server); 
-app.set('io', io);
+// app.set('io', io);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/', require('./routes'));
 
-app.use('/api', apiRoutes);
-app.use('/auth', oauthRoutes);
 app.use(errorHandler);
 
 app.listen(process.env.PORT || 5500, () => {
