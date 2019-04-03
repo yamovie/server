@@ -8,9 +8,7 @@ const userController = require('../controllers/userController');
 // });
 
 router.get('/:id', userController.findOne);
-
-// router.post('/:id'), async (req, res) => {
-
-// }
+router.post('/signup', userController.signup);
+router.post('/login', userController.login);
 
 module.exports = router;
