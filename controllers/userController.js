@@ -1,31 +1,41 @@
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 
-module.exports.findOne = (req, res) => {
-  User.find({ googleId: req.params.id }).then(userData => res.json(userData));
-};
+const { SECRET } = process.env;
 
-module.exports.signup = (req, res) => {
-  let user = new User(req.body)
-  user.save()
-  .then(user => {
-    res.json({ token: createJWT(user) })
-  })
-  .catch(err => res.status(400).json(err));
-};
+function createJWT(user) {
+  return jwt.sign({ user }, SECRET, { expiresIn: '24h' });
+}
 
-module.exports.login = (req, res) => {
+// module.exports.findOne = (req, res) => {
+//   User.find({ googleId: req.params.id }).then(userData => res.json(userData));
+// };
+
+function signup(req, res) {
+  const newUser = User.create({
+    fullName: req.body.fullName,
+    email: req.body.email,
+    password: req.body.password,
+  }) 
+    .then(user => {
+      res.json({ token: createJWT(user) });
+    })
+    .catch(err => res.status(400).json(err));
+}
+
+function login(req, res) {
   User.findOne({ email: req.body.email }).exec().then(user => {
     if (!user) return res.status(401).json({ err: 'bad credentials' });
-    user.comparePassowrd(req.body.pw, (err, isMatch) => {
+    user.comparePassword(req.body.pw, (err, isMatch) => {
       if (isMatch) {
         res.json({ token: createJWT(user) });
       }
       return res.status(401).json({ err: 'bad credentials' });
     });
   }).catch(err => res.status(401).json(err));
-};
-
-function createJWT(user) {
-  return jwt.sign({user}, SECRET, {expiresIn: '24h'})
 }
+
+module.exports = {
+  login,
+  signup,
+};
