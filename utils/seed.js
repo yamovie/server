@@ -49,6 +49,11 @@ const seedGenres = async () => {
   }
 };
 
+const seedCertifications = async () => {
+  const seed = await services.getCertifications();
+  const data = seed.certifications.US;
+};
+
 const seedMovies = async () => {
   await console.log('Seeding movies...');
 

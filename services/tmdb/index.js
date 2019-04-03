@@ -1,6 +1,10 @@
 const axios = require('axios');
 const { requests } = require('../../utils');
 
+exports.requestCertifications = () => {
+  return axios(requests.TMDB_CERTIFICATIONS);
+};
+
 exports.requestConfigurations = () => {
   return axios(requests.TMDB_CONFIG);
 };

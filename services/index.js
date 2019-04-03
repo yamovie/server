@@ -7,6 +7,11 @@ module.exports.updateConfigurations = async () => {
   return configResponse.data;
 };
 
+module.exports.getCertifications = async () => {
+  const certResponse = await tmdb.requestCertifications();
+  return certResponse.data;
+};
+
 module.exports.getMovies = async page => {
   const response = await tmdb.requestDiscoverMovies(page);
   return response.data;
@@ -25,6 +30,7 @@ module.exports.getMoviesData = async movies => {
       const omdbResponse = await omdb.requestMovieDetails(
         datum.external_ids.imdb_id,
       );
+
       datum.ratings = omdbResponse.data.Ratings;
     }
   }

@@ -16,6 +16,8 @@ router.get('/movies/:id', controllers.movie.readOne);
 
 router.get('/movies/genre/:id', controllers.movie.readByGenre);
 
+router.post('/movies/recommended', controllers.movie.readByRecommendation);
+
 /**
  * GET request for genre list
  * @return  array of genres

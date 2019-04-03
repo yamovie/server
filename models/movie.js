@@ -7,6 +7,10 @@ const movieSchema = new mongoose.Schema(
     adult: {
       type: Boolean,
     },
+    budget: {
+      type: Number,
+    },
+    certifications: Array,
     genre_ids: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'Genre',
@@ -39,6 +43,9 @@ const movieSchema = new mongoose.Schema(
     release_date: {
       type: String,
       default: '',
+    },
+    release_year: {
+      type: Number,
     },
     runtime: {
       type: Number,

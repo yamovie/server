@@ -28,11 +28,13 @@ module.exports.movie = async (data, configs) => {
   return Object.assign(
     {
       adult: data.adult,
+      budget: data.budget,
       homepage: data.homepage,
       original_language: data.original_language,
       original_title: data.original_title,
       overview: data.overview,
       release_date: data.release_date,
+      release_year: data.release_date.split('-')[0],
       runtime: data.runtime,
       status: data.status,
       tagline: data.tagline,
@@ -40,6 +42,7 @@ module.exports.movie = async (data, configs) => {
       external_ids: data.external_ids,
     },
     ...(await Promise.all([
+      parseMovieCertifications(data.release_dates.results),
       parseMovieCredits(data.credits),
       parseMovieGenres(data.genres),
       parseMovieProductionCompanies(data.production_companies, configs),
@@ -48,6 +51,18 @@ module.exports.movie = async (data, configs) => {
       parseMovieVideos(data.videos.results, configs),
     ])),
   );
+};
+
+const parseMovieCertifications = async (data = []) => {
+  return {
+    certifications: [
+      ...new Set(
+        data
+          .filter(datum => datum.iso_3166_1 === 'US')[0]
+          .release_dates.map(elem => elem.certification),
+      ),
+    ],
+  };
 };
 
 const parseMovieCredits = async ({ cast = [], crew = [] }) => {
@@ -91,9 +106,16 @@ const parseMovieProductionCompanies = async (companies = [], configs) => {
 
 const parseMovieRatings = async (ratings = []) => {
   return {
-    ratings: ratings.map(({ Source, Value }) => {
-      return { source: Source, value: Value };
-    }),
+    ratings: ratings.reduce((acc, { Source, Value }) => {
+      const source = Source.toLowerCase()
+        .split(' ')
+        .join('_');
+      acc[source] = {
+        rate: Value,
+        value: parseInt(Value),
+      };
+      return acc;
+    }, {}),
   };
 };
 
