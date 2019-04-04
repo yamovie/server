@@ -1,4 +1,12 @@
 module.exports = {
+  TMDB_CERTIFICATIONS: {
+    method: 'get',
+    baseURL: 'https://api.themoviedb.org/3/certification/movie/list',
+    url: '',
+    params: {
+      api_key: process.env.TMDB_KEY,
+    },
+  },
   TMDB_CONFIG: {
     method: 'get',
     baseURL: 'https://api.themoviedb.org/3/configuration',
@@ -34,7 +42,7 @@ module.exports = {
     url: '',
     params: {
       api_key: process.env.TMDB_KEY,
-      append_to_response: 'credits,images,videos,external_ids',
+      append_to_response: 'credits,release_dates,images,videos,external_ids',
       include_image_language: 'en,null',
     },
   },

@@ -1,5 +1,6 @@
 const { Movie } = require('../models');
-const { parser } = require('../utils');
+const utils = require('../utils');
+const certData = require('../utils/mpaa');
 
 /**
  * Serves JSON object of all genres.
@@ -7,9 +8,9 @@ const { parser } = require('../utils');
  * @param {Object} res HTTP response
  */
 const readAll = async (req, res) => {
-  const qs = await parser.qs(req.url);
+  const qs = await utils.parser.query(req.url);
   const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
-  res.json(allMovies);
+  return res.json(allMovies);
 };
 
 /**
@@ -19,16 +20,63 @@ const readAll = async (req, res) => {
  */
 const readOne = async (req, res) => {
   const foundMovie = await Movie.findById(req.params.id);
-  res.json(foundMovie);
+  return res.json(foundMovie);
 };
 
 const readByGenre = async (req, res) => {
-  const qs = await parser.qs(req.url);
-
+  const qs = await utils.parser.query(req.url);
   const foundMovies = await Movie.paginate(
     { genre_ids: req.params.id },
     { page: qs.page || 1 },
   );
+  return res.json(foundMovies);
+};
+
+const search = async (req, res) => {
+  const qs = await utils.parser.query(req.url);
+
+  // console.log(req.url);
+  // console.log(qs);
+
+  const conditions = {
+    title: new RegExp(qs.query, 'i'),
+  };
+
+  const options = { page: qs.page || 1 };
+
+  const foundMovie = await Movie.paginate(conditions, options);
+  return res.json(foundMovie);
+};
+
+const readByRecommendation = async (req, res) => {
+  const qs = await utils.parser.query(req.url);
+
+  let {
+    genres,
+    mpaa,
+    minYear,
+    maxYear,
+    rottenTomatoes,
+    imdb,
+    foreign,
+    indie,
+  } = req.body;
+
+  const cert = certData.getCertification(mpaa);
+  const certs = certData.filterCertifications(cert.order);
+
+  const conditions = {
+    genre_ids: { $in: genres },
+    certifications: { $in: certs },
+    release_year: { $gte: minYear, $lte: maxYear },
+    'ratings.rotten_tomatoes.value': { $gte: rottenTomatoes },
+    'ratings.internet_movie_database.value': { $gte: imdb },
+  };
+
+  if (!foreign) conditions.original_language = 'en';
+  if (indie) conditions.budget = { $lt: 1000000 };
+
+  const foundMovies = await Movie.paginate(conditions, { page: qs.page || 1 });
   res.json(foundMovies);
 };
 
@@ -40,3 +88,12 @@ const readByGenre = async (req, res) => {
 const create = movie => Movie.create(movie);
 
 module.exports = { readAll, readOne, readByGenre, create };
+
+module.exports = {
+  readAll,
+  readOne,
+  readByGenre,
+  readByRecommendation,
+  create,
+  search,
+};

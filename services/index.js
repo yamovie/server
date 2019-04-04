@@ -8,8 +8,8 @@ const updateConfigurations = async () => {
 };
 
 const getMovies = async page => {
-  const response = await tmdb.requestDiscoverMovies(page);
-  return response.data;
+  const certResponse = await tmdb.requestCertifications();
+  return certResponse.data;
 };
 
 const getMoviesData = async movies => {
@@ -25,11 +25,12 @@ const getMoviesData = async movies => {
       const omdbResponse = await omdb.requestMovieDetails(
         datum.external_ids.imdb_id,
       );
+
       datum.ratings = omdbResponse.data.Ratings;
     }
   }
 
-  return { movieData, configData };
+  return movieData;
 };
 
 const getGenres = async () => {

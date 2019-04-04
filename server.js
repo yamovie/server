@@ -19,10 +19,10 @@ const { seed } = require('./utils');
 const app = express();
 
 // Seed
-seed();
+// seed();
 
 app.use(cors());
-app.use(logger);
+// app.use(logger);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

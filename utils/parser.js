@@ -1,6 +1,18 @@
 /* eslint-disable object-curly-newline */
 const controllers = require('../controllers');
 
+const parseMovieCertifications = async (data = []) => {
+  return {
+    certifications: [
+      ...new Set(
+        data
+          .filter(datum => datum.iso_3166_1 === 'US')[0]
+          .release_dates.map(elem => elem.certification),
+      ),
+    ],
+  };
+};
+
 const parseMovieCredits = async ({ cast = [], crew = [] }) => ({
   credits: {
     cast: cast.map(({ character, name, order }) => ({
@@ -19,7 +31,7 @@ const parseMovieCredits = async ({ cast = [], crew = [] }) => ({
 const parseMovieGenres = async (genres = []) => ({
   genre_ids: await Promise.all(
     genres.map(genre => controllers.genre.readOneByKey(genre.id)),
-  ).then(res => res._id),
+  ),
 });
 
 const parseMovieProductionCompanies = async (companies = [], configs) => ({
@@ -35,10 +47,17 @@ const parseMovieProductionCompanies = async (companies = [], configs) => ({
 });
 
 const parseMovieRatings = async (ratings = []) => ({
-  ratings: ratings.map(({ Source, Value }) => ({
-    source: Source,
-    value: Value,
-  })),
+  ratings: ratings.reduce((acc, { Source, Value }) => {
+    const source = Source.toLowerCase()
+      .split(' ')
+      .join('_');
+
+    acc[source] = {
+      rate: Value,
+      value: parseInt(Value),
+    };
+    return acc;
+  }, {}),
 });
 
 const parseMovieImages = async ({ backdrops = [], posters = [] }, configs) => ({
@@ -78,11 +97,13 @@ const movie = async (data, configs) =>
   Object.assign(
     {
       adult: data.adult,
+      budget: data.budget,
       homepage: data.homepage,
       original_language: data.original_language,
       original_title: data.original_title,
       overview: data.overview,
       release_date: data.release_date,
+      release_year: data.release_date.split('-')[0],
       runtime: data.runtime,
       status: data.status,
       tagline: data.tagline,
@@ -90,6 +111,7 @@ const movie = async (data, configs) =>
       external_ids: data.external_ids,
     },
     ...(await Promise.all([
+      parseMovieCertifications(data.release_dates.results),
       parseMovieCredits(data.credits),
       parseMovieGenres(data.genres),
       parseMovieProductionCompanies(data.production_companies, configs),
@@ -112,9 +134,23 @@ const query = async url => {
   if (index === -1) return {};
 
   const queries = url.substring(index + 1).split('&');
+  const parseMovieRatings = async (ratings = []) => {
+    return {
+      ratings: ratings.reduce((acc, { Source, Value }) => {
+        const source = Source.toLowerCase()
+          .split(' ')
+          .join('_');
+        acc[source] = {
+          rate: Value,
+          value: parseInt(Value),
+        };
+        return acc;
+      }, {}),
+    };
+  };
 
   return queries.reduce((acc, curr) => {
-    const { key, value } = curr.split('=');
+    const [key, value] = curr.split('=');
     acc[key] = value;
     return acc;
   }, {});

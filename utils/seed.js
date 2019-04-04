@@ -45,6 +45,11 @@ const seedGenres = async () => {
   }
 };
 
+const seedCertifications = async () => {
+  const seed = await services.getCertifications();
+  const data = seed.certifications.US;
+};
+
 const seedMovies = async () => {
   await console.log('Seeding movies...');
 
@@ -76,7 +81,7 @@ const seed = async () => {
   await seedGenres();
 
   while (state.movies.hasMore) {
-    await new Promise(resolve => setTimeout(resolve, 30000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
 
     await seedMovies();
   }
