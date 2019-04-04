@@ -3,6 +3,7 @@ const cors = require('cors');
 const express = require('express');
 const { logger, errorHandler } = require('./middleware');
 const { seed } = require('./utils');
+
 const app = express();
 
 // Seed
