@@ -27,6 +27,7 @@ function signup(req, res) {
     })
     .catch(err => res.status(400).json(err));
 }
+
 /**
  * Checks user credentials
  * @param {Object} req credentials
