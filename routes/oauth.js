@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 const oauthController = require('../controllers/oauthController');
+// jwt express
  
 const googleAuth = passport.authenticate('google', {
   scope: ['profile', 'email'],

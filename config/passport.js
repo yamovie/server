@@ -12,6 +12,7 @@ passport.use(new GoogleStrategy({
     if (user) {
       return done(null, user);
     }
+    // make JWT from user
     const newUser = {
       name: profile.displayName,
       email: profile.emails[0].value,
