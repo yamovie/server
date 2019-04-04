@@ -6,11 +6,11 @@ const parser = require('../utils/parser');
  * Returns all data from every movie.
  * @return  array of movies
  */
-module.exports.readAll = async (req, res) => {
+const readAll = async (req, res) => {
   const qs = await parser.qs(req.url);
   const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
 
-  res.json(allMovies);
+  return res.json(allMovies);
 };
 
 /**
@@ -18,19 +18,30 @@ module.exports.readAll = async (req, res) => {
  * @param   id  movie id
  * @return      promise, movie
  */
-module.exports.readOne = async (req, res) => {
+const readOne = async (req, res) => {
   const foundMovie = await Movie.findById(req.params.id);
-  res.json(foundMovie);
+  return res.json(foundMovie);
 };
 
-module.exports.readByGenre = async (req, res) => {
+const readByGenre = async (req, res) => {
   const qs = await parser.qs(req.url);
 
   const foundMovies = await Movie.paginate(
     { genre_ids: req.params.id },
     { page: qs.page || 1 },
   );
-  res.json(foundMovies);
+  return res.json(foundMovies);
+};
+
+
+const search = async (req, res) => {
+  const { query } = await parser.qs(req.url);
+  
+  const foundMovie = await Movie.find({
+    title: new RegExp(query, 'i'),
+  });
+  return res.json(foundMovie);
+  
 };
 
 /**
@@ -38,4 +49,12 @@ module.exports.readByGenre = async (req, res) => {
  *
  * Create new Movie document
  */
-module.exports.create = movie => Movie.create(movie);
+const create = movie => Movie.create(movie);
+
+module.exports = {
+  readAll,
+  readOne,
+  readByGenre,
+  search,
+  create,
+};
