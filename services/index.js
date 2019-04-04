@@ -2,17 +2,17 @@ const axios = require('axios');
 const tmdb = require('./tmdb');
 const omdb = require('./omdb');
 
-module.exports.updateConfigurations = async () => {
+const updateConfigurations = async () => {
   const configResponse = await tmdb.requestConfigurations();
   return configResponse.data;
 };
 
-module.exports.getMovies = async page => {
+const getMovies = async page => {
   const response = await tmdb.requestDiscoverMovies(page);
   return response.data;
 };
 
-module.exports.getMoviesData = async movies => {
+const getMoviesData = async movies => {
   const tmdbRequests = movies.map(movie => tmdb.requestMovieDetails(movie.id));
   const tmdbResponses = await axios.all(tmdbRequests);
 
@@ -32,7 +32,14 @@ module.exports.getMoviesData = async movies => {
   return { movieData, configData };
 };
 
-module.exports.getGenres = async () => {
+const getGenres = async () => {
   const genreResponse = await tmdb.requestGenres();
   return genreResponse.data;
+};
+
+module.exports = {
+  updateConfigurations,
+  getMovies,
+  getMoviesData,
+  getGenres,
 };

@@ -15,6 +15,7 @@ require('./config/passport');
 // test();
 
 const { seed } = require('./utils');
+
 const app = express();
 
 // Seed

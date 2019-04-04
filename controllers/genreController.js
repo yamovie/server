@@ -4,22 +4,28 @@ const { Genre } = require('../models');
  * Serves an array of movie genres
  * @return  genres
  */
-module.exports.readAll = async (req, res) => {
+const readAll = async (req, res) => {
   const allGenres = await Genre.find({});
 
-  if (res) res.json(allGenres);
-  else return allGenres;
+  return res ? res.json(allGenres) : allGenres;
 };
 
-module.exports.readOne = async (req, res) => {
+const readOne = async (req, res) => {
   const foundGenre = await Genre.findById(req.params.id);
-  res.json(foundGenre);
+  return res.json(foundGenre);
 };
 
-module.exports.readOneByKey = key =>
+const readOneByKey = key =>
   Genre.findOne({ 'external_ids.tmdb_id': key }).exec();
 
 /**
  * Create new Genre document
  */
-module.exports.create = genre => Genre.create(genre);
+const create = genre => Genre.create(genre);
+
+module.exports = {
+  readAll,
+  readOne,
+  readOneByKey,
+  create,
+};

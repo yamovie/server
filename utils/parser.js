@@ -1,31 +1,81 @@
+/* eslint-disable object-curly-newline */
 const controllers = require('../controllers');
 
-module.exports.qs = async url => {
-  const index = url.indexOf('?');
+const parseMovieCredits = async ({ cast = [], crew = [] }) => ({
+  credits: {
+    cast: cast.map(({ character, name, order }) => ({
+      character,
+      name,
+      order,
+    })),
+    crew: crew.map(({ department, job, name }) => ({
+      department,
+      job,
+      name,
+    })),
+  },
+});
 
-  if (index === -1) return {};
+const parseMovieGenres = async (genres = []) => ({
+  genre_ids: await Promise.all(
+    genres.map(genre => controllers.genre.readOneByKey(genre.id)),
+  ).then(res => res._id),
+});
 
-  const qs = url.substring(index + 1);
-  const queries = qs.split('&');
+const parseMovieProductionCompanies = async (companies = [], configs) => ({
+  production_companies: companies.map(
+    ({ name, logo_path, origin_country }) => ({
+      name,
+      origin_country,
+      logo_url: `${configs.images.secure_base_url}${
+        configs.images.logo_sizes[6]
+      }${logo_path}`,
+    }),
+  ),
+});
 
-  return queries.reduce((acc, curr) => {
-    const query = curr.split('=');
-    acc[query[0]] = query[1];
-    return acc;
-  }, {});
-};
+const parseMovieRatings = async (ratings = []) => ({
+  ratings: ratings.map(({ Source, Value }) => ({
+    source: Source,
+    value: Value,
+  })),
+});
 
-module.exports.genres = async ({ name, id }) => {
-  return {
+const parseMovieImages = async ({ backdrops = [], posters = [] }, configs) => ({
+  images: {
+    backdrops: backdrops.map(({ aspect_ratio, file_path, height, width }) => ({
+      aspect_ratio,
+      height,
+      width,
+      backdrop_url: `${configs.images.secure_base_url}${
+        configs.images.backdrop_sizes[3]
+      }${file_path}`,
+    })),
+    posters: posters.map(({ aspect_ratio, file_path, height, width }) => ({
+      aspect_ratio,
+      height,
+      width,
+      poster_url: `${configs.images.secure_base_url}${
+        configs.images.poster_sizes[6]
+      }${file_path}`,
+    })),
+  },
+});
+
+const parseMovieVideos = async (videos = [], configs) => ({
+  videos: videos.map(({ key, name, site, size, type }) => ({
     name,
-    external_ids: {
-      tmdb_id: id,
-    },
-  };
-};
+    site,
+    size,
+    type,
+    url: site.includes('YouTube')
+      ? `${configs.urls.YT_EMBED_BASE_URL}${key}`
+      : key,
+  })),
+});
 
-module.exports.movie = async (data, configs) => {
-  return Object.assign(
+const movie = async (data, configs) =>
+  Object.assign(
     {
       adult: data.adult,
       homepage: data.homepage,
@@ -48,94 +98,30 @@ module.exports.movie = async (data, configs) => {
       parseMovieVideos(data.videos.results, configs),
     ])),
   );
+
+const genres = async ({ name, id }) => ({
+  name,
+  external_ids: {
+    tmdb_id: id,
+  },
+});
+
+const query = async url => {
+  const index = url.indexOf('?');
+
+  if (index === -1) return {};
+
+  const queries = url.substring(index + 1).split('&');
+
+  return queries.reduce((acc, curr) => {
+    const { key, value } = curr.split('=');
+    acc[key] = value;
+    return acc;
+  }, {});
 };
 
-const parseMovieCredits = async ({ cast = [], crew = [] }) => {
-  return {
-    credits: {
-      cast: cast.map(({ character, name, order }) => {
-        return { character, name, order };
-      }),
-      crew: crew.map(({ department, job, name }) => {
-        return { department, job, name };
-      }),
-    },
-  };
-};
-
-const parseMovieGenres = async (genres = []) => {
-  return {
-    genre_ids: (await Promise.all(
-      genres
-        .map(async genre => await controllers.genre.readOneByKey(genre.id))
-        .map(async req => await req),
-    )).map(res => res._id),
-  };
-};
-
-const parseMovieProductionCompanies = async (companies = [], configs) => {
-  return {
-    production_companies: companies.map(
-      ({ name, logo_path, origin_country }) => {
-        return {
-          name,
-          origin_country,
-          logo_url: `${configs.images.secure_base_url}${
-            configs.images.logo_sizes[6]
-          }${logo_path}`,
-        };
-      },
-    ),
-  };
-};
-
-const parseMovieRatings = async (ratings = []) => {
-  return {
-    ratings: ratings.map(({ Source, Value }) => {
-      return { source: Source, value: Value };
-    }),
-  };
-};
-
-const parseMovieImages = async ({ backdrops = [], posters = [] }, configs) => {
-  return {
-    images: {
-      backdrops: backdrops.map(({ aspect_ratio, file_path, height, width }) => {
-        return {
-          aspect_ratio,
-          height,
-          width,
-          backdrop_url: `${configs.images.secure_base_url}${
-            configs.images.backdrop_sizes[3]
-          }${file_path}`,
-        };
-      }),
-      posters: posters.map(({ aspect_ratio, file_path, height, width }) => {
-        return {
-          aspect_ratio,
-          height,
-          width,
-          poster_url: `${configs.images.secure_base_url}${
-            configs.images.poster_sizes[6]
-          }${file_path}`,
-        };
-      }),
-    },
-  };
-};
-
-const parseMovieVideos = async (videos = [], configs) => {
-  return {
-    videos: videos.map(({ key, name, site, size, type }) => {
-      return {
-        name,
-        site,
-        size,
-        type,
-        url: site.includes('YouTube')
-          ? `${configs.urls.YT_EMBED_BASE_URL}${key}`
-          : key,
-      };
-    }),
-  };
+module.exports = {
+  movie,
+  genres,
+  query,
 };

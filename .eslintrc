@@ -15,6 +15,20 @@
     "browser": true
   },
   "rules": {
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": ["_id"]
+      }
+    ],
+    "function-paren-newline": 0,
+    "implicit-arrow-linebreak": 0,
+    "react/jsx-one-expression-per-line": [
+      "enabled",
+      {
+        "allow": "single-child"
+      }
+    ],
     "operator-linebreak": 0,
     "indent": ["error", 2],
     "linebreak-style": 0,
@@ -23,14 +37,32 @@
     "no-console": 1,
     "no-trailing-spaces": [
       "warn",
-      { "skipBlankLines": true, "ignoreComments": true }
+      {
+        "skipBlankLines": true,
+        "ignoreComments": true
+      }
     ],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
     "import/prefer-default-export": 0,
     "arrow-parens": 0,
-    "no-param-reassign": [2, { "props": false }],
+    "no-param-reassign": [
+      2,
+      {
+        "props": false
+      }
+    ],
     "padded-blocks": 0,
     "no-alert": 1,
-    "no-plusplus": [1, { "allowForLoopAfterthoughts": true }]
+    "no-plusplus": [
+      1,
+      {
+        "allowForLoopAfterthoughts": true
+      }
+    ]
   }
 }
