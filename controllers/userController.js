@@ -11,6 +11,11 @@ function createJWT(user) {
 //   User.find({ googleId: req.params.id }).then(userData => res.json(userData));
 // };
 
+/**
+ * creates new user in database
+ * @param {Object} req user data
+ * @param {string} res token
+ */
 function signup(req, res) {
   const newUser = User.create({
     fullName: req.body.fullName,
@@ -22,7 +27,11 @@ function signup(req, res) {
     })
     .catch(err => res.status(400).json(err));
 }
-
+/**
+ * Checks user credentials
+ * @param {Object} req credentials
+ * @param {string} res token
+ */
 function login(req, res) {
   User.findOne({ email: req.body.email }).exec().then(user => {
     if (!user) return res.status(401).json({ err: 'bad credentials' });
