@@ -1,7 +1,13 @@
 const router = require('express').Router();
 const passport = require('passport');
-const oauthController = require('../controllers/oauthController');
-// jwt express
+const jwt = require('jsonwebtoken');
+
+const { SECRET } = process.env;
+
+function createJWT(user) {
+  return jwt.sign({ user }, SECRET, { expiresIn: '24h' });
+}
+
 
 /**
  * Routes that are triggered by React client
@@ -20,7 +26,7 @@ router.get(
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/', session: false }),
   (req, res) => {
-    const {token} = req.user;
+    const token = createJWT(req.user);
     res.redirect(`http://localhost:3000?token=${token}`);
     
   });
