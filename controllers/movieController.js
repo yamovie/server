@@ -2,20 +2,20 @@ const { Movie } = require('../models');
 const { parser } = require('../utils');
 
 /**
- * Returns all data from every movie.
- * @return  array of movies
+ * Serves JSON object of all genres.
+ * @param {Object} req HTTP request
+ * @param {Object} res HTTP response
  */
 const readAll = async (req, res) => {
   const qs = await parser.qs(req.url);
   const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
-
   res.json(allMovies);
 };
 
 /**
- * Returns data of specific movie
- * @param   id  movie id
- * @return {Promise}     promise, movie
+ *
+ * @param {Object} req HTTP request
+ * @param {Object} res HTTP response
  */
 const readOne = async (req, res) => {
   const foundMovie = await Movie.findById(req.params.id);
