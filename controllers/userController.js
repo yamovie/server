@@ -16,7 +16,7 @@ function createJWT(user) {
  * @param {Object} req user data
  * @param {string} res token
  */
-const signup = (req, res) => {
+function signup(req, res) {
   const newUser = User.create({
     fullName: req.body.fullName,
     email: req.body.email,
@@ -33,7 +33,7 @@ const signup = (req, res) => {
  * @param {Object} req credentials
  * @param {string} res token
  */
-const login = (req, res) => {
+function login(req, res) {
   User.findOne({ email: req.body.email }).exec().then(user => {
     if (!user) return res.status(401).json({ err: 'bad credentials' });
     user.comparePassword(req.body.pw, (err, isMatch) => {
@@ -43,7 +43,7 @@ const login = (req, res) => {
       return res.status(401).json({ err: 'bad credentials' });
     });
   }).catch(err => res.status(401).json(err));
-};
+}
 
 module.exports = {
   login,
