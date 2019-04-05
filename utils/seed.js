@@ -81,7 +81,7 @@ const seed = async () => {
   await seedGenres();
 
   while (state.movies.hasMore) {
-    await new Promise(resolve => setTimeout(resolve, 30000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
 
     await seedMovies();
   }

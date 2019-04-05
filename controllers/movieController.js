@@ -1,9 +1,6 @@
 const { Movie } = require('../models');
 const { parser } = require('../utils');
 const mongodb = require('mongodb');
-const { Movie, Genre } = require('../models');
-const { configs } = require('../utils');
-const parser = require('../utils/parser');
 const certData = require('../utils/mpaa');
 
 /**
@@ -13,6 +10,7 @@ const certData = require('../utils/mpaa');
  */
 const readAll = async (req, res) => {
   const qs = await parser.qs(req.url);
+  ``;
   const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
   res.json(allMovies);
 
@@ -48,7 +46,7 @@ const search = async (req, res) => {
   return res.json(foundMovie);
 };
 
-module.exports.readByRecommendation = async (req, res) => {
+const readByRecommendation = async (req, res) => {
   const qs = await parser.qs(req.url);
 
   let {
@@ -91,4 +89,11 @@ module.exports.readByRecommendation = async (req, res) => {
  */
 const create = movie => Movie.create(movie);
 
-module.exports = { readAll, readOne, readByGenre, create };
+module.exports = {
+  readAll,
+  readOne,
+  readByGenre,
+  readByRecommendation,
+  create,
+  search,
+};

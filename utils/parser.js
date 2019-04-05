@@ -1,6 +1,18 @@
 /* eslint-disable object-curly-newline */
 const controllers = require('../controllers');
 
+const parseMovieCertifications = async (data = []) => {
+  return {
+    certifications: [
+      ...new Set(
+        data
+          .filter(datum => datum.iso_3166_1 === 'US')[0]
+          .release_dates.map(elem => elem.certification),
+      ),
+    ],
+  };
+};
+
 const parseMovieCredits = async ({ cast = [], crew = [] }) => ({
   credits: {
     cast: cast.map(({ character, name, order }) => ({

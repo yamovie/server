@@ -30,7 +30,7 @@ const getMoviesData = async movies => {
     }
   }
 
-  return { movieData, configData };
+  return movieData;
 };
 
 const getGenres = async () => {
