@@ -1,3 +1,5 @@
+const { Movie } = require('../models');
+const { parser } = require('../utils');
 const mongodb = require('mongodb');
 const { Movie, Genre } = require('../models');
 const { configs } = require('../utils');
@@ -5,20 +7,22 @@ const parser = require('../utils/parser');
 const certData = require('../utils/mpaa');
 
 /**
- * Returns all data from every movie.
- * @return  array of movies
+ * Serves JSON object of all genres.
+ * @param {Object} req HTTP request
+ * @param {Object} res HTTP response
  */
 const readAll = async (req, res) => {
   const qs = await parser.qs(req.url);
   const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
+  res.json(allMovies);
 
   return res.json(allMovies);
 };
 
 /**
- * Returns data of specific movie
- * @param   id  movie id
- * @return      promise, movie
+ *
+ * @param {Object} req HTTP request
+ * @param {Object} res HTTP response
  */
 const readOne = async (req, res) => {
   const foundMovie = await Movie.findById(req.params.id);
@@ -35,15 +39,13 @@ const readByGenre = async (req, res) => {
   return res.json(foundMovies);
 };
 
-
 const search = async (req, res) => {
   const { query } = await parser.qs(req.url);
-  
+
   const foundMovie = await Movie.find({
     title: new RegExp(query, 'i'),
   });
   return res.json(foundMovie);
-  
 };
 
 module.exports.readByRecommendation = async (req, res) => {
@@ -89,10 +91,4 @@ module.exports.readByRecommendation = async (req, res) => {
  */
 const create = movie => Movie.create(movie);
 
-module.exports = {
-  readAll,
-  readOne,
-  readByGenre,
-  search,
-  create,
-};
+module.exports = { readAll, readOne, readByGenre, create };

@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const controllers = require('../controllers');
 const services = require('../services');
 const { parser, configs } = require('../utils');
@@ -13,25 +15,19 @@ const state = {
   },
 };
 
-const seed = async () => {
-  console.log('Seeding...');
+const setMovieState = (page, results, totalPages, totalResults) => {
+  state.movies = {
+    page,
+    results: state.movies.results + results,
+    totalPages,
+    totalResults,
+    updatedAt: new Date().toLocaleString('en-US', {
+      timeZone: 'America/Los_Angeles',
+    }),
+    hasMore: page < totalPages,
+  };
 
-  await seedGenres();
-
-  while (state.movies.hasMore) {
-    await new Promise(resolve => setTimeout(resolve, 15000));
-
-    await seedMovies();
-  }
-
-  // let timer = await setTimeout(async () => {
-  //   console.log('timing...');
-  //   await seedMovies;
-  //   if (state.movies.hasMore) timer = await setTimeout(seedMovies, 10000);
-  //   else clearTimeout(timer);
-  // }, 1000);
-
-  // await seedMovies();
+  console.info(state.movies);
 };
 
 const seedGenres = async () => {
@@ -41,8 +37,8 @@ const seedGenres = async () => {
 
     const seed = await services.getGenres();
 
-    for await (let genre of seed.genres) {
-      await controllers.genre.create(await parser.genres(genre));
+    for await (const genre of seed.genres) {
+      controllers.genre.create(await parser.genres(genre));
     }
 
     await console.log('Genres seeded.');
@@ -71,28 +67,24 @@ const seedMovies = async () => {
   );
   const data = await services.getMoviesData(seed.results);
 
-  for await (let datum of data) {
-    await controllers.movie.create(await parser.movie(datum, movieConfigs));
+  for await (const datum of data) {
+    controllers.movie.create(await parser.movie(datum, movieConfigs));
     console.log(`Parsing ${datum.title}`);
-    // await parser.movie(datum, movieConfigs);
   }
 
   await console.log('Movies seeded.');
 };
 
-const setMovieState = (page, results, totalPages, totalResults) => {
-  state.movies = {
-    page,
-    results: state.movies.results + results,
-    totalPages,
-    totalResults,
-    updatedAt: new Date().toLocaleString('en-US', {
-      timeZone: 'America/Los_Angeles',
-    }),
-    hasMore: page < totalPages,
-  };
+const seed = async () => {
+  console.log('Seeding...');
 
-  console.info(state.movies);
+  await seedGenres();
+
+  while (state.movies.hasMore) {
+    await new Promise(resolve => setTimeout(resolve, 30000));
+
+    await seedMovies();
+  }
 };
 
 module.exports = seed;
