@@ -29,7 +29,7 @@ module.exports.getMoviesData = async movies => {
     }
   }
 
-  return movieData;
+  return { movieData, configData };
 };
 
 module.exports.getGenres = async () => {
