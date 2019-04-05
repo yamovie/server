@@ -136,7 +136,7 @@ const query = async url => {
   const queries = url.substring(index + 1).split('&');
 
   return queries.reduce((acc, curr) => {
-    const { key, value } = curr.split('=');
+    const [key, value] = curr.split('=');
     acc[key] = value;
     return acc;
   }, {});

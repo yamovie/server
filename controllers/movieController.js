@@ -33,11 +33,18 @@ const readByGenre = async (req, res) => {
 };
 
 const search = async (req, res) => {
-  const { query } = await utils.parser.query(req.url);
+  const qs = await utils.parser.query(req.url);
 
-  const foundMovie = await Movie.find({
-    title: new RegExp(query, 'i'),
-  });
+  // console.log(req.url);
+  // console.log(qs);
+
+  const conditions = {
+    title: new RegExp(qs.query, 'i'),
+  };
+
+  const options = { page: qs.page || 1 };
+
+  const foundMovie = await Movie.paginate(conditions, options);
   return res.json(foundMovie);
 };
 
