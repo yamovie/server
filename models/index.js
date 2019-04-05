@@ -29,3 +29,4 @@ mongoose.connection.on('disconnected', () =>
 
 module.exports.Movie = require('./movie');
 module.exports.Genre = require('./genre');
+module.exports.User = require('./user');
