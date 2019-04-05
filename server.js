@@ -43,7 +43,6 @@ app.use('/', require('./routes'));
 // static middleware
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.use(errorHandler);
 
 app.listen(process.env.PORT || 5500, () => {
