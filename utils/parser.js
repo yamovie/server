@@ -121,7 +121,7 @@ const genres = async ({ name, id }) => ({
   },
 });
 
-const query = async url => {
+const qs = async url => {
   const index = url.indexOf('?');
 
   if (index === -1) return {};
@@ -138,5 +138,5 @@ const query = async url => {
 module.exports = {
   movie,
   genres,
-  query,
+  qs,
 };
