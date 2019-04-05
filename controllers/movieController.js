@@ -10,8 +10,8 @@ const certData = require('../utils/mpaa');
  */
 const readAll = async (req, res) => {
   const qs = await parser.qs(req.url);
-  ``;
-  const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
+  const allMovies = await Movie.find({});
+  // const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
   res.json(allMovies);
 
   return res.json(allMovies);
