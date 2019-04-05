@@ -29,8 +29,10 @@ const readOne = async (req, res) => {
  * @param {Number} key tmdb id
  * @return {Promise}
  */
-const readOneByKey = key =>
-  Genre.findOne({ 'external_ids.tmdb_id': key }).exec();
+const readOneByKey = async key => {
+  const foundGenre = await Genre.findOne({ 'external_ids.tmdb_id': key });
+  return foundGenre;
+};
 
 /**
  * Creates new genre document in database

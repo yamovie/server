@@ -1,6 +1,5 @@
 const { Movie } = require('../models');
 const utils = require('../utils');
-const mongodb = require('mongodb');
 const certData = require('../utils/mpaa');
 
 /**
@@ -26,7 +25,6 @@ const readOne = async (req, res) => {
 
 const readByGenre = async (req, res) => {
   const qs = await utils.parser.query(req.url);
-
   const foundMovies = await Movie.paginate(
     { genre_ids: req.params.id },
     { page: qs.page || 1 },
@@ -51,7 +49,7 @@ const readByRecommendation = async (req, res) => {
     mpaa,
     minYear,
     maxYear,
-    rottenTomato,
+    rottenTomatoes,
     imdb,
     foreign,
     indie,
@@ -60,22 +58,18 @@ const readByRecommendation = async (req, res) => {
   const cert = certData.getCertification(mpaa);
   const certs = certData.filterCertifications(cert.order);
 
-  genres = genres.map(genre => mongodb.ObjectID(genre));
-
   const conditions = {
     genre_ids: { $in: genres },
     certifications: { $in: certs },
     release_year: { $gte: minYear, $lte: maxYear },
-    'ratings.rotten_tomatoes.value': { $gte: rottenTomato },
+    'ratings.rotten_tomatoes.value': { $gte: rottenTomatoes },
     'ratings.internet_movie_database.value': { $gte: imdb },
   };
 
   if (!foreign) conditions.original_language = 'en';
-
   if (indie) conditions.budget = { $lt: 1000000 };
 
   const foundMovies = await Movie.paginate(conditions, { page: qs.page || 1 });
-
   res.json(foundMovies);
 };
 

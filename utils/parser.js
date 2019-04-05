@@ -31,7 +31,7 @@ const parseMovieCredits = async ({ cast = [], crew = [] }) => ({
 const parseMovieGenres = async (genres = []) => ({
   genre_ids: await Promise.all(
     genres.map(genre => controllers.genre.readOneByKey(genre.id)),
-  ).then(res => res._id),
+  ),
 });
 
 const parseMovieProductionCompanies = async (companies = [], configs) => ({
@@ -47,10 +47,17 @@ const parseMovieProductionCompanies = async (companies = [], configs) => ({
 });
 
 const parseMovieRatings = async (ratings = []) => ({
-  ratings: ratings.map(({ Source, Value }) => ({
-    source: Source,
-    value: Value,
-  })),
+  ratings: ratings.reduce((acc, { Source, Value }) => {
+    const source = Source.toLowerCase()
+      .split(' ')
+      .join('_');
+
+    acc[source] = {
+      rate: Value,
+      value: parseInt(Value),
+    };
+    return acc;
+  }, {}),
 });
 
 const parseMovieImages = async ({ backdrops = [], posters = [] }, configs) => ({
