@@ -25,11 +25,12 @@ const getMoviesData = async movies => {
       const omdbResponse = await omdb.requestMovieDetails(
         datum.external_ids.imdb_id,
       );
+
       datum.ratings = omdbResponse.data.Ratings;
     }
   }
 
-  return movieData;
+  return { movieData, configData };
 };
 
 const getGenres = async () => {
