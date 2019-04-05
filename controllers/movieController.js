@@ -1,5 +1,5 @@
 const { Movie } = require('../models');
-const { parser } = require('../utils');
+const utils = require('../utils');
 const mongodb = require('mongodb');
 const certData = require('../utils/mpaa');
 
@@ -9,11 +9,8 @@ const certData = require('../utils/mpaa');
  * @param {Object} res HTTP response
  */
 const readAll = async (req, res) => {
-  const qs = await parser.qs(req.url);
-  const allMovies = await Movie.find({});
-  // const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
-  res.json(allMovies);
-
+  const qs = await utils.parser.query(req.url);
+  const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
   return res.json(allMovies);
 };
 
@@ -28,7 +25,7 @@ const readOne = async (req, res) => {
 };
 
 const readByGenre = async (req, res) => {
-  const qs = await parser.qs(req.url);
+  const qs = await utils.parser.query(req.url);
 
   const foundMovies = await Movie.paginate(
     { genre_ids: req.params.id },
@@ -38,7 +35,7 @@ const readByGenre = async (req, res) => {
 };
 
 const search = async (req, res) => {
-  const { query } = await parser.qs(req.url);
+  const { query } = await utils.parser.query(req.url);
 
   const foundMovie = await Movie.find({
     title: new RegExp(query, 'i'),
@@ -47,7 +44,7 @@ const search = async (req, res) => {
 };
 
 const readByRecommendation = async (req, res) => {
-  const qs = await parser.qs(req.url);
+  const qs = await utils.parser.query(req.url);
 
   let {
     genres,
