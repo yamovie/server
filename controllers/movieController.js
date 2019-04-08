@@ -1,5 +1,5 @@
+const qs = require('query-string');
 const { Movie } = require('../models');
-const utils = require('../utils');
 const certData = require('../utils/mpaa');
 
 /**
@@ -8,8 +8,8 @@ const certData = require('../utils/mpaa');
  * @param {Object} res HTTP response
  */
 const readAll = async (req, res) => {
-  const qs = await utils.parser.query(req.url);
-  const allMovies = await Movie.paginate({}, { page: qs.page || 1 });
+  const query = qs.parse(local.search);
+  const allMovies = await Movie.paginate({}, { page: query.page || 1 });
   return res.json(allMovies);
 };
 
@@ -24,32 +24,29 @@ const readOne = async (req, res) => {
 };
 
 const readByGenre = async (req, res) => {
-  const qs = await utils.parser.query(req.url);
+  const query = qs.parse(location.search);
   const foundMovies = await Movie.paginate(
     { genre_ids: req.params.id },
-    { page: qs.page || 1 },
+    { page: query.page || 1 },
   );
   return res.json(foundMovies);
 };
 
 const search = async (req, res) => {
-  const qs = await utils.parser.query(req.url);
-
-  // console.log(req.url);
-  // console.log(qs);
+  const query = qs.parse(location.search);
 
   const conditions = {
     title: new RegExp(qs.query, 'i'),
   };
 
-  const options = { page: qs.page || 1 };
+  const options = { page: query.page || 1 };
 
   const foundMovie = await Movie.paginate(conditions, options);
   return res.json(foundMovie);
 };
 
 const readByRecommendation = async (req, res) => {
-  const qs = await utils.parser.query(req.url);
+  const query = qs.parse(location.search);
 
   let {
     genres,
@@ -76,7 +73,9 @@ const readByRecommendation = async (req, res) => {
   if (!foreign) conditions.original_language = 'en';
   if (indie) conditions.budget = { $lt: 1000000 };
 
-  const foundMovies = await Movie.paginate(conditions, { page: qs.page || 1 });
+  const foundMovies = await Movie.paginate(conditions, {
+    page: query.page || 1,
+  });
   res.json(foundMovies);
 };
 

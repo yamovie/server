@@ -128,36 +128,7 @@ const genres = async ({ name, id }) => ({
   },
 });
 
-const query = async url => {
-  const index = url.indexOf('?');
-
-  if (index === -1) return {};
-
-  const queries = url.substring(index + 1).split('&');
-  const parseMovieRatings = async (ratings = []) => {
-    return {
-      ratings: ratings.reduce((acc, { Source, Value }) => {
-        const source = Source.toLowerCase()
-          .split(' ')
-          .join('_');
-        acc[source] = {
-          rate: Value,
-          value: parseInt(Value),
-        };
-        return acc;
-      }, {}),
-    };
-  };
-
-  return queries.reduce((acc, curr) => {
-    const [key, value] = curr.split('=');
-    acc[key] = value;
-    return acc;
-  }, {});
-};
-
 module.exports = {
   movie,
   genres,
-  query,
 };
