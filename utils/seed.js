@@ -53,6 +53,19 @@ const seedCertifications = async () => {
 const seedMovies = async () => {
   await console.log('Seeding movies...');
 
+  const seed = await services.getMovies();
+  const data = await services.getMoviesData(seed.items);
+  const parsed = [];
+  for await (const datum of data) {
+    console.log(`Parsing ${datum.title}`);
+    parsed.push(await parser.jw(datum));
+  }
+  console.log(parsed[0]);
+};
+
+const _seedMovies = async () => {
+  await console.log('Seeding movies...');
+
   const movieConfigs = Object.assign(
     await services.updateConfigurations(),
     configs.movies,
@@ -80,11 +93,13 @@ const seed = async () => {
 
   await seedGenres();
 
-  while (state.movies.hasMore) {
-    await new Promise(resolve => setTimeout(resolve, 10000));
+  await seedMovies();
 
-    await seedMovies();
-  }
+  // while (state.movies.hasMore) {
+  //   await new Promise(resolve => setTimeout(resolve, 10000));
+
+  //   await seedMovies();
+  // }
 };
 
 module.exports = seed;

@@ -1,4 +1,27 @@
 module.exports = {
+  JW_SEARCH: {
+    method: 'post',
+    baseURL: 'https://apis.justwatch.com/content/titles/en_US/popular',
+    url: '',
+    headers: { 'Content-Type': 'application/json' },
+    data: {
+      content_types: ['movie'],
+      presentation_types: null,
+      providers: null,
+      genres: null,
+      languages: 'en',
+      release_year_from: 2018,
+      release_year_until: 2018,
+      monetization_types: null,
+      min_price: null,
+      max_price: null,
+      scoring_filter_types: null,
+      cinema_release: null,
+      query: null,
+      page: null,
+      page_size: 20,
+    },
+  },
   TMDB_CERTIFICATIONS: {
     method: 'get',
     baseURL: 'https://api.themoviedb.org/3/certification/movie/list',

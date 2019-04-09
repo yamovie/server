@@ -1,7 +1,7 @@
 /* eslint-disable object-curly-newline */
 const controllers = require('../controllers');
 
-const parseMovieCertifications = async (data = []) => {
+const parseTmdbCertifications = async (data = []) => {
   return {
     certifications: [
       ...new Set(
@@ -13,7 +13,7 @@ const parseMovieCertifications = async (data = []) => {
   };
 };
 
-const parseMovieCredits = async ({ cast = [], crew = [] }) => ({
+const parseTmdbCredits = async ({ cast = [], crew = [] }) => ({
   credits: {
     cast: cast.map(({ character, name, order }) => ({
       character,
@@ -28,13 +28,13 @@ const parseMovieCredits = async ({ cast = [], crew = [] }) => ({
   },
 });
 
-const parseMovieGenres = async (genres = []) => ({
+const parseTmdbGenres = async (genres = []) => ({
   genre_ids: await Promise.all(
     genres.map(genre => controllers.genre.readOneByKey(genre.id)),
   ),
 });
 
-const parseMovieProductionCompanies = async (companies = [], configs) => ({
+const parseTmdbProductionCompanies = async (companies = [], configs) => ({
   production_companies: companies.map(
     ({ name, logo_path, origin_country }) => ({
       name,
@@ -46,7 +46,7 @@ const parseMovieProductionCompanies = async (companies = [], configs) => ({
   ),
 });
 
-const parseMovieRatings = async (ratings = []) => ({
+const parseTmdbRatings = async (ratings = []) => ({
   ratings: ratings.reduce((acc, { Source, Value }) => {
     const source = Source.toLowerCase()
       .split(' ')
@@ -60,7 +60,7 @@ const parseMovieRatings = async (ratings = []) => ({
   }, {}),
 });
 
-const parseMovieImages = async ({ backdrops = [], posters = [] }, configs) => ({
+const parseTmdbImages = async ({ backdrops = [], posters = [] }, configs) => ({
   images: {
     backdrops: backdrops.map(({ aspect_ratio, file_path, height, width }) => ({
       aspect_ratio,
@@ -81,7 +81,7 @@ const parseMovieImages = async ({ backdrops = [], posters = [] }, configs) => ({
   },
 });
 
-const parseMovieVideos = async (videos = [], configs) => ({
+const parseTmdbVideos = async (videos = [], configs) => ({
   videos: videos.map(({ key, name, site, size, type }) => ({
     name,
     site,
@@ -111,13 +111,13 @@ const movie = async (data, configs) =>
       external_ids: data.external_ids,
     },
     ...(await Promise.all([
-      parseMovieCertifications(data.release_dates.results),
-      parseMovieCredits(data.credits),
-      parseMovieGenres(data.genres),
-      parseMovieProductionCompanies(data.production_companies, configs),
-      parseMovieRatings(data.ratings),
-      parseMovieImages(data.images, configs),
-      parseMovieVideos(data.videos.results, configs),
+      parseTmdbCertifications(data.release_dates.results),
+      parseTmdbCredits(data.credits),
+      parseTmdbGenres(data.genres),
+      parseTmdbProductionCompanies(data.production_companies, configs),
+      parseTmdbRatings(data.ratings),
+      parseTmdbImages(data.images, configs),
+      parseTmdbVideos(data.videos.results, configs),
     ])),
   );
 
@@ -128,7 +128,28 @@ const genres = async ({ name, id }) => ({
   },
 });
 
+const jw = async data => ({
+  certification: data.age_certification,
+  original_language: data.original_language,
+  original_title: data.original_title,
+  overview: data.short_description,
+  release_date: data.cinema_release_date,
+  release_year: data.original_release_year,
+  runtime: data.runtime,
+  title: data.title,
+  credits: data.credits,
+  genre_ids: data.genre_ids,
+  ratings: data.scoring,
+  images: {
+    poster: data.poster,
+    backdrops: data.backdrops,
+  },
+  videos: data.clips,
+  offers: data.offers,
+});
+
 module.exports = {
   movie,
   genres,
+  jw,
 };

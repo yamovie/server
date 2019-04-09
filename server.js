@@ -7,19 +7,19 @@ const session = require('express-session');
 const passport = require('passport');
 const { logger, errorHandler } = require('./middleware');
 // const { seed } = require('./utils');
-// const tests = require('./tests');
+const tests = require('./tests');
 
 require('./config/passport');
 
 // Test
-// test();
+// tests();
 
 const { seed } = require('./utils');
 
 const app = express();
 
 // Seed
-// seed();
+seed();
 
 app.use(cors());
 // app.use(logger);
