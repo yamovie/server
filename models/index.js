@@ -12,7 +12,7 @@ const options = {
   promiseLibrary: Promise,
 };
 
-mongoose.set('debug', false);
+mongoose.set('debug', true);
 
 mongoose.connect(
   `${process.env.DB_SCHEME}${process.env.DB_HOST}${process.env.DB_NAME}`,
