@@ -1,4 +1,5 @@
 const { Movie } = require('../models');
+const { recommendations } = require('../configs');
 
 const readBySearch = async (req, res) => {
   const conditions = {
@@ -40,30 +41,21 @@ const readByGenre = async (req, res) => {
 };
 
 const readByRecommendation = async (req, res) => {
-  const {
-    genres,
-    mpaa,
-    minYear,
-    maxYear,
-    rottenTomatoes,
-    imdb,
-    foreign,
-    indie,
-  } = req.body;
-
-  const cert = certData.getCertification(mpaa);
-  const certs = certData.filterCertifications(cert.order);
+  const certifications = recommendations.getCertifications(
+    req.body.certification,
+  );
 
   const conditions = {
-    genre_ids: { $in: genres },
-    certifications: { $in: certs },
-    release_year: { $gte: minYear, $lte: maxYear },
-    'ratings.rotten_tomatoes.value': { $gte: rottenTomatoes },
-    'ratings.internet_movie_database.value': { $gte: imdb },
+    genre_ids: { $in: req.body.genres },
+    certifications: { $in: certifications },
+    release_year: { $gte: req.body.minYear, $lte: req.body.maxYear },
+    'ratings.rotten_tomatoes.value': { $gte: req.body.rotten_tomatoes },
+    'ratings.internet_movie_database.value': { $gte: req.body.imdb },
   };
 
-  if (!foreign) conditions.original_language = 'en';
-  if (indie) conditions.budget = { $lt: 1000000 };
+  if (!req.body.foreign) conditions.original_language = 'en';
+  if (req.body.indie)
+    conditions.budget = { $lt: recommendations.INDIE_BUDGET_THRESHOLD };
 
   const foundMovies = await Movie.paginate(conditions, {
     page: req.query.page || 1,
