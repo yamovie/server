@@ -7,7 +7,6 @@ const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
 const { logger, errorhandler } = require('./middleware');
-
 const app = express();
 
 require('./utils').seed();
@@ -34,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes'));
 
-app.use(errorhandler);
+// app.use(errorhandler);
 
 app.listen(process.env.PORT || 5500, () => {
   console.log(`Server listening on PORT ${process.env.PORT || 5500}`);
