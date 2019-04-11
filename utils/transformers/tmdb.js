@@ -1,7 +1,8 @@
-/* eslint-disable object-curly-newline */
-const controllers = require('../controllers');
+const controllers = require('../../controllers');
 
-const parseTmdbCertifications = async (data = []) => {
+const tmdb = {};
+
+const parseCertifications = async (data = []) => {
   return {
     certifications: [
       ...new Set(
@@ -13,7 +14,7 @@ const parseTmdbCertifications = async (data = []) => {
   };
 };
 
-const parseTmdbCredits = async ({ cast = [], crew = [] }) => ({
+const parseCredits = async ({ cast = [], crew = [] }) => ({
   credits: {
     cast: cast.map(({ character, name, order }) => ({
       character,
@@ -28,13 +29,13 @@ const parseTmdbCredits = async ({ cast = [], crew = [] }) => ({
   },
 });
 
-const parseTmdbGenres = async (genres = []) => ({
+const parseGenres = async (genres = []) => ({
   genre_ids: await Promise.all(
     genres.map(genre => controllers.genre.readOneByKey(genre.id)),
   ),
 });
 
-const parseTmdbProductionCompanies = async (companies = [], configs) => ({
+const parseProductionCompanies = async (companies = [], configs) => ({
   production_companies: companies.map(
     ({ name, logo_path, origin_country }) => ({
       name,
@@ -46,7 +47,7 @@ const parseTmdbProductionCompanies = async (companies = [], configs) => ({
   ),
 });
 
-const parseTmdbRatings = async (ratings = []) => ({
+const parseRatings = async (ratings = []) => ({
   ratings: ratings.reduce((acc, { Source, Value }) => {
     const source = Source.toLowerCase()
       .split(' ')
@@ -60,7 +61,7 @@ const parseTmdbRatings = async (ratings = []) => ({
   }, {}),
 });
 
-const parseTmdbImages = async ({ backdrops = [], posters = [] }, configs) => ({
+const parseImages = async ({ backdrops = [], posters = [] }, configs) => ({
   images: {
     backdrops: backdrops.map(({ aspect_ratio, file_path, height, width }) => ({
       aspect_ratio,
@@ -81,7 +82,7 @@ const parseTmdbImages = async ({ backdrops = [], posters = [] }, configs) => ({
   },
 });
 
-const parseTmdbVideos = async (videos = [], configs) => ({
+const parseVideos = async (videos = [], configs) => ({
   videos: videos.map(({ key, name, site, size, type }) => ({
     name,
     site,
@@ -93,7 +94,7 @@ const parseTmdbVideos = async (videos = [], configs) => ({
   })),
 });
 
-const movie = async (data, configs) =>
+tmdb.movie = async (data, configs) =>
   Object.assign(
     {
       adult: data.adult,
@@ -111,45 +112,21 @@ const movie = async (data, configs) =>
       external_ids: data.external_ids,
     },
     ...(await Promise.all([
-      parseTmdbCertifications(data.release_dates.results),
-      parseTmdbCredits(data.credits),
-      parseTmdbGenres(data.genres),
-      parseTmdbProductionCompanies(data.production_companies, configs),
-      parseTmdbRatings(data.ratings),
-      parseTmdbImages(data.images, configs),
-      parseTmdbVideos(data.videos.results, configs),
+      parseCertifications(data.release_dates.results),
+      parseCredits(data.credits),
+      parseGenres(data.genres),
+      parseProductionCompanies(data.production_companies, configs),
+      parseRatings(data.ratings),
+      parseImages(data.images, configs),
+      parseVideos(data.videos.results, configs),
     ])),
   );
 
-const genres = async ({ name, id }) => ({
+tmdb.genre = async ({ name, id }) => ({
   name,
   external_ids: {
     tmdb_id: id,
   },
 });
 
-const jw = async data => ({
-  certification: data.age_certification,
-  original_language: data.original_language,
-  original_title: data.original_title,
-  overview: data.short_description,
-  release_date: data.cinema_release_date,
-  release_year: data.original_release_year,
-  runtime: data.runtime,
-  title: data.title,
-  credits: data.credits,
-  genre_ids: data.genre_ids,
-  ratings: data.scoring,
-  images: {
-    poster: data.poster,
-    backdrops: data.backdrops,
-  },
-  videos: data.clips,
-  offers: data.offers,
-});
-
-module.exports = {
-  movie,
-  genres,
-  jw,
-};
+module.exports = tmdb;

@@ -40,9 +40,12 @@ const readOneByKey = async key => {
  */
 const create = genre => Genre.create(genre);
 
+const insertMany = genres => Genre.insertMany(genres);
+
 module.exports = {
   readAll,
   readOne,
   readOneByKey,
   create,
+  insertMany,
 };

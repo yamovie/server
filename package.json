@@ -37,7 +37,6 @@
     "passport": "^0.4.0",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
-    "query-string": "^6.4.2",
     "shortid": "^2.2.14"
   },
   "devDependencies": {

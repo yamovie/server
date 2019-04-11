@@ -3,26 +3,29 @@ const bcrypt = require('bcrypt');
 
 const SALT_ROUNDS = 6;
 
-const userSchema = mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+const userSchema = mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    birthday: String,
+    fullName: String,
+    streamingService: Object,
+    watchlist: {
+      type: [Object],
+    },
+    preferenceId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Preference',
+      required: false,
+    },
+    googleId: String,
+    password: String,
   },
-  birthday: String,
-  fullName: String,
-  streamingService: Object,
-  watchlist: {
-    type: [Object],
-  },
-  preferenceId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Preference',
-    required: false,
-  },
-  googleId: String,
-  password: String,
-});
+  { collection: 'users' },
+);
 
 userSchema.set('toJSON', {
   transform: (doc, ret) => {

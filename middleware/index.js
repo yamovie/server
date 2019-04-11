@@ -1,2 +1,2 @@
+module.exports.errorhandler = require('./errorhandler');
 module.exports.logger = require('./logger');
-module.exports.errorHandler = require('./errorHandler');

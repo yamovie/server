@@ -1,6 +1,15 @@
-const qs = require('query-string');
 const { Movie } = require('../models');
-const certData = require('../utils/mpaa');
+
+const readBySearch = async (req, res) => {
+  const conditions = {
+    title: new RegExp(req.query.title, 'i'),
+  };
+
+  const options = { page: req.query.page || 1 };
+
+  const foundMovie = await Movie.paginate(conditions, options);
+  return res.json(foundMovie);
+};
 
 /**
  * Serves JSON object of all genres.
@@ -8,8 +17,7 @@ const certData = require('../utils/mpaa');
  * @param {Object} res HTTP response
  */
 const readAll = async (req, res) => {
-  const query = qs.parse(local.search);
-  const allMovies = await Movie.paginate({}, { page: query.page || 1 });
+  const allMovies = await Movie.paginate({}, { page: req.query.page || 1 });
   return res.json(allMovies);
 };
 
@@ -24,31 +32,15 @@ const readOne = async (req, res) => {
 };
 
 const readByGenre = async (req, res) => {
-  const query = qs.parse(location.search);
   const foundMovies = await Movie.paginate(
     { genre_ids: req.params.id },
-    { page: query.page || 1 },
+    { page: req.query.page || 1 },
   );
   return res.json(foundMovies);
 };
 
-const search = async (req, res) => {
-  const query = qs.parse(location.search);
-
-  const conditions = {
-    title: new RegExp(qs.query, 'i'),
-  };
-
-  const options = { page: query.page || 1 };
-
-  const foundMovie = await Movie.paginate(conditions, options);
-  return res.json(foundMovie);
-};
-
 const readByRecommendation = async (req, res) => {
-  const query = qs.parse(location.search);
-
-  let {
+  const {
     genres,
     mpaa,
     minYear,
@@ -74,19 +66,14 @@ const readByRecommendation = async (req, res) => {
   if (indie) conditions.budget = { $lt: 1000000 };
 
   const foundMovies = await Movie.paginate(conditions, {
-    page: query.page || 1,
+    page: req.query.page || 1,
   });
   res.json(foundMovies);
 };
 
-/**
- * INTERNAL USE ONLY
- *
- * Create new Movie document
- */
 const create = movie => Movie.create(movie);
 
-module.exports = { readAll, readOne, readByGenre, create };
+const insertMany = movies => Movie.insertMany(movies);
 
 module.exports = {
   readAll,
@@ -94,5 +81,6 @@ module.exports = {
   readByGenre,
   readByRecommendation,
   create,
-  search,
+  insertMany,
+  readBySearch,
 };

@@ -1,6 +1,11 @@
+/**
+ * JW - Just Watch
+ * TMDB - The Movie Database
+ * OMDB - Open Movie Database
+ */
 module.exports = {
   JW_SEARCH: {
-    method: 'post',
+    method: 'POST',
     baseURL: 'https://apis.justwatch.com/content/titles/en_US/popular',
     url: '',
     headers: { 'Content-Type': 'application/json' },
@@ -22,8 +27,23 @@ module.exports = {
       page_size: 20,
     },
   },
+  JW_TITLE: {
+    method: 'GET',
+    baseURL: 'https://apis.justwatch.com/content/titles/movie/',
+    url: '/locale/en_US',
+  },
+  JW_GENRES: {
+    method: 'GET',
+    baseURL: 'https://apis.justwatch.com',
+    url: 'content/genres/locale/en_US',
+  },
+  JW_PROVIDERS: {
+    method: 'GET',
+    baseURL: 'https://apis.justwatch.com',
+    url: 'content/providers/locale/en_US',
+  },
   TMDB_CERTIFICATIONS: {
-    method: 'get',
+    method: 'GET',
     baseURL: 'https://api.themoviedb.org/3/certification/movie/list',
     url: '',
     params: {
@@ -31,7 +51,7 @@ module.exports = {
     },
   },
   TMDB_CONFIG: {
-    method: 'get',
+    method: 'GET',
     baseURL: 'https://api.themoviedb.org/3/configuration',
     url: '',
     params: {
@@ -39,7 +59,7 @@ module.exports = {
     },
   },
   TMDB_NOW_PLAYING: {
-    method: 'get',
+    method: 'GET',
     baseURL: 'https://api.themoviedb.org/3/movie/now_playing',
     url: '',
     params: {
@@ -49,7 +69,7 @@ module.exports = {
     },
   },
   TMDB_DISCOVER: {
-    method: 'get',
+    method: 'GET',
     baseURL: 'https://api.themoviedb.org/3/discover/movie',
     url: '',
     params: {
@@ -60,7 +80,7 @@ module.exports = {
     },
   },
   TMDB_DETAIL: {
-    method: 'get',
+    method: 'GET',
     baseURL: 'https://api.themoviedb.org/3/movie',
     url: '',
     params: {
@@ -70,7 +90,7 @@ module.exports = {
     },
   },
   TMDB_GENRES: {
-    method: 'get',
+    method: 'GET',
     baseURL: 'https://api.themoviedb.org/3/genre/movie/list',
     url: '',
     params: {
@@ -79,7 +99,7 @@ module.exports = {
     },
   },
   OMDB_DETAIL: {
-    method: 'get',
+    method: 'GET',
     baseURL: 'http://www.omdbapi.com',
     url: '',
     params: {

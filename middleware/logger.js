@@ -12,7 +12,7 @@ const getPrefix = req => {
 const getLoggerByStatusCode = status => {
   if (status >= 500) return console.error.bind(console);
   if (status >= 400) return console.warn.bind(console);
-  console.log.bind(console);
+  return console.log.bind(console);
 };
 
 /**

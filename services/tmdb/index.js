@@ -1,9 +1,7 @@
 const axios = require('axios');
-const { requests } = require('../../utils');
+const { requests } = require('../../configs');
 
-exports.requestCertifications = () => {
-  return axios(requests.TMDB_CERTIFICATIONS);
-};
+const requestCertifications = () => axios(requests.TMDB_CERTIFICATIONS);
 
 const requestConfigurations = () => axios(requests.TMDB_CONFIG);
 
@@ -29,6 +27,7 @@ const requestMovieDetails = id => {
 const requestGenres = () => axios(requests.TMDB_GENRES);
 
 module.exports = {
+  requestCertifications,
   requestConfigurations,
   requestNowPlayingMovies,
   requestDiscoverMovies,
