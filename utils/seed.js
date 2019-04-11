@@ -26,7 +26,7 @@ const setMovieState = (page, results, totalPages, totalResults) => {
     hasMore: page < totalPages,
   };
 
-  console.info(...state.movies);
+  console.info(state.movies);
 };
 
 const jw_seedMovies = async () => {
@@ -53,6 +53,14 @@ const seedMovies = async () => {
   );
 
   const seed = await services.getMovies(state.movies.page + 1);
+
+  setMovieState(
+    seed.page,
+    seed.results.length,
+    seed.total_pages,
+    seed.total_results,
+  );
+
   const data = await services.getMoviesData(seed.results);
   const movies = await Promise.all(
     data.map(movie => transformers.tmdb.movie(movie, config)),
@@ -66,13 +74,15 @@ const seedMovies = async () => {
 const seedGenres = async () => {
   console.log('Genres seeding...');
 
-  const seed = (await services.getGenres()).genres;
+  if ((await controllers.genre.count()) === 0) {
+    const seed = (await services.getGenres()).genres;
 
-  const genres = await Promise.all(
-    seed.map(genre => transformers.tmdb.genre(genre)),
-  );
+    const genres = await Promise.all(
+      seed.map(genre => transformers.tmdb.genre(genre)),
+    );
 
-  await controllers.genre.insertMany(genres);
+    await controllers.genre.insertMany(genres);
+  }
 
   console.log('Genres seeded.');
 };
@@ -112,11 +122,10 @@ const seed = async () => {
   // await jw_seedGenres();
   // await jw_seedMovies();
 
-  // while (state.movies.hasMore) {
-  //   await new Promise(resolve => setTimeout(resolve, 10000));
-
-  //   await seedMovies();
-  // }
+  while (state.movies.hasMore) {
+    await new Promise(resolve => setTimeout(resolve, 10000));
+    await seedMovies();
+  }
 
   console.log('Seeding completed.');
 };

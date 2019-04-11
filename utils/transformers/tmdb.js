@@ -68,7 +68,7 @@ const parseImages = async ({ backdrops = [], posters = [] }, configs) => ({
       height,
       width,
       backdrop_url: `${configs.images.secure_base_url}${
-        configs.images.backdrop_sizes[3]
+        configs.images.backdrop_sizes[2]
       }${file_path}`,
     })),
     posters: posters.map(({ aspect_ratio, file_path, height, width }) => ({
@@ -76,7 +76,7 @@ const parseImages = async ({ backdrops = [], posters = [] }, configs) => ({
       height,
       width,
       poster_url: `${configs.images.secure_base_url}${
-        configs.images.poster_sizes[6]
+        configs.images.poster_sizes[5]
       }${file_path}`,
     })),
   },
