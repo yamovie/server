@@ -9,7 +9,7 @@ const passport = require('passport');
 const { logger, errorhandler } = require('./middleware');
 const app = express();
 
-require('./utils').seed();
+// require('./utils').seed();
 
 app.use(cors());
 app.use(logger);
