@@ -1,14 +1,17 @@
+const { urls } = require('../../configs/urls');
+
 const jw = {};
 
 // ===============================================================================
 // =========================== Parse Helpers  ====================================
 
 /**
- * TODO: finish this
+ * TODO: add documentation
  * @param {Array<object>} jwCredits
  * @returns {Promise} the credits object
  */
 const parseJWCredits = async jwCredits => {
+  if (!jwCredits) return { credits: { cast: [], crew: [] } };
   jwCredits.forEach(person => {
     const role = person.role.toLowerCase();
     person.role = `${role.charAt(0).toUpperCase()}${role.slice(1)}`;
@@ -21,7 +24,7 @@ const parseJWCredits = async jwCredits => {
 // ===============================================================================
 
 /**
- * TODO: finish this
+ * TODO: add documentation
  * @param {string} jwPoster
  * @param {Array<string>} jwBackdrops
  * @param {string} jwLink the general link to this movie's page on JustWatch
@@ -29,25 +32,27 @@ const parseJWCredits = async jwCredits => {
  */
 const parseJWImages = async (jwPoster, jwBackdrops, jwLink) => {
   const pSize = 592;
-  const posters = [];
-  const posterLink = jwPoster.replace('{profile}', `s${pSize}`);
-  const poster_url = `${jwLink}${posterLink}`;
-  posters.push({ poster_url });
+  let poster = '';
+  if (jwPoster) {
+    const posterLink = jwPoster.replace('{profile}', `s${pSize}`);
+    poster = `${jwLink}${posterLink}`;
+  }
 
   const bdSize = 1440;
   const backdrops = [];
-  jwBackdrops.forEach(backdrop => {
-    const bdLink = backdrop.backdrop_url.replace('{profile}', `s${bdSize}`);
-    const backdrop_url = `${jwLink}${bdLink}`;
-    backdrops.push({ backdrop_url });
-  });
-  return { images: { posters, backdrops } };
+  if (jwBackdrops) {
+    jwBackdrops.forEach(backdrop => {
+      const bdLink = backdrop.backdrop_url.replace('{profile}', `s${bdSize}`);
+      backdrops.push(`${jwLink}${bdLink}`);
+    });
+  }
+  return { images: { poster, backdrops } };
 };
 
 // ===============================================================================
 
 /**
- * TODO: finish this
+ * TODO: add documentation
  * @param {Array<object>} jwRatings
  * @returns {Promise}
  */
@@ -56,19 +61,21 @@ const parseJWRatings = async jwRatings => {
     imdb: {
       rate: '?/10',
       value: 0,
-      url: 'http://www.imdb.com',
+      url: urls.IMDB_BASE,
     },
     rotten_tomatoes: {
       rate: '?%',
       value: 0,
-      url: 'http://www.rottentomatoes.com',
+      url: urls.RT_BASE,
     },
     themdb: {
       rate: '?%',
       value: 0,
-      url: 'https://www.themoviedb.org',
+      url: urls.TMDB_BASE,
     },
   };
+
+  if (!jwRatings) return ratings;
 
   jwRatings.forEach(({ provider_type, value }) => {
     // is imdb data
@@ -77,8 +84,9 @@ const parseJWRatings = async jwRatings => {
         ratings.imdb.value = value;
         ratings.imdb.rate = `${value}/10`;
       }
+      // TODO: get this from external_ids
       if (provider_type.includes('id')) {
-        ratings.imdb.url = `http://www.imdb.com/title/${value}`;
+        ratings.imdb.url = `${urls.IMDB_MOVIE_BASE}/${value}`;
       }
     } // end of imdb section
 
@@ -89,7 +97,7 @@ const parseJWRatings = async jwRatings => {
         ratings.themdb.rate = `${value * 10}%`;
       }
       if (provider_type.includes('id')) {
-        ratings.themdb.url = `https://www.themoviedb.org/movie/${value}`;
+        ratings.themdb.url = `${urls.TMDB_MOVIE_BASE}/${value}`;
       }
       // also has tmdb:popularity, if we want to do something with that
     } // end of tmdb section
@@ -103,43 +111,84 @@ const parseJWRatings = async jwRatings => {
       // above call needs full string to differentiate from tomato_userrating:meter
       // which is different from the critic ratings, if we want to use that too
       if (provider_type.includes('id')) {
-        ratings.rotten_tomatoes.url = `http://www.rottentomatoes.com/m/${value}`;
+        ratings.rotten_tomatoes.url = `${urls.RT_MOVIE_BASE}/${value}`;
       }
       // also has tomato:rating, but idk what it is/does
     } // end of rotten tomatoes section
   }); // end of forEach
 
-  return ratings;
+  return { ratings };
 };
 
 // ===============================================================================
 
 /**
- * TODO: finish this
+ * TODO: add documentation
  * @param {Array<object>} jwVideos
  */
 const parseJWVideos = async jwVideos => {
-  // do stuff
+  if (!jwVideos) return [];
+  const videos = [];
+  jwVideos.forEach(video => {
+    const transformedVideo = { type: video.type, name: video.name };
+    if (video.provider === 'youtube') {
+      transformedVideo.url = `${urls.YT_EMBED_BASE}/${video.external_id}`;
+    }
+    videos.push(transformedVideo);
+  });
+  return { videos };
 };
 
 // ===============================================================================
 
 /**
- * TODO: finish this
+ * TODO: add documentation
  * @param {Array<object>} jwOffers
  */
 const parseJWOffers = async jwOffers => {
-  // do stuff
+  const offers = {
+    buy: [],
+    rent: [],
+    stream: [],
+  };
+
+  jwOffers.forEach(offer => {
+    let arrayToSearch = [];
+    if (offer.monetization_type === 'buy') {
+      arrayToSearch = offers.buy;
+    } else if (offer.monetization_type === 'rent') {
+      arrayToSearch = offers.rent;
+    } else if (offer.monetization_type === 'flatrate') {
+      arrayToSearch = offers.stream;
+    }
+
+    const priceLink = { price: offer.retail_price, url: offer.urls.standard_web };
+    let currOffer = arrayToSearch.find(
+      anOffer => anOffer.provider_id === offer.provider_id,
+    );
+
+    const type = offer.presentation_type === '4k' ? 'fourk' : offer.presentation_type;
+    if (currOffer) {
+      currOffer[type] = priceLink;
+    } else {
+      currOffer = {
+        provider_id: offer.provider_id,
+        [type]: priceLink,
+      };
+    }
+
+    arrayToSearch.push(currOffer);
+  });
+
+  return offers;
 };
 
 // ===============================================================================
 // ================================ Parse ========================================
 
-const BASE_JW_URL = 'https://www.justwatch.com';
-
 // TODO: add documentation
 jw.movie = async data => {
-  const jw_url = `${BASE_JW_URL}${data.full_path}`;
+  const jw_url = `${urls.JW_BASE}${data.full_path}`;
   return Object.assign(
     {
       jw_url,
@@ -155,10 +204,10 @@ jw.movie = async data => {
     },
     ...(await Promise.all([
       parseJWCredits(data.credits),
+      parseJWRatings(data.scoring),
       parseJWImages(data.poster, data.backdrops, jw_url),
       parseJWVideos(data.clips),
       parseJWOffers(data.offers),
-      parseJWRatings(data.scoring),
     ])),
   );
 };

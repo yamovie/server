@@ -2,17 +2,15 @@ const controllers = require('../../controllers');
 
 const tmdb = {};
 
-const parseCertifications = async (data = []) => {
-  return {
-    certifications: [
-      ...new Set(
-        data
-          .filter(datum => datum.iso_3166_1 === 'US')[0]
-          .release_dates.map(elem => elem.certification),
-      ),
-    ],
-  };
-};
+const parseCertifications = async (data = []) => ({
+  certifications: [
+    ...new Set(
+      data
+        .filter(datum => datum.iso_3166_1 === 'US')[0]
+        .release_dates.map(elem => elem.certification),
+    ),
+  ],
+});
 
 const parseCredits = async ({ cast = [], crew = [] }) => ({
   credits: {
@@ -36,15 +34,13 @@ const parseGenres = async (genres = []) => ({
 });
 
 const parseProductionCompanies = async (companies = [], configs) => ({
-  production_companies: companies.map(
-    ({ name, logo_path, origin_country }) => ({
-      name,
-      origin_country,
-      logo_url: `${configs.images.secure_base_url}${
-        configs.images.logo_sizes[6]
-      }${logo_path}`,
-    }),
-  ),
+  production_companies: companies.map(({ name, logo_path, origin_country }) => ({
+    name,
+    origin_country,
+    logo_url: `${configs.images.secure_base_url}${
+      configs.images.logo_sizes[6]
+    }${logo_path}`,
+  })),
 });
 
 const parseRatings = async (ratings = []) => ({
@@ -55,7 +51,7 @@ const parseRatings = async (ratings = []) => ({
 
     acc[source] = {
       rate: Value,
-      value: parseInt(Value),
+      value: parseInt(Value, 10),
     };
     return acc;
   }, {}),
@@ -88,9 +84,7 @@ const parseVideos = async (videos = [], configs) => ({
     site,
     size,
     type,
-    url: site.includes('YouTube')
-      ? `${configs.urls.YT_EMBED_BASE_URL}${key}`
-      : key,
+    url: site.includes('YouTube') ? `${configs.urls.YT_EMBED_BASE_URL}/${key}` : key,
   })),
 });
 

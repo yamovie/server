@@ -4,6 +4,7 @@ const { paginate } = require('../configs');
 
 const movieSchema = new mongoose.Schema(
   {
+    jw_url: String,
     certification: String,
     original_language: String,
     original_title: String,
@@ -12,15 +13,15 @@ const movieSchema = new mongoose.Schema(
     release_year: Number,
     runtime: Number,
     title: String,
-    credits: [Object],
     genre_ids: [Number],
-    ratings: [Object],
+    credits: Object,
+    ratings: Object,
     images: {
       poster: String,
       backdrops: [Object],
     },
     videos: [Object],
-    offers: [Object],
+    offers: Object,
   },
   { collection: 'jw_movies' },
 );
