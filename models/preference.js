@@ -7,6 +7,7 @@ const preferenceSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    required: true,
   },
   genres: [{
     type: Schema.Types.ObjectId,
@@ -16,17 +17,38 @@ const preferenceSchema = new Schema({
   animated: Boolean,
   foreign: Boolean,
   indie: Boolean,
-  mpaaRatings: [{}],
+  certifications: [String],
+  streamingServices: {
+    hulu: Boolean,
+    netflix: Boolean,
+  },
   ratings: {
-    imdb: Number,
-    rottenTomatoes: Number,
+    imdb: {
+      minRating: String,
+      maxRating: String,
+    },
+    rottenTomatoes: {
+      minRating: String,
+      maxRating: String,
+    },
+    metacritic: {
+      minRating: String,
+      maxRating: String,
+    },
   },
   release: {
-    startYear: Number,
-    endYear: Number,
+    minYear: Number,
+    maxYear: Number,
   },
 },
 { collection: 'preferences' });
+
+// Hides user in response sent back to client 
+// preferenceSchema.methods.toJSON = () => {
+//   const obj = this.toObject();
+//   delete obj.user;
+//   return obj;
+// };
 
 const Preference = mongoose.model('Preference', preferenceSchema);
 module.exports = Preference;
