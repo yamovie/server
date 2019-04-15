@@ -19,6 +19,7 @@ function createJWT(user) {
  * @param {string} res token
  */
 const signup = async (req, res) => {
+  console.log('Signup running');
   const newPreference = await new Preference();
   
   const newUser = await new User({
