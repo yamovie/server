@@ -1,15 +1,36 @@
 const axios = require('axios');
+const jw = require('./jw');
 const tmdb = require('./tmdb');
 const omdb = require('./omdb');
 
-const updateConfigurations = async () => {
+const getConfigurations = async () => {
   const configResponse = await tmdb.requestConfigurations();
   return configResponse.data;
 };
 
-const getMovies = async page => {
+const getProviders = async () => (await jw.requestProviders()).data;
+
+const jw_getGenres = async () => (await jw.requestGenres()).data;
+
+const jw_getMovies = async page => (await jw.requestMovies(page)).data;
+
+const getGenres = async () => (await tmdb.requestGenres()).data;
+
+const jw_getMoviesData = async movies => {
+  const requests = movies.map(movie => jw.requestData(movie.id));
+  const responses = await axios.all(requests);
+  const data = responses.map(res => res.data);
+  return data;
+};
+
+const getCertifications = async page => {
   const certResponse = await tmdb.requestCertifications();
   return certResponse.data;
+};
+
+const getMovies = async page => {
+  const response = await tmdb.requestDiscoverMovies(page);
+  return response.data;
 };
 
 const getMoviesData = async movies => {
@@ -33,14 +54,13 @@ const getMoviesData = async movies => {
   return movieData;
 };
 
-const getGenres = async () => {
-  const genreResponse = await tmdb.requestGenres();
-  return genreResponse.data;
-};
-
 module.exports = {
-  updateConfigurations,
+  jw_getGenres,
+  jw_getMovies,
+  jw_getMoviesData,
+  getConfigurations,
   getMovies,
   getMoviesData,
   getGenres,
+  getProviders,
 };
