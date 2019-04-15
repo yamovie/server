@@ -1,4 +1,5 @@
-const { urls } = require('../../configs/urls');
+const { urls } = require('../../configs');
+const controllers = require('../../controllers');
 
 const jw = {};
 
@@ -184,9 +185,10 @@ const parseJWOffers = async jwOffers => {
 
     const priceLink = { price: offer.retail_price, url: offer.urls.standard_web };
 
+    const objProviderId = controllers.provider.readOneByKey(offer.provider_id);
     // checking to see if there's already an object for this provider
     const currOffer = arrayToSearch.find(
-      anOffer => anOffer.provider_id === offer.provider_id,
+      anOffer => anOffer.provider_id === objProviderId,
     );
 
     // need to alter the keyname just for this one because keys can't start with numbers
@@ -196,7 +198,7 @@ const parseJWOffers = async jwOffers => {
       currOffer[type] = priceLink;
     } else {
       arrayToSearch.push({
-        provider_id: offer.provider_id,
+        provider_id: objProviderId,
         [type]: priceLink,
       });
     }

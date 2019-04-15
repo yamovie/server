@@ -1,4 +1,4 @@
-module.exports.urls = {
+module.exports = {
   YT_EMBED_BASE: 'https://www.youtube.com/embed',
   JW_BASE: 'https://www.justwatch.com',
   IMDB_BASE: 'http://www.imdb.com',
