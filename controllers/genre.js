@@ -42,7 +42,10 @@ const create = genre => Genre.create(genre);
 
 const insertMany = genres => Genre.insertMany(genres);
 
+const count = () => Genre.estimatedDocumentCount();
+
 module.exports = {
+  count,
   readAll,
   readOne,
   readOneByKey,
