@@ -23,8 +23,15 @@ const movieSchema = new mongoose.Schema(
     videos: [Object],
     offers: Object,
   },
-  { collection: 'jw_movies' },
+  { collection: 'jw_movies', toJSON: { virtuals: true } },
 );
+
+// movieSchema.virtual('buy-providers', {
+//   ref: 'Provider',
+//   localField: 'offers.buy.provider_id',
+//   foreignField: 'external_ids.jw_id',
+//   justOne: false,
+// });
 
 mongoosePaginate.paginate.options = {
   limit: 20,

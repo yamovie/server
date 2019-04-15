@@ -173,7 +173,7 @@ const parseJWOffers = async jwOffers => {
 
   if (!jwOffers) return { offers };
 
-  jwOffers.forEach(offer => {
+  for await (const offer of jwOffers) {
     let arrayToSearch = [];
     if (offer.monetization_type === 'buy') {
       arrayToSearch = offers.buy;
@@ -183,16 +183,23 @@ const parseJWOffers = async jwOffers => {
       arrayToSearch = offers.stream;
     }
 
-    const priceLink = { price: offer.retail_price, url: offer.urls.standard_web };
+    const priceLink = {
+      price: offer.retail_price,
+      url: offer.urls.standard_web,
+    };
 
-    const objProviderId = controllers.provider.readOneByKey(offer.provider_id);
+    const objProviderId = (await controllers.provider.readOneByKey(
+      offer.provider_id,
+    ))._id.toString();
+
     // checking to see if there's already an object for this provider
     const currOffer = arrayToSearch.find(
       anOffer => anOffer.provider_id === objProviderId,
     );
 
     // need to alter the keyname just for this one because keys can't start with numbers
-    const type = offer.presentation_type === '4k' ? 'fourk' : offer.presentation_type;
+    const type =
+      offer.presentation_type === '4k' ? 'fourk' : offer.presentation_type;
 
     if (currOffer) {
       currOffer[type] = priceLink;
@@ -202,7 +209,7 @@ const parseJWOffers = async jwOffers => {
         [type]: priceLink,
       });
     }
-  });
+  }
 
   return { offers };
 };
