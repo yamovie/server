@@ -102,7 +102,7 @@ const seed = async () => {
   // await seedGenres();
   // await seedMovies();
   // await jw_seedGenres();
-  await jw_seedMovies();
+  // await jw_seedMovies();
 
   // while (state.movies.hasMore) {
   //   await new Promise(resolve => setTimeout(resolve, 10000));

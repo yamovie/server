@@ -24,7 +24,7 @@ module.exports = {
       cinema_release: null,
       query: null,
       page: null,
-      page_size: 2,
+      page_size: 20,
     },
   },
   JW_TITLE: {

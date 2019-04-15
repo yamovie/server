@@ -6,9 +6,11 @@ const jw = {};
 // =========================== Parse Helpers  ====================================
 
 /**
- * TODO: add documentation
- * @param {Array<object>} jwCredits
- * @returns {Promise} the credits object
+ * Takes the single credits array supplied by the JW API and parses it into
+ * an object containing an array each for the cast and the crew. Also formats the
+ * roles to all be capitalized but not all caps
+ * @param {Array<object>} jwCredits An array of objects containing cast/crew info
+ * @returns {Promise} a Promise containing the completed credits object
  */
 const parseJWCredits = async jwCredits => {
   if (!jwCredits) return { credits: { cast: [], crew: [] } };
@@ -24,11 +26,13 @@ const parseJWCredits = async jwCredits => {
 // ===============================================================================
 
 /**
- * TODO: add documentation
- * @param {string} jwPoster
- * @param {Array<string>} jwBackdrops
+ * Parses the provided url endings to create the full urls for this movie's poster and backdrops
+ * @param {string} jwPoster the end of the url link to this movie's poster, with a spot for size
+ * @param {Array<string>} jwBackdrops an array containing the ends of all the strings
+ *                         for this movie's backdrops, with a spot for size
  * @param {string} jwLink the general link to this movie's page on JustWatch
- * @returns {Promise}
+ * @returns {Promise} a promise containing the constructed images object, with the
+ *                    poster link and array of backdrop links
  */
 const parseJWImages = async (jwPoster, jwBackdrops, jwLink) => {
   const pSize = 592;
@@ -52,11 +56,14 @@ const parseJWImages = async (jwPoster, jwBackdrops, jwLink) => {
 // ===============================================================================
 
 /**
- * TODO: add documentation
- * @param {Array<object>} jwRatings
- * @returns {Promise}
+ * Takes in the scoring object and parses the various scores to create objects
+ * including the scores and links for Rotten Tomatoes, IMDB, and TMDB ratings.
+ * Keys are imdb, rotten_tomatoes, and themdb
+ * @param {Array<object>} jwRatings an array of all the different types of scores for this movie
+ * @param {Array<object} jwExternalIds an array of objects of ids to external content providers
+ * @returns {Promise} a promise containing the constructed ratings object
  */
-const parseJWRatings = async jwRatings => {
+const parseJWRatings = async (jwRatings, jwExternalIds) => {
   const ratings = {
     imdb: {
       rate: '?/10',
@@ -75,7 +82,12 @@ const parseJWRatings = async jwRatings => {
     },
   };
 
-  if (!jwRatings) return ratings;
+  if (!jwRatings) return { ratings };
+
+  const imdbIdObj = jwExternalIds.find(idObj => idObj.provider === 'imdb');
+  if (imdbIdObj) {
+    ratings.imdb.url = `${urls.IMDB_MOVIE_BASE}/${imdbIdObj.external_id}`;
+  }
 
   jwRatings.forEach(({ provider_type, value }) => {
     // is imdb data
@@ -84,7 +96,6 @@ const parseJWRatings = async jwRatings => {
         ratings.imdb.value = value;
         ratings.imdb.rate = `${value}/10`;
       }
-      // TODO: get this from external_ids
       if (provider_type.includes('id')) {
         ratings.imdb.url = `${urls.IMDB_MOVIE_BASE}/${value}`;
       }
@@ -123,12 +134,14 @@ const parseJWRatings = async jwRatings => {
 // ===============================================================================
 
 /**
- * TODO: add documentation
- * @param {Array<object>} jwVideos
+ * Takes an array of objects containing info about videos for this movie, constructs
+ * the full url for each video, and adds it to that video object
+ * @param {Array<object>} jwVideos the array of video data objects
+ * @returns {Promise} a promise containing the video object
  */
 const parseJWVideos = async jwVideos => {
-  if (!jwVideos) return [];
   const videos = [];
+  if (!jwVideos) return { videos };
   jwVideos.forEach(video => {
     const transformedVideo = { type: video.type, name: video.name };
     if (video.provider === 'youtube') {
@@ -142,8 +155,13 @@ const parseJWVideos = async jwVideos => {
 // ===============================================================================
 
 /**
- * TODO: add documentation
- * @param {Array<object>} jwOffers
+ * Takes in the disorganized offers array and parses all of them. It splits them up by
+ * type: buy, rent, or stream, and then groups by provider. Within each subarray of
+ * objects, each object has a keys for provider_id, sd, hd, and fourk, with the latter
+ * three containing the link to that particular offer and the price for that offer
+ * @param {Array<object>} jwOffers the original offers array
+ * @returns {Promise} a promise containing the offers object:
+ * offers: { buy: [], rent: [], stream: [] }
  */
 const parseJWOffers = async jwOffers => {
   const offers = {
@@ -151,6 +169,8 @@ const parseJWOffers = async jwOffers => {
     rent: [],
     stream: [],
   };
+
+  if (!jwOffers) return { offers };
 
   jwOffers.forEach(offer => {
     let arrayToSearch = [];
@@ -163,30 +183,37 @@ const parseJWOffers = async jwOffers => {
     }
 
     const priceLink = { price: offer.retail_price, url: offer.urls.standard_web };
-    let currOffer = arrayToSearch.find(
+
+    // checking to see if there's already an object for this provider
+    const currOffer = arrayToSearch.find(
       anOffer => anOffer.provider_id === offer.provider_id,
     );
 
+    // need to alter the keyname just for this one because keys can't start with numbers
     const type = offer.presentation_type === '4k' ? 'fourk' : offer.presentation_type;
+
     if (currOffer) {
       currOffer[type] = priceLink;
     } else {
-      currOffer = {
+      arrayToSearch.push({
         provider_id: offer.provider_id,
         [type]: priceLink,
-      };
+      });
     }
-
-    arrayToSearch.push(currOffer);
   });
 
-  return offers;
+  return { offers };
 };
 
 // ===============================================================================
 // ================================ Parse ========================================
 
-// TODO: add documentation
+/**
+ * Takes in data from the JustWatch API and parses and transforms it to be shaped
+ * in a useful way for the YaMovie front-end to display
+ * @param {Object} data the original data from the JW API call
+ * @returns {Object} an object with the parsed and transformed data for a movie
+ */
 jw.movie = async data => {
   const jw_url = `${urls.JW_BASE}${data.full_path}`;
   return Object.assign(
@@ -204,7 +231,7 @@ jw.movie = async data => {
     },
     ...(await Promise.all([
       parseJWCredits(data.credits),
-      parseJWRatings(data.scoring),
+      parseJWRatings(data.scoring, data.external_ids),
       parseJWImages(data.poster, data.backdrops, jw_url),
       parseJWVideos(data.clips),
       parseJWOffers(data.offers),
