@@ -41,16 +41,14 @@ const readOne = async (req, res) => {
 
 const readByGenre = async (req, res) => {
   const foundMovies = await Movie.paginate(
-    { genre_ids: req.params.id },
+    { genres: req.params.id },
     { page: req.query.page || 1 },
   );
   return res.json(foundMovies);
 };
 
 const readByRecommendation = async (req, res) => {
-  const certifications = recommendations.getCertifications(
-    req.body.certification,
-  );
+  const certifications = recommendations.getCertifications(req.body.certification);
 
   const conditions = {
     genre_ids: { $in: req.body.genres },
@@ -61,8 +59,7 @@ const readByRecommendation = async (req, res) => {
   };
 
   if (!req.body.foreign) conditions.original_language = 'en';
-  if (req.body.indie)
-    conditions.budget = { $lt: recommendations.INDIE_BUDGET_THRESHOLD };
+  if (req.body.indie) conditions.budget = { $lt: recommendations.INDIE_BUDGET_THRESHOLD };
 
   const foundMovies = await Movie.paginate(conditions, {
     page: req.query.page || 1,

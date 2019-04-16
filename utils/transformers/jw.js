@@ -35,12 +35,12 @@ const parseJWCredits = async jwCredits => {
  * @returns {Promise} a promise containing the constructed images object, with the
  *                    poster link and array of backdrop links
  */
-const parseJWImages = async (jwPoster, jwBackdrops, jwLink) => {
+const parseJWImages = async (jwPoster, jwBackdrops, jwImageLink) => {
   const pSize = 592;
   let poster = '';
   if (jwPoster) {
     const posterLink = jwPoster.replace('{profile}', `s${pSize}`);
-    poster = `${jwLink}${posterLink}`;
+    poster = `${jwImageLink}${posterLink}`;
   }
 
   const bdSize = 1440;
@@ -48,7 +48,7 @@ const parseJWImages = async (jwPoster, jwBackdrops, jwLink) => {
   if (jwBackdrops) {
     jwBackdrops.forEach(backdrop => {
       const bdLink = backdrop.backdrop_url.replace('{profile}', `s${bdSize}`);
-      backdrops.push(`${jwLink}${bdLink}`);
+      backdrops.push(`${jwImageLink}${bdLink}`);
     });
   }
   return { images: { poster, backdrops } };
@@ -173,6 +173,7 @@ const parseJWOffers = async jwOffers => {
 
   if (!jwOffers) return { offers };
 
+  // eslint-disable-next-line no-restricted-syntax
   for await (const offer of jwOffers) {
     let arrayToSearch = [];
     if (offer.monetization_type === 'buy') {
@@ -193,13 +194,10 @@ const parseJWOffers = async jwOffers => {
     ))._id.toString();
 
     // checking to see if there's already an object for this provider
-    const currOffer = arrayToSearch.find(
-      anOffer => anOffer.provider === objProviderId,
-    );
+    const currOffer = arrayToSearch.find(anOffer => anOffer.provider === objProviderId);
 
     // need to alter the keyname just for this one because keys can't start with numbers
-    const type =
-      offer.presentation_type === '4k' ? 'fourk' : offer.presentation_type;
+    const type = offer.presentation_type === '4k' ? 'fourk' : offer.presentation_type;
 
     if (currOffer) {
       currOffer[type] = priceLink;
@@ -213,6 +211,8 @@ const parseJWOffers = async jwOffers => {
 
   return { offers };
 };
+
+// ===============================================================================
 
 /**
  *
@@ -248,10 +248,12 @@ const parseJWGenres = async jwGenres => {
  * @returns {Object} an object with the parsed and transformed data for a movie
  */
 jw.movie = async data => {
+  const jw_image_url = 'https://images.justwatch.com';
   const jw_url = `${urls.JW_BASE}${data.full_path}`;
   return Object.assign(
     {
       jw_url,
+      jw_image_url,
       certification: data.age_certification,
       original_language: data.original_language,
       original_title: data.original_title,
@@ -264,7 +266,7 @@ jw.movie = async data => {
     ...(await Promise.all([
       parseJWCredits(data.credits),
       parseJWRatings(data.scoring, data.external_ids),
-      parseJWImages(data.poster, data.backdrops, jw_url),
+      parseJWImages(data.poster, data.backdrops, jw_image_url),
       parseJWVideos(data.clips),
       parseJWOffers(data.offers),
       parseJWGenres(data.genre_ids),

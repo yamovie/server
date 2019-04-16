@@ -5,6 +5,7 @@ const { paginate, requests } = require('../configs');
 const movieSchema = new mongoose.Schema(
   {
     jw_url: String,
+    jw_image_url: String,
     certification: String,
     original_language: String,
     original_title: String,
@@ -33,6 +34,9 @@ const movieSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Provider',
           },
+          hd: Object,
+          sd: Object,
+          fourk: Object,
         },
       ],
       rent: [
@@ -41,6 +45,9 @@ const movieSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Provider',
           },
+          hd: Object,
+          sd: Object,
+          fourk: Object,
         },
       ],
       stream: [
@@ -49,6 +56,9 @@ const movieSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Provider',
           },
+          hd: Object,
+          sd: Object,
+          fourk: Object,
         },
       ],
     },
@@ -58,8 +68,7 @@ const movieSchema = new mongoose.Schema(
 
 mongoosePaginate.paginate.options = {
   limit: requests.JW_SEARCH.data.page_size,
-  populate:
-    'genres offers.buy.provider offers.rent.provider offers.stream.provider',
+  populate: 'genres offers.buy.provider offers.rent.provider offers.stream.provider',
   lean: true,
   leanWithId: true,
   customLabels: paginate.labels,
