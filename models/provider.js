@@ -14,9 +14,11 @@ const providerSchema = new mongoose.Schema(
     icon_url: String,
     slug: String,
     external_ids: {
-      type: Object,
-      required: true,
-      unique: true,
+      jw_id: {
+        type: Object,
+        required: true,
+        unique: true,
+      },
     },
   },
   { collection: 'providers' },

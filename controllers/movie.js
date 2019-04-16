@@ -18,7 +18,12 @@ const readBySearch = async (req, res) => {
  * @param {Object} res HTTP response
  */
 const readAll = async (req, res) => {
-  const allMovies = await Movie.paginate({}, { page: req.query.page || 1 });
+  const allMovies = await Movie.paginate(
+    {},
+    {
+      page: req.query.page || 1,
+    },
+  );
   return res.json(allMovies);
 };
 
@@ -28,29 +33,33 @@ const readAll = async (req, res) => {
  * @param {Object} res HTTP response
  */
 const readOne = async (req, res) => {
-  const foundMovie = await Movie.findById(req.params.id);
+  const foundMovie = await Movie.findById(req.params.id).populate(
+    'genres offers.buy.provider offers.rent.provider offers.stream.provider',
+  );
   return res.json(foundMovie);
 };
 
 const readByGenre = async (req, res) => {
   const foundMovies = await Movie.paginate(
-    { genre_ids: req.params.id },
+    { genres: req.params.id },
     { page: req.query.page || 1 },
   );
   return res.json(foundMovies);
 };
 
 const readByRecommendation = async (req, res) => {
-  const certifications = recommendations.getCertifications(
+  console.log(req.body);
+
+  const applicableCerts = recommendations.getCertifications(
     req.body.certification,
   );
 
   const conditions = {
-    genre_ids: { $in: req.body.genres },
-    certifications: { $in: certifications },
-    release_year: { $gte: req.body.minYear, $lte: req.body.maxYear },
-    'ratings.rotten_tomatoes.value': { $gte: req.body.rotten_tomatoes },
-    'ratings.internet_movie_database.value': { $gte: req.body.imdb },
+    // genres: { $in: req.body.genres },
+    // certification: { $in: applicableCerts },
+    // release_year: { $gte: req.body.min_year, $lte: req.body.max_year },
+    // 'ratings.rotten_tomatoes.value': { $gte: req.body.rotten_tomatoes },
+    // 'ratings.imdb.value': { $gte: req.body.imdb },
   };
 
   if (!req.body.foreign) conditions.original_language = 'en';

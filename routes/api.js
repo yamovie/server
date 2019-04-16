@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const controllers = require('../controllers');
 
-router.get('/movies/search/', controllers.movie.readBySearch);
+router.get('/movies/search', controllers.movie.readBySearch);
 
 /**
  * GET request for movie list
