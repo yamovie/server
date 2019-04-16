@@ -68,7 +68,8 @@ const movieSchema = new mongoose.Schema(
 
 mongoosePaginate.paginate.options = {
   limit: requests.JW_SEARCH.data.page_size,
-  populate: 'genres offers.buy.provider offers.rent.provider offers.stream.provider',
+  populate:
+    'genres offers.buy.provider offers.rent.provider offers.stream.provider',
   lean: true,
   leanWithId: true,
   customLabels: paginate.labels,
