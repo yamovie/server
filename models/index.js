@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const {
- DB_USER, DB_KEY, DB_SCHEME, DB_HOST, DB_NAME 
+  DB_USER, DB_KEY, DB_SCHEME, DB_HOST, DB_NAME,
 } = process.env;
 
 mongoose.set('debug', false);
@@ -45,5 +45,6 @@ module.exports.Genre = require('./genre');
 module.exports.Movie = require('./movie');
 module.exports.Provider = require('./provider');
 module.exports.User = require('./user');
+module.exports.Preference = require('./preference');
 // module.exports.Genre = require('./jw-genre');
 // module.exports.Movie = require('./jw-movies');

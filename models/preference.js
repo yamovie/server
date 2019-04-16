@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-
 const preferenceSchema = new Schema({
-  user: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,

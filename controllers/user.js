@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
-const Preference = require('../models/preference');
-const preferencesController = require('./preferencesController');
+const { Preference, User } = require('../models');
 
 const { SECRET } = process.env;
 
@@ -14,12 +12,11 @@ function createJWT(user) {
 // };
 
 /**
- * creates new user in database
+ * creates new user and preference document in database, which are assosciated
  * @param {Object} req user data
  * @param {string} res token
  */
 const signup = async (req, res) => {
-  console.log('Signup running');
   const newPreference = await new Preference();
   
   const newUser = await new User({
@@ -29,7 +26,7 @@ const signup = async (req, res) => {
     preference: newPreference,
   });
 
-  newPreference.user = newUser._id;
+  newPreference.userId = newUser._id;
   
   Promise.all([
     newPreference.save(),

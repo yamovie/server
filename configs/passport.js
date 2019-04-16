@@ -1,6 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const { User } = require('../models');
+const { User, Preference } = require('../models');
 
 passport.use(
   new GoogleStrategy(
@@ -15,15 +15,23 @@ passport.use(
         if (user) {
           return done(null, user);
         }
-        const newUser = {
+        const newPreference = new Preference();
+        const newUser = new User({
           fullName: profile.displayName,
           email: profile.emails[0].value,
           birthday: profile.birthday,
           googleId: profile.id,
           token: accessToken,
-        };
-        User.create(newUser);
-        return done(null, newUser);
+          preferenceId: newPreference._id,
+        });
+        newPreference.userId = newUser._id;
+        
+        Promise.all([
+          newPreference.save(),
+          newUser.save(),
+        ]).then(() => done(null, newUser)).catch((error) => {
+          done(error);
+        });
       });
     },
   ),

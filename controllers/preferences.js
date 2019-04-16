@@ -1,13 +1,12 @@
-const jwt = require('jsonwebtoken');
-const Preference = require('../models/preference');
-
+const { Preference } = require('../models');
 
 /**
- * Returns all data from preferences
- * @return 
+ * Returns all data from preferences and sends it back to the client
+ * @param userId takes a userId in order to find assosciated preferences document
+ * @returns 
  */
 const getPreferences = (req, res) => {
-  Preference.findOne({ user: req.query.userId },
+  Preference.findOne({ userId: req.query.userId },
     (err, preferences) => {
       if (err) {
         res.json({ error: err });
@@ -16,7 +15,10 @@ const getPreferences = (req, res) => {
     });
 };
 
-
+/**
+ * Creates a new preference document
+ * @returns {object} preference
+ */
 const createPreference = (req, res) => {
   Preference.create({}, (err, preference) => {
     if (err) {
@@ -26,27 +28,20 @@ const createPreference = (req, res) => {
   });
 };
 
-
+/**
+ * Updates an existing preference document based on the userId given to the functions params.
+ * @returns {object} preference
+ */
 const updatePreference = (req, res) => {
   const query = req.body.preferences;
 
-
-  Preference.findOneAndUpdate({ user: req.body.userId }, query, (err) => {
+  Preference.findOneAndUpdate({ userId: req.body.userId }, query, (err) => {
     if (err) {
       res.json({ error: err });
     }
   })
     .then(preference => res.status('204').json({ message: 'The preference was updated succesfully', data: preference }));
 };
-  
-/**
- * Returns all data from preferences
- * @return 
- */
-// module.exports.update = (req, res) => {
-//   res.json({ message: 'Preferences has been successfully updated' });
-// };
-
 
 module.exports = {
   createPreference,

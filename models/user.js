@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema(
     watchlist: {
       type: [Object],
     },
-    preference: {
+    preferenceId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Preference',
       required: false,
