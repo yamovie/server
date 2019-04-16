@@ -6,7 +6,12 @@ const genreSchema = new mongoose.Schema(
     short_name: String,
     technical_name: String,
     slug: String,
-    external_ids: Object,
+    external_ids: {
+      jw_id: {
+        type: Number,
+        unique: true,
+      },
+    },
   },
   { collection: 'jw_genres' },
 );
