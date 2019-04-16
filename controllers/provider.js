@@ -12,7 +12,10 @@ const readOneByKey = async key => {
 
 const insertMany = providers => Provider.insertMany(providers);
 
+const count = () => Provider.estimatedDocumentCount();
+
 module.exports = {
   insertMany,
   readOneByKey,
+  count,
 };

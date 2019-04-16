@@ -48,18 +48,23 @@ const readByGenre = async (req, res) => {
 };
 
 const readByRecommendation = async (req, res) => {
-  const certifications = recommendations.getCertifications(req.body.certification);
+  console.log(req.body);
+
+  const applicableCerts = recommendations.getCertifications(
+    req.body.certification,
+  );
 
   const conditions = {
-    genre_ids: { $in: req.body.genres },
-    certifications: { $in: certifications },
-    release_year: { $gte: req.body.minYear, $lte: req.body.maxYear },
-    'ratings.rotten_tomatoes.value': { $gte: req.body.rotten_tomatoes },
-    'ratings.internet_movie_database.value': { $gte: req.body.imdb },
+    // genres: { $in: req.body.genres },
+    // certification: { $in: applicableCerts },
+    // release_year: { $gte: req.body.min_year, $lte: req.body.max_year },
+    // 'ratings.rotten_tomatoes.value': { $gte: req.body.rotten_tomatoes },
+    // 'ratings.imdb.value': { $gte: req.body.imdb },
   };
 
   if (!req.body.foreign) conditions.original_language = 'en';
-  if (req.body.indie) conditions.budget = { $lt: recommendations.INDIE_BUDGET_THRESHOLD };
+  if (req.body.indie)
+    conditions.budget = { $lt: recommendations.INDIE_BUDGET_THRESHOLD };
 
   const foundMovies = await Movie.paginate(conditions, {
     page: req.query.page || 1,

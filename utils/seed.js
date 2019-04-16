@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 const controllers = require('../controllers');
 const services = require('../services');
 const configs = require('../configs');
@@ -35,8 +33,18 @@ const jw_seedMovies = async () => {
   console.log('Movies seeding...');
 
   const seed = await services.jw_getMovies();
+
+  setMovieState(
+    state.movies.page + 1,
+    seed.items.length,
+    seed.total_pages,
+    seed.total_results,
+  );
+
   const data = await services.jw_getMoviesData(seed.items);
-  const movies = await Promise.all(data.map(movie => transformers.jw.movie(movie)));
+  const movies = await Promise.all(
+    data.map(movie => transformers.jw.movie(movie)),
+  );
 
   await controllers.movie.insertMany(movies);
 
@@ -46,11 +54,20 @@ const jw_seedMovies = async () => {
 const seedMovies = async () => {
   await console.log('Seeding movies...');
 
-  const config = Object.assign({}, configs.urls, await services.getConfigurations());
+  const config = Object.assign(
+    {},
+    configs.urls,
+    await services.getConfigurations(),
+  );
 
   const seed = await services.getMovies(state.movies.page + 1);
 
-  setMovieState(seed.page, seed.results.length, seed.total_pages, seed.total_results);
+  setMovieState(
+    seed.page,
+    seed.results.length,
+    seed.total_pages,
+    seed.total_results,
+  );
 
   const data = await services.getMoviesData(seed.results);
   const movies = await Promise.all(
@@ -68,7 +85,9 @@ const seedGenres = async () => {
   if ((await controllers.genre.count()) === 0) {
     const seed = (await services.getGenres()).genres;
 
-    const genres = await Promise.all(seed.map(genre => transformers.tmdb.genre(genre)));
+    const genres = await Promise.all(
+      seed.map(genre => transformers.tmdb.genre(genre)),
+    );
 
     await controllers.genre.insertMany(genres);
   }
@@ -79,12 +98,14 @@ const seedGenres = async () => {
 const seedProviders = async () => {
   console.log('Providers seeding...');
 
-  const seed = await services.getProviders();
-  const providers = await Promise.all(
-    seed.map(provider => transformers.jw.provider(provider)),
-  );
+  if ((await controllers.provider.count()) === 0) {
+    const seed = await services.getProviders();
+    const providers = await Promise.all(
+      seed.map(provider => transformers.jw.provider(provider)),
+    );
 
-  await controllers.provider.insertMany(providers);
+    await controllers.provider.insertMany(providers);
+  }
 
   console.log('Providers seeded.');
 };
@@ -93,7 +114,9 @@ const jw_seedGenres = async () => {
   console.log('Genres seeding...');
 
   const seed = await services.jw_getGenres();
-  const genres = await Promise.all(seed.map(genre => transformers.jw.genre(genre)));
+  const genres = await Promise.all(
+    seed.map(genre => transformers.jw.genre(genre)),
+  );
 
   await controllers.genre.insertMany(genres);
 
@@ -103,10 +126,10 @@ const jw_seedGenres = async () => {
 const seed = async () => {
   console.log('Seeding...');
 
-  // await seedProviders();
+  await seedProviders();
   // await seedGenres();
   // await seedMovies();
-  // await jw_seedGenres();
+  await jw_seedGenres();
   // await jw_seedMovies();
 
   while (state.movies.hasMore) {

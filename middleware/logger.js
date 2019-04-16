@@ -32,9 +32,9 @@ const logger = (req, res, next) => {
     );
   });
 
-  res.on('close', () =>
-    console.warn(`${getPrefix(req)} Request aborted by client`),
-  );
+  // res.on('close', () =>
+  //   console.warn(`${getPrefix(req)} Request aborted by client`),
+  // );
 
   res.on('error', () =>
     console.error(`${getPrefix(req)} Request pipeline error: ${err}`),
