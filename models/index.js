@@ -39,9 +39,9 @@ mongoose.connection.on('disconnected', () =>
 /**
  * Models
  */
-module.exports.Genre = require('./genre');
-module.exports.Movie = require('./movie');
+// module.exports.Genre = require('./genre');
+// module.exports.Movie = require('./movie');
 module.exports.Provider = require('./provider');
 module.exports.User = require('./user');
-// module.exports.Genre = require('./jw-genre');
-// module.exports.Movie = require('./jw-movies');
+module.exports.Genre = require('./jw-genre');
+module.exports.Movie = require('./jw-movies');
