@@ -126,17 +126,17 @@ const jw_seedGenres = async () => {
 const seed = async () => {
   console.log('Seeding...');
 
-  await seedProviders();
+  // await seedProviders();
   // await seedGenres();
   // await seedMovies();
-  await jw_seedGenres();
+  // await jw_seedGenres();
   // await jw_seedMovies();
 
-  while (state.movies.hasMore) {
-    await new Promise(resolve => setTimeout(resolve, 10000));
-    // await seedMovies();
-    await jw_seedMovies();
-  }
+  // while (state.movies.hasMore) {
+  //   await new Promise(resolve => setTimeout(resolve, 10000));
+  //   // await seedMovies();
+  //   await jw_seedMovies();
+  // }
 
   console.log('Seeding completed.');
 };
