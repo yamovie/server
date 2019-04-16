@@ -30,7 +30,8 @@ const readOne = async (req, res) => {
  * @return {Promise}
  */
 const readOneByKey = async key => {
-  const foundGenre = await Genre.findOne({ 'external_ids.tmdb_id': key });
+  // const foundGenre = await Genre.findOne({ 'external_ids.tmdb_id': key });
+  const foundGenre = await Genre.findOne({ 'external_ids.jw_id': key });
   return foundGenre;
 };
 

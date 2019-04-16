@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
-const { paginate } = require('../configs');
+const { paginate, requests } = require('../configs');
 
 const movieSchema = new mongoose.Schema(
   {
@@ -13,7 +13,12 @@ const movieSchema = new mongoose.Schema(
     release_year: Number,
     runtime: Number,
     title: String,
-    genre_ids: [Number],
+    genres: [
+      {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'JW_Genre',
+      },
+    ],
     credits: Object,
     ratings: Object,
     images: {
@@ -21,20 +26,40 @@ const movieSchema = new mongoose.Schema(
       backdrops: [Object],
     },
     videos: [Object],
-    offers: Object,
+    offers: {
+      buy: [
+        {
+          provider: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Provider',
+          },
+        },
+      ],
+      rent: [
+        {
+          provider: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Provider',
+          },
+        },
+      ],
+      stream: [
+        {
+          provider: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Provider',
+          },
+        },
+      ],
+    },
   },
-  { collection: 'jw_movies', toJSON: { virtuals: true } },
+  { collection: 'jw_movies' },
 );
 
-// movieSchema.virtual('buy-providers', {
-//   ref: 'Provider',
-//   localField: 'offers.buy.provider_id',
-//   foreignField: 'external_ids.jw_id',
-//   justOne: false,
-// });
-
 mongoosePaginate.paginate.options = {
-  limit: 20,
+  limit: requests.JW_SEARCH.data.page_size,
+  populate:
+    'genres offers.buy.provider offers.rent.provider offers.stream.provider',
   lean: true,
   leanWithId: true,
   customLabels: paginate.labels,

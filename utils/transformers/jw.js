@@ -194,7 +194,7 @@ const parseJWOffers = async jwOffers => {
 
     // checking to see if there's already an object for this provider
     const currOffer = arrayToSearch.find(
-      anOffer => anOffer.provider_id === objProviderId,
+      anOffer => anOffer.provider === objProviderId,
     );
 
     // need to alter the keyname just for this one because keys can't start with numbers
@@ -205,13 +205,37 @@ const parseJWOffers = async jwOffers => {
       currOffer[type] = priceLink;
     } else {
       arrayToSearch.push({
-        provider_id: objProviderId,
+        provider: objProviderId,
         [type]: priceLink,
       });
     }
   }
 
   return { offers };
+};
+
+/**
+ *
+ * @param {*} jwGenres
+ */
+const parseJWGenres = async jwGenres => {
+  if (!jwGenres) return { genres: [] };
+
+  // for await (let genre of jwGenres) {
+  //   const newId = (await controllers.genre.readOneByKey(genre))._id.toString();
+  //   genre = (await controllers.genre.readOneByKey(genre))._id.toString();
+  //   console.log(newId, genre);
+  // }
+
+  // console.log(jwGenres);
+
+  return {
+    genres: await Promise.all(
+      jwGenres.map(async genre =>
+        (await controllers.genre.readOneByKey(genre))._id.toString(),
+      ),
+    ),
+  };
 };
 
 // ===============================================================================
@@ -236,7 +260,6 @@ jw.movie = async data => {
       release_year: data.original_release_year,
       runtime: data.runtime,
       title: data.title,
-      genre_ids: data.genre_ids,
     },
     ...(await Promise.all([
       parseJWCredits(data.credits),
@@ -244,6 +267,7 @@ jw.movie = async data => {
       parseJWImages(data.poster, data.backdrops, jw_url),
       parseJWVideos(data.clips),
       parseJWOffers(data.offers),
+      parseJWGenres(data.genre_ids),
     ])),
   );
 };
@@ -257,7 +281,7 @@ jw.genre = async ({ id, translation, short_name, technical_name, slug }) => ({
   technical_name,
   slug,
   external_ids: {
-    jw: id,
+    jw_id: id,
   },
 });
 

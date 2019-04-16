@@ -22,7 +22,6 @@ const readAll = async (req, res) => {
     {},
     {
       page: req.query.page || 1,
-      populate: 'buy-providers',
     },
   );
   return res.json(allMovies);
@@ -34,12 +33,7 @@ const readAll = async (req, res) => {
  * @param {Object} res HTTP response
  */
 const readOne = async (req, res) => {
-  // const foundMovie = await Movie.findById(req.params.id).populate(
-  //   'buy-providers',
-  // );
-
   const foundMovie = await Movie.findById(req.params.id);
-
   return res.json(foundMovie);
 };
 
