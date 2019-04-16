@@ -36,7 +36,9 @@ const jw_seedMovies = async () => {
 
   const seed = await services.jw_getMovies();
   const data = await services.jw_getMoviesData(seed.items);
-  const movies = await Promise.all(data.map(movie => transformers.jw.movie(movie)));
+  const movies = await Promise.all(
+    data.map(movie => transformers.jw.movie(movie)),
+  );
 
   await controllers.movie.insertMany(movies);
 
@@ -46,11 +48,20 @@ const jw_seedMovies = async () => {
 const seedMovies = async () => {
   await console.log('Seeding movies...');
 
-  const config = Object.assign({}, configs.urls, await services.getConfigurations());
+  const config = Object.assign(
+    {},
+    configs.urls,
+    await services.getConfigurations(),
+  );
 
   const seed = await services.getMovies(state.movies.page + 1);
 
-  setMovieState(seed.page, seed.results.length, seed.total_pages, seed.total_results);
+  setMovieState(
+    seed.page,
+    seed.results.length,
+    seed.total_pages,
+    seed.total_results,
+  );
 
   const data = await services.getMoviesData(seed.results);
   const movies = await Promise.all(
@@ -68,7 +79,9 @@ const seedGenres = async () => {
   if ((await controllers.genre.count()) === 0) {
     const seed = (await services.getGenres()).genres;
 
-    const genres = await Promise.all(seed.map(genre => transformers.tmdb.genre(genre)));
+    const genres = await Promise.all(
+      seed.map(genre => transformers.tmdb.genre(genre)),
+    );
 
     await controllers.genre.insertMany(genres);
   }
@@ -93,7 +106,9 @@ const jw_seedGenres = async () => {
   console.log('Genres seeding...');
 
   const seed = await services.jw_getGenres();
-  const genres = await Promise.all(seed.map(genre => transformers.jw.genre(genre)));
+  const genres = await Promise.all(
+    seed.map(genre => transformers.jw.genre(genre)),
+  );
 
   await controllers.genre.insertMany(genres);
 
@@ -111,7 +126,8 @@ const seed = async () => {
 
   while (state.movies.hasMore) {
     await new Promise(resolve => setTimeout(resolve, 10000));
-    await seedMovies();
+    // await seedMovies();
+    await jw_seedMovies();
   }
 
   console.log('Seeding completed.');

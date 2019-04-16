@@ -33,7 +33,9 @@ const readAll = async (req, res) => {
  * @param {Object} res HTTP response
  */
 const readOne = async (req, res) => {
-  const foundMovie = await Movie.findById(req.params.id);
+  const foundMovie = await Movie.findById(req.params.id).populate(
+    'genres offers.buy.provider offers.rent.provider offers.stream.provider',
+  );
   return res.json(foundMovie);
 };
 
