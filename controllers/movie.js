@@ -55,11 +55,11 @@ const readByRecommendation = async (req, res) => {
   );
 
   const conditions = {
-    // genres: { $in: req.body.genres },
-    // certification: { $in: applicableCerts },
-    // release_year: { $gte: req.body.min_year, $lte: req.body.max_year },
-    // 'ratings.rotten_tomatoes.value': { $gte: req.body.rotten_tomatoes },
-    // 'ratings.imdb.value': { $gte: req.body.imdb },
+    genres: { $in: req.body.genres },
+    certification: { $in: applicableCerts },
+    release_year: { $gte: req.body.min_year, $lte: req.body.max_year },
+    'ratings.rotten_tomatoes.value': { $gte: req.body.rotten_tomatoes },
+    'ratings.imdb.value': { $gte: req.body.imdb },
   };
 
   if (!req.body.foreign) conditions.original_language = 'en';
