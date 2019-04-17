@@ -5,7 +5,7 @@ const { transformers } = require('../utils/');
 
 const state = {
   movies: {
-    page: 0,
+    page: 1,
     results: 0,
     totalPages: 0,
     totalResults: 0,
@@ -25,14 +25,14 @@ const setMovieState = (page, results, totalPages, totalResults) => {
     }),
     hasMore: page < totalPages,
   };
-
-  console.info(state.movies);
 };
 
 const jw_seedMovies = async () => {
   console.log('Movies seeding...');
 
-  const seed = await services.jw_getMovies();
+  console.info(state.movies);
+
+  const seed = await services.jw_getMovies(state.movies.page);
 
   setMovieState(
     state.movies.page + 1,
@@ -132,11 +132,11 @@ const seed = async () => {
   // await jw_seedGenres();
   // await jw_seedMovies();
 
-  // while (state.movies.hasMore) {
-  //   await new Promise(resolve => setTimeout(resolve, 10000));
-  //   // await seedMovies();
-  //   await jw_seedMovies();
-  // }
+  while (state.movies.hasMore) {
+    await new Promise(resolve => setTimeout(resolve, 10000));
+    // await seedMovies();
+    await jw_seedMovies();
+  }
 
   console.log('Seeding completed.');
 };

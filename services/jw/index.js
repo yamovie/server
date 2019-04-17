@@ -2,6 +2,7 @@ const axios = require('axios');
 const { requests } = require('../../configs');
 
 const requestMovies = page => {
+  console.log('requesting...', page);
   requests.JW_SEARCH.data.page = page || 1;
   return axios(requests.JW_SEARCH);
 };

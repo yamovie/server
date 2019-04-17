@@ -4,7 +4,11 @@ const { paginate, requests } = require('../configs');
 
 const movieSchema = new mongoose.Schema(
   {
-    jw_url: String,
+    jw_url: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     jw_image_url: String,
     certification: String,
     original_language: String,
