@@ -4,11 +4,12 @@ module.exports = {
     const foundCert = certifications.find(
       cert => cert.certification === target,
     );
+
     if (!foundCert) return [];
     return certifications
       .filter(cert =>
         foundCert.order === 3
-          ? cert.order <= foundCert.order
+          ? cert.order >= foundCert.order
           : cert.order <= foundCert.order && cert.order !== 0,
       )
       .map(cert => cert.certification);
