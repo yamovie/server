@@ -64,7 +64,7 @@ const readByRecommendation = async (req, res) => {
 
   if (!req.body.foreign) conditions.original_language = 'en';
   if (req.body.indie)
-    conditions.budget = { $lt: recommendations.INDIE_BUDGET_THRESHOLD };
+    conditions.budget = { $lte: recommendations.INDIE_BUDGET_THRESHOLD };
 
   const foundMovies = await Movie.paginate(conditions, {
     page: req.query.page || 1,
@@ -74,9 +74,10 @@ const readByRecommendation = async (req, res) => {
 
 const create = movie => Movie.create(movie);
 
-const insertMany = movies => Movie.insertMany(movies);
+const insertMany = movies => Movie.insertMany(movies, { ordered: false });
 
 module.exports = {
+  model: Movie.modelName,
   readAll,
   readOne,
   readByGenre,

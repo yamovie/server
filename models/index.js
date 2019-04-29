@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 
 const {
-  DB_USER, DB_KEY, DB_SCHEME, DB_HOST, DB_NAME,
+  DB_USER,
+  DB_KEY,
+  DB_SCHEME,
+  DB_HOST,
+  DB_NAME,
+  SEED_SOURCE,
 } = process.env;
 
 mongoose.set('debug', false);
@@ -41,10 +46,17 @@ mongoose.connection.on('disconnected', () =>
 /**
  * Models
  */
-// module.exports.Genre = require('./genre');
-// module.exports.Movie = require('./movie');
-module.exports.Provider = require('./provider');
+
+// module.exports.TMDBGenre = require('./tmdb-genre');
+// module.exports.TMDBMovie = require('./tmdb-movie');
+
+// module.exports.JWProvider = require('./jw-provider');
+// module.exports.JWGenre = require('./jw-genre');
+// module.exports.JWMovie = require('./jw-movie');
+
+module.exports.Provider = require('./jw-provider');
+module.exports.Genre = require(`./${SEED_SOURCE}-genre`);
+module.exports.Movie = require(`./${SEED_SOURCE}-movie`);
+
 module.exports.User = require('./user');
 module.exports.Preference = require('./preference');
-module.exports.Genre = require('./jw-genre');
-module.exports.Movie = require('./jw-movies');

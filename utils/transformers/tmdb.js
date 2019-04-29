@@ -34,13 +34,15 @@ const parseGenres = async (genres = []) => ({
 });
 
 const parseProductionCompanies = async (companies = [], configs) => ({
-  production_companies: companies.map(({ name, logo_path, origin_country }) => ({
-    name,
-    origin_country,
-    logo_url: `${configs.images.secure_base_url}${
-      configs.images.logo_sizes[6]
-    }${logo_path}`,
-  })),
+  production_companies: companies.map(
+    ({ name, logo_path, origin_country }) => ({
+      name,
+      origin_country,
+      logo_url: `${configs.images.secure_base_url}${
+        configs.images.logo_sizes[6]
+      }${logo_path}`,
+    }),
+  ),
 });
 
 const parseRatings = async (ratings = []) => ({
@@ -84,7 +86,9 @@ const parseVideos = async (videos = [], configs) => ({
     site,
     size,
     type,
-    url: site.includes('YouTube') ? `${configs.urls.YT_EMBED_BASE_URL}/${key}` : key,
+    url: site.includes('YouTube')
+      ? `${configs.urls.YT_EMBED_BASE_URL}/${key}`
+      : key,
   })),
 });
 
@@ -116,6 +120,7 @@ tmdb.movie = async (data, configs) =>
     ])),
   );
 
+  
 tmdb.genre = async ({ name, id }) => ({
   name,
   external_ids: {

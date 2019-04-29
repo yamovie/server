@@ -41,7 +41,7 @@ const readOneByKey = async key => {
  */
 const create = genre => Genre.create(genre);
 
-const insertMany = genres => Genre.insertMany(genres);
+const insertMany = genres => Genre.insertMany(genres, { ordered: false });
 
 const count = () => Genre.estimatedDocumentCount();
 

@@ -1,4 +1,3 @@
-const { urls } = require('../../configs');
 const controllers = require('../../controllers');
 
 const jw = {};
@@ -64,22 +63,22 @@ const parseJWImages = async (jwPoster, jwBackdrops, jwImageLink) => {
  * @param {Array<object} jwExternalIds an array of objects of ids to external content providers
  * @returns {Promise} a promise containing the constructed ratings object
  */
-const parseJWRatings = async (jwRatings, jwExternalIds) => {
+const parseJWRatings = async (jwRatings, jwExternalIds, config) => {
   const ratings = {
     imdb: {
       rate: '?/10',
       value: 0,
-      url: urls.IMDB_BASE,
+      url: config.urls.IMDB_BASE,
     },
     rotten_tomatoes: {
       rate: '?%',
       value: 0,
-      url: urls.RT_BASE,
+      url: config.urls.RT_BASE,
     },
     themdb: {
       rate: '?%',
       value: 0,
-      url: urls.TMDB_BASE,
+      url: config.urls.TMDB_BASE,
     },
   };
 
@@ -87,7 +86,9 @@ const parseJWRatings = async (jwRatings, jwExternalIds) => {
 
   const imdbIdObj = jwExternalIds.find(idObj => idObj.provider === 'imdb');
   if (imdbIdObj) {
-    ratings.imdb.url = `${urls.IMDB_MOVIE_BASE}/${imdbIdObj.external_id}`;
+    ratings.imdb.url = `${config.urls.IMDB_MOVIE_BASE}/${
+      imdbIdObj.external_id
+    }`;
   }
 
   jwRatings.forEach(({ provider_type, value }) => {
@@ -109,7 +110,7 @@ const parseJWRatings = async (jwRatings, jwExternalIds) => {
         ratings.themdb.rate = `${value * 10}%`;
       }
       if (provider_type.includes('id')) {
-        ratings.themdb.url = `${urls.TMDB_MOVIE_BASE}/${value}`;
+        ratings.themdb.url = `${config.urls.TMDB_MOVIE_BASE}/${value}`;
       }
       // also has tmdb:popularity, if we want to do something with that
     } // end of tmdb section
@@ -123,7 +124,7 @@ const parseJWRatings = async (jwRatings, jwExternalIds) => {
       // above call needs full string to differentiate from tomato_userrating:meter
       // which is different from the critic ratings, if we want to use that too
       if (provider_type.includes('id')) {
-        ratings.rotten_tomatoes.url = `${urls.RT_MOVIE_BASE}/${value}`;
+        ratings.rotten_tomatoes.url = `${config.urls.RT_MOVIE_BASE}/${value}`;
       }
       // also has tomato:rating, but idk what it is/does
     } // end of rotten tomatoes section
@@ -140,13 +141,15 @@ const parseJWRatings = async (jwRatings, jwExternalIds) => {
  * @param {Array<object>} jwVideos the array of video data objects
  * @returns {Promise} a promise containing the video object
  */
-const parseJWVideos = async jwVideos => {
+const parseJWVideos = async (jwVideos, config) => {
   const videos = [];
   if (!jwVideos) return { videos };
   jwVideos.forEach(video => {
     const transformedVideo = { type: video.type, name: video.name };
     if (video.provider === 'youtube') {
-      transformedVideo.url = `${urls.YT_EMBED_BASE}/${video.external_id}`;
+      transformedVideo.url = `${config.urls.YT_EMBED_BASE}/${
+        video.external_id
+      }`;
     }
     videos.push(transformedVideo);
   });
@@ -194,10 +197,13 @@ const parseJWOffers = async jwOffers => {
     ))._id.toString();
 
     // checking to see if there's already an object for this provider
-    const currOffer = arrayToSearch.find(anOffer => anOffer.provider === objProviderId);
+    const currOffer = arrayToSearch.find(
+      anOffer => anOffer.provider === objProviderId,
+    );
 
     // need to alter the keyname just for this one because keys can't start with numbers
-    const type = offer.presentation_type === '4k' ? 'fourk' : offer.presentation_type;
+    const type =
+      offer.presentation_type === '4k' ? 'fourk' : offer.presentation_type;
 
     if (currOffer) {
       currOffer[type] = priceLink;
@@ -247,9 +253,9 @@ const parseJWGenres = async jwGenres => {
  * @param {Object} data the original data from the JW API call
  * @returns {Object} an object with the parsed and transformed data for a movie
  */
-jw.movie = async data => {
+jw.movie = async (data, config) => {
   const jw_image_url = 'https://images.justwatch.com';
-  const jw_url = `${urls.JW_BASE}${data.full_path}`;
+  const jw_url = `${config.urls.JW_BASE}${data.full_path}`;
   return Object.assign(
     {
       jw_url,
@@ -265,9 +271,9 @@ jw.movie = async data => {
     },
     ...(await Promise.all([
       parseJWCredits(data.credits),
-      parseJWRatings(data.scoring, data.external_ids),
+      parseJWRatings(data.scoring, data.external_ids, config),
       parseJWImages(data.poster, data.backdrops, jw_image_url),
-      parseJWVideos(data.clips),
+      parseJWVideos(data.clips, config),
       parseJWOffers(data.offers),
       parseJWGenres(data.genre_ids),
     ])),

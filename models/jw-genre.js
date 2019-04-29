@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const genreSchema = new mongoose.Schema(
   {
     translation: String,
@@ -13,7 +12,7 @@ const genreSchema = new mongoose.Schema(
       },
     },
   },
-  { collection: 'jw_genres' },
+  { collection: 'genres' },
 );
 
 const JW_Genre = mongoose.model('JW_Genre', genreSchema);

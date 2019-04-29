@@ -9,7 +9,9 @@ const { logger, errorhandler } = require('./middleware');
 
 const app = express();
 
-// require('./utils').seed();
+const { SEED, SEED_SOURCE } = process.env;
+
+if (SEED === 'true') require('./utils').seed(SEED_SOURCE);
 
 app.use(cors());
 app.use(logger);
@@ -32,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes'));
 
-// app.use(errorhandler);
+app.use(errorhandler);
 
 app.listen(process.env.PORT || 5500, () => {
   console.log(`Server listening on PORT ${process.env.PORT || 5500}`);

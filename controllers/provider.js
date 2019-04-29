@@ -10,7 +10,8 @@ const readOneByKey = async key => {
   return foundProvider;
 };
 
-const insertMany = providers => Provider.insertMany(providers);
+const insertMany = providers =>
+  Provider.insertMany(providers, { ordered: false });
 
 const count = () => Provider.estimatedDocumentCount();
 

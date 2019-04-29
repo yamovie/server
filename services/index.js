@@ -3,18 +3,7 @@ const jw = require('./jw');
 const tmdb = require('./tmdb');
 const omdb = require('./omdb');
 
-const getConfigurations = async () => {
-  const configResponse = await tmdb.requestConfigurations();
-  return configResponse.data;
-};
-
-const getProviders = async () => (await jw.requestProviders()).data;
-
-const jw_getGenres = async () => (await jw.requestGenres()).data;
-
-const jw_getMovies = async page => (await jw.requestMovies(page)).data;
-
-const getGenres = async () => (await tmdb.requestGenres()).data;
+const { SEED_SOURCE: source } = process.env;
 
 const jw_getMoviesData = async movies => {
   const requests = movies.map(movie => jw.requestData(movie.id));
@@ -23,17 +12,7 @@ const jw_getMoviesData = async movies => {
   return data;
 };
 
-const getCertifications = async page => {
-  const certResponse = await tmdb.requestCertifications();
-  return certResponse.data;
-};
-
-const getMovies = async page => {
-  const response = await tmdb.requestDiscoverMovies(page);
-  return response.data;
-};
-
-const getMoviesData = async movies => {
+const tmdb_getMoviesData = async movies => {
   const tmdbRequests = movies.map(movie => tmdb.requestMovieDetails(movie.id));
   const tmdbResponses = await axios.all(tmdbRequests);
 
@@ -54,13 +33,84 @@ const getMoviesData = async movies => {
   return movieData;
 };
 
+const jw_getMovies = async page => {
+  const data = (await jw.requestMovies(page)).data;
+  data.results = data.items;
+  return data;
+};
+
+const tmdb_getMovies = async page =>
+  (await tmdb.requestDiscoverMovies(page)).data;
+
+const jw_getGenres = async () => (await jw.requestGenres()).data;
+
+const tmdb_getGenres = async () => (await tmdb.requestGenres()).data;
+
+const jw_getProviders = async () => (await jw.requestProviders()).data;
+
+const getProviders = async () => {
+  switch (source) {
+    case 'jw':
+      return jw_getProviders();
+    default:
+      console.log(`Invalid provider source: ${source}`);
+      return [];
+  }
+};
+
+const getGenres = async () => {
+  switch (source) {
+    case 'jw':
+      return jw_getGenres();
+    case 'tmdb':
+      return tmdb_getGenres().genres;
+    default:
+      console.log(`Invalid genre source: ${source}`);
+      return [];
+  }
+};
+
+const getConfigurations = async () => {
+  switch (source) {
+    case 'tmdb':
+      return tmdb_getConfigurations();
+    default:
+      console.log(`Invalid configuration source: ${source}`);
+      return {};
+  }
+};
+
+const tmdb_getConfigurations = async () =>
+  (await tmdb.requestConfigurations()).data;
+
+const getMovies = async page => {
+  switch (source) {
+    case 'jw':
+      return jw_getMovies(page);
+    case 'tmdb':
+      return tmdb_getMovies(page);
+    default:
+      console.log(`Invalid movie source: ${source}`);
+      return {};
+  }
+};
+
+const getMovieData = async movies => {
+  switch (source) {
+    case 'jw':
+      return jw_getMoviesData(movies);
+    case 'tmdb':
+      return tmdb_getMoviesData(movies);
+    default:
+      console.log(`Invalid movie data source: ${source}`);
+      return [];
+  }
+};
+
 module.exports = {
-  jw_getGenres,
-  jw_getMovies,
-  jw_getMoviesData,
+  getProviders,
+  getGenres,
   getConfigurations,
   getMovies,
-  getMoviesData,
-  getGenres,
-  getProviders,
+  getMovieData,
 };

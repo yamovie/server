@@ -34,7 +34,7 @@ userSchema.set('toJSON', {
   },
 });
 
-userSchema.pre('save', function (next) {
+userSchema.pre('save', function(next) {
   const user = this;
   if (!user.isModified('password')) return next();
   // password has been changed - salt and hash it
@@ -46,7 +46,7 @@ userSchema.pre('save', function (next) {
   });
 });
 
-userSchema.methods.comparePassword = function (tryPassword, cb) {
+userSchema.methods.comparePassword = function(tryPassword, cb) {
   // 'this' represents the document that you called comparePassword on
   bcrypt.compare(tryPassword, this.password, (err, isMatch) => {
     if (err) return cb(err);

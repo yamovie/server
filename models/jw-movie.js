@@ -67,7 +67,7 @@ const movieSchema = new mongoose.Schema(
       ],
     },
   },
-  { collection: 'jw_movies' },
+  { collection: 'movies' },
 );
 
 mongoosePaginate.paginate.options = {
