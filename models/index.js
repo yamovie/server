@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const {
+  DB_VERBOSE,
   DB_USER,
   DB_KEY,
   DB_SCHEME,
@@ -9,7 +10,7 @@ const {
   SEED_SOURCE,
 } = process.env;
 
-mongoose.set('debug', false);
+mongoose.set('debug', DB_VERBOSE === 'true');
 
 mongoose.connect(`${DB_SCHEME}${DB_HOST}${DB_NAME}`, {
   user: DB_USER,
