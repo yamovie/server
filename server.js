@@ -5,13 +5,14 @@ const path = require('path');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
-const { logger, errorhandler } = require('./middleware');
+const { logger } = require('./middleware');
+const { seed } = require('./utils');
 
 const app = express();
 
-const { SEED, SEED_SOURCE } = process.env;
+const { SEED, SECRET } = process.env;
 
-if (SEED === 'true') require('./utils').seed(SEED_SOURCE);
+if (SEED === 'true') seed();
 
 app.use(cors());
 app.use(logger);
@@ -21,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret: `${process.env.SECRET}`,
+    secret: `${SECRET}`,
     resave: false,
     saveUninitialized: true,
   }),
@@ -34,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes'));
 
-app.use(errorhandler);
+// app.use(errorHandler);
 
 app.listen(process.env.PORT || 5500, () => {
   console.log(`Server listening on PORT ${process.env.PORT || 5500}`);

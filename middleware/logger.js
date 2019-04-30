@@ -24,8 +24,7 @@ const logger = (req, res, next) => {
   console.info(`${getPrefix(req)} ${req.method} ${req.originalUrl}`);
 
   res.on('finish', () => {
-    const logger = getLoggerByStatusCode(res.statusCode);
-    logger(
+    getLoggerByStatusCode(res.statusCode)(
       `${getPrefix(req)} ${res.statusCode} ${res.statusMessage} ${res.get(
         'Content-Length',
       ) || 0}b sent`,
@@ -36,7 +35,7 @@ const logger = (req, res, next) => {
   //   console.warn(`${getPrefix(req)} Request aborted by client`),
   // );
 
-  res.on('error', () =>
+  res.on('error', err =>
     console.error(`${getPrefix(req)} Request pipeline error: ${err}`),
   );
 

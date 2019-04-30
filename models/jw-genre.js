@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const genreSchema = new mongoose.Schema(
   {
     translation: String,

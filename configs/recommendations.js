@@ -1,21 +1,3 @@
-module.exports = {
-  INDIE_BUDGET_THRESHOLD: 1000000,
-  getCertifications: target => {
-    const foundCert = certifications.find(
-      cert => cert.certification === target,
-    );
-
-    if (!foundCert) return [];
-    return certifications
-      .filter(cert =>
-        foundCert.order === 3
-          ? cert.order >= foundCert.order
-          : cert.order <= foundCert.order && cert.order !== 0,
-      )
-      .map(cert => cert.certification);
-  },
-};
-
 const certifications = [
   {
     certification: 'G',
@@ -53,3 +35,21 @@ const certifications = [
     order: 2,
   },
 ];
+
+module.exports = {
+  INDIE_BUDGET_THRESHOLD: 1000000,
+  getCertifications: target => {
+    const foundCert = certifications.find(
+      cert => cert.certification === target,
+    );
+
+    if (!foundCert) return [];
+    return certifications
+      .filter(cert =>
+        foundCert.order === 3
+          ? cert.order >= foundCert.order
+          : cert.order <= foundCert.order && cert.order !== 0,
+      )
+      .map(cert => cert.certification);
+  },
+};

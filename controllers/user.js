@@ -18,7 +18,7 @@ function createJWT(user) {
  */
 const signup = async (req, res) => {
   const newPreference = await new Preference();
-  
+
   const newUser = await new User({
     fullName: req.body.fullName,
     email: req.body.email,
@@ -27,15 +27,18 @@ const signup = async (req, res) => {
   });
 
   newPreference.userId = newUser._id;
-  
-  Promise.all([
-    newPreference.save(),
-    newUser.save(),
-  ]).then((savedObjects) => {
-    res.json({ message: 'Saved', data: savedObjects, token: createJWT(newUser) });
-  }).catch((err) => {
-    res.status(400).json(err);
-  });
+
+  Promise.all([newPreference.save(), newUser.save()])
+    .then(savedObjects => {
+      res.json({
+        message: 'Saved',
+        data: savedObjects,
+        token: createJWT(newUser),
+      });
+    })
+    .catch(err => {
+      res.status(400).json(err);
+    });
 };
 
 /**
@@ -44,15 +47,18 @@ const signup = async (req, res) => {
  * @param {string} res token
  */
 function login(req, res) {
-  User.findOne({ email: req.body.email }).exec().then(user => {
-    if (!user) return res.status(401).json({ err: 'bad credentials' });
-    user.comparePassword(req.body.pw, (err, isMatch) => {
-      if (isMatch) {
-        return res.json({ token: createJWT(user) });
-      }
-      return res.status(401).json({ err: 'bad credentials' });
-    });
-  }).catch(err => res.status(401).json(err));
+  User.findOne({ email: req.body.email })
+    .exec()
+    .then(user => {
+      if (!user) return res.status(401).json({ err: 'bad credentials' });
+      user.comparePassword(req.body.pw, (err, isMatch) => {
+        if (isMatch) {
+          return res.json({ token: createJWT(user) });
+        }
+        return res.status(401).json({ err: 'bad credentials' });
+      });
+    })
+    .catch(err => res.status(401).json(err));
 }
 
 module.exports = {

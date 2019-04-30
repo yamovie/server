@@ -99,7 +99,7 @@ const parseJWRatings = async (jwRatings, jwExternalIds, config) => {
         ratings.imdb.rate = `${value}/10`;
       }
       if (provider_type.includes('id')) {
-        ratings.imdb.url = `${urls.IMDB_MOVIE_BASE}/${value}`;
+        ratings.imdb.url = `${config.urls.IMDB_MOVIE_BASE}/${value}`;
       }
     } // end of imdb section
 

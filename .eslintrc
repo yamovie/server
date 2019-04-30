@@ -9,6 +9,7 @@
       "classes": true
     }
   },
+  "plugins": ["node"],
   "env": {
     "node": true,
     "es6": true,
@@ -67,6 +68,8 @@
       {
         "allowForLoopAfterthoughts": true
       }
-    ]
+    ],
+    "global-require": 0,
+    "import/no-dynamic-require": 0
   }
 }

@@ -53,8 +53,8 @@ mongoose.connection.on('disconnected', () =>
 // module.exports.JWProvider = require('./jw-provider');
 // module.exports.JWGenre = require('./jw-genre');
 // module.exports.JWMovie = require('./jw-movie');
-
 module.exports.Provider = require('./jw-provider');
+
 module.exports.Genre = require(`./${SEED_SOURCE}-genre`);
 module.exports.Movie = require(`./${SEED_SOURCE}-movie`);
 
