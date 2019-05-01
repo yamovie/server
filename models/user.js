@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema(
     fullName: String,
     streamingService: Object,
     watchlist: {
-      type: [Object],
+      type: [mongoose.Schema.Types.ObjectId],
     },
     preferenceId: {
       type: mongoose.Schema.Types.ObjectId,

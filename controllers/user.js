@@ -61,7 +61,14 @@ function login(req, res) {
     .catch(err => res.status(401).json(err));
 }
 
+function watchlist(req, res) {
+  User.findByIdAndUpdate(req.body.userId, { $push: { watchlist: req.body.movieId } } )
+    .exec()
+    .catch(err => res.status(401).json(err));
+}
+
 module.exports = {
   login,
   signup,
+  watchlist,
 };
