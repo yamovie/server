@@ -1,10 +1,8 @@
 const router = require('express').Router();
-const preferences = require('../controllers/preferences');
+const controllers = require('../controllers');
 
-
-router.get('/', preferences.getPreferences);
-router.post('/', preferences.createPreference);
-router.patch('/update', preferences.updatePreference);
-
+router.get('/', controllers.preference.getPreferences);
+router.post('/', controllers.preference.createPreference);
+router.patch('/update', controllers.preference.updatePreference);
 
 module.exports = router;

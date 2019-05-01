@@ -3,16 +3,17 @@ const { Preference } = require('../models');
 /**
  * Returns all data from preferences and sends it back to the client
  * @param userId takes a userId in order to find assosciated preferences document
- * @returns 
+ * @returns
  */
 const getPreferences = (req, res) => {
-  Preference.findOne({ userId: req.query.userId },
-    (err, preferences) => {
-      if (err) {
-        res.json({ error: err });
-      }
-      res.status(200).json({ message: 'Preference was sucessfully retrieved', preferences });
-    });
+  Preference.findOne({ userId: req.query.userId }, (err, preferences) => {
+    if (err) {
+      res.json({ error: err });
+    }
+    res
+      .status(200)
+      .json({ message: 'Preference was sucessfully retrieved', preferences });
+  });
 };
 
 /**
@@ -24,7 +25,10 @@ const createPreference = (req, res) => {
     if (err) {
       res.json({ error: err.message });
     }
-    return res.status('201').json({ message: 'Preferences has been successfully created', preference });
+    return res.status('201').json({
+      message: 'Preferences has been successfully created',
+      preference,
+    });
   });
 };
 
@@ -35,12 +39,16 @@ const createPreference = (req, res) => {
 const updatePreference = (req, res) => {
   const query = req.body.preferences;
 
-  Preference.findOneAndUpdate({ userId: req.body.userId }, query, (err) => {
+  Preference.findOneAndUpdate({ userId: req.body.userId }, query, err => {
     if (err) {
       res.json({ error: err });
     }
-  })
-    .then(preference => res.status('204').json({ message: 'The preference was updated succesfully', data: preference }));
+  }).then(preference =>
+    res.status('204').json({
+      message: 'The preference was updated succesfully',
+      data: preference,
+    }),
+  );
 };
 
 module.exports = {
