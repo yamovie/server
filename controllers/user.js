@@ -24,6 +24,7 @@ const signup = async (req, res) => {
     email: req.body.email,
     password: req.body.password,
     preference: newPreference,
+    watchlist: [],
   });
 
   newPreference.userId = newUser._id;
@@ -61,7 +62,16 @@ function login(req, res) {
     .catch(err => res.status(401).json(err));
 }
 
+function watchlist(req, res) {
+  // add to set.
+  User.findByIdAndUpdate(req.body.userId, { $addToSet: { watchlist: req.body.movieId } } )
+    .exec()
+    return res.status(200).json({message: 'added to watchlist'})
+    .catch(err => res.status(401).json(err));
+}
+
 module.exports = {
   login,
   signup,
+  watchlist,
 };

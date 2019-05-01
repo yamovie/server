@@ -13,9 +13,13 @@ const userSchema = mongoose.Schema(
     birthday: String,
     fullName: String,
     streamingService: Object,
-    watchlist: {
-      type: [Object],
-    },
+    watchlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Movie',
+        required: false,
+      }
+    ],
     preferenceId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Preference',
