@@ -7,7 +7,7 @@ router.get('/movies/search', controllers.movie.readBySearch);
  * GET request for movie list
  * @return  array of movies
  */
-router.get('/movies', controllers.movie.readAll);
+// router.get('/movies', controllers.movie.readAll);
 
 /**
  * GET request for specific movie
