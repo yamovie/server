@@ -36,20 +36,20 @@ const createPreference = (req, res) => {
  * Updates an existing preference document based on the userId given to the functions params.
  * @returns {object} preference
  */
-const updatePreference = (req, res) => {
+const updatePreference = async (req, res) => {
   const query = req.body.preferences;
-
-  Preference.findOneAndUpdate({ userId: req.body.userId }, query, err => {
-    if (err) {
-      res.json({ error: err });
-    }
-  }).then(preference =>
-    res.status('204').json({
-      message: 'The preference was updated succesfully',
-      data: preference,
-    }),
-  );
+  const userId = req.body.userId;
+  try {
+    Preference.findOneAndUpdate({ userId }, query, (err, something) => {
+      res.status(200).json({message: 'Preferences successfully updated!'})
+    });
+  }
+  catch (e){
+    res.status(304).json({error: "Oops, something went wrong and the preference was not updated."})
+  }
 };
+ 
+
 
 module.exports = {
   createPreference,

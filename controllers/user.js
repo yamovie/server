@@ -17,30 +17,29 @@ function createJWT(user) {
  * @param {string} res token
  */
 const signup = async (req, res) => {
-  const newPreference = await new Preference();
-
-  const newUser = await new User({
+  const newPreference = new Preference();
+  const newUser = new User({
     fullName: req.body.fullName,
     email: req.body.email,
     password: req.body.password,
-    preference: newPreference,
+    preferenceId: newPreference._id,
     watchlist: [],
   });
 
   newPreference.userId = newUser._id;
 
   Promise.all([newPreference.save(), newUser.save()])
-    .then(savedObjects => {
-      res.json({
-        message: 'Saved',
-        data: savedObjects,
-        token: createJWT(newUser),
-      });
-    })
-    .catch(err => {
-      res.status(400).json(err);
+  .then(savedObjects => {
+    res.json({
+      message: 'Saved',
+      data: savedObjects,
+      token: createJWT(newUser),
     });
-};
+  })
+  .catch(err => {
+    res.status(400).json(err);
+  });
+}
 
 /**
  * Checks user credentials
