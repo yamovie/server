@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
-const { Preference, User } = require('../models');
+const { Preference, User, Movie } = require('../models');
+const ObjectId = require('mongodb').ObjectId;
+
 
 const { SECRET } = process.env;
 
@@ -69,8 +71,41 @@ function watchlist(req, res) {
     .catch(err => res.status(401).json(err));
 }
 
+// Gets all the watchlist movies from a user
+const getWatchlistMovies = async (req, res) => {
+  const user = await User.findById(req.body.userId);
+  const movies = await Movie.find({_id: {$in: user.watchlist} })
+  .select('_id images.poster')
+  .catch(e => {
+    if (e) {
+      res.json({error: e})
+    } 
+  })
+
+  res.status(200).json(movies);
+}
+
+// Deletes a selected watchlist movie
+const deleteWatchlistMovie = async (req, res) => {
+  const movieId = req.body.movieId;
+  const userId = req.body.userId
+
+  console.log(movieId);
+  console.log(userId);
+ 
+  User.findOneAndUpdate(
+    { _id: userId },
+    { $pull: { watchlist: { $in: [movieId] } } },
+    { multi: true }
+  )
+  .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
+  .catch(e => res.json({e}));
+}
+
 module.exports = {
   login,
   signup,
   watchlist,
+  getWatchlistMovies,
+  deleteWatchlistMovie,
 };
