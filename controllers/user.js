@@ -86,20 +86,20 @@ const getWatchlistMovies = async (req, res) => {
 }
 
 // Deletes a selected watchlist movie
-const deleteWatchlistMovie = async (req, res) => {
+const deleteWatchlistMovie = (req, res) => {
   const movieId = req.body.movieId;
   const userId = req.body.userId
 
-  console.log(movieId);
-  console.log(userId);
- 
-  User.findOneAndUpdate(
-    { _id: userId },
-    { $pull: { watchlist: { $in: [movieId] } } },
-    { multi: true }
-  )
-  .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
-  .catch(e => res.json({e}));
+  try {
+    User.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { watchlist: { $in: [movieId] } } },
+      { multi: true }
+    )
+    .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
+  } catch(e) {
+    res.status(500).json({error: e});
+  }
 }
 
 module.exports = {
