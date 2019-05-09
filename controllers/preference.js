@@ -6,7 +6,8 @@ const { Preference } = require('../models');
  * @returns
  */
 const getPreferences = (req, res) => {
-  Preference.findOne({ userId: req.query.userId }, (err, preferences) => {
+  console.log(req.params.id);
+  Preference.findOne({ userId: req.params.id }, (err, preferences) => {
     if (err) {
       res.json({ error: err });
     }
@@ -16,27 +17,28 @@ const getPreferences = (req, res) => {
   });
 };
 
-/**
- * Creates a new preference document
- * @returns {object} preference
- */
-const createPreference = (req, res) => {
-  Preference.create({}, (err, preference) => {
-    if (err) {
-      res.json({ error: err.message });
-    }
-    return res.status('201').json({
-      message: 'Preferences has been successfully created',
-      preference,
-    });
-  });
-};
+// /**
+//  * Creates a new preference document
+//  * @returns {object} preference
+//  */
+// const createPreference = (req, res) => {
+//   Preference.create({}, (err, preference) => {
+//     if (err) {
+//       res.json({ error: err.message });
+//     }
+//     return res.status('201').json({
+//       message: 'Preferences has been successfully created',
+//       preference,
+//     });
+//   });
+// };
 
 /**
  * Updates an existing preference document based on the userId given to the functions params.
  * @returns {object} preference
  */
 const updatePreference = (req, res) => {
+  console.log(req);
   const query = req.body.preferences;
 
   Preference.findOneAndUpdate({ userId: req.body.userId }, query, err => {
@@ -52,7 +54,7 @@ const updatePreference = (req, res) => {
 };
 
 module.exports = {
-  createPreference,
+  // createPreference,
   getPreferences,
   updatePreference,
 };
