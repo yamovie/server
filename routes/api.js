@@ -28,4 +28,8 @@ router.get('/genres', controllers.genre.readAll);
 
 router.get('/genres/:id', controllers.genre.readOne);
 
+router.get('/providers', controllers.provider.readAll); 
+
+router.get('/providers/:type', controllers.provider.readByMonetization);
+
 module.exports = router;
