@@ -49,7 +49,7 @@ const count = () => Provider.estimatedDocumentCount();
 
 module.exports = {
   readAll,
-  readByMonetization,
+  // readByMonetization,
   readStream,
   readBuy,
   readRent,
