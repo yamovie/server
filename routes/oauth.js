@@ -26,8 +26,14 @@ router.get(
   '/google/callback',
   passport.authenticate('google', { failureRedirect: '/', session: false }),
   (req, res) => {
+    let clientOrigin = req.headers.referer.split('/');
+    clientOrigin.pop();
+    clientOrigin = clientOrigin.join('/');
+
     const token = createJWT(req.user);
-    res.redirect(`${CLIENT_ORIGIN}?token=${token}`);
+    res.redirect(`${clientOrigin}?token=${token}`);
+    // res.redirect(`${CLIENT_ORIGIN}?token=${token}`);
+
   },
 );
 
