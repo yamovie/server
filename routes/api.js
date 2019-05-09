@@ -28,4 +28,14 @@ router.get('/genres', controllers.genre.readAll);
 
 router.get('/genres/:id', controllers.genre.readOne);
 
+router.get('/providers', controllers.provider.readAll); 
+
+router.get('/providers/stream', controllers.provider.readStream);
+
+router.get('/providers/buy', controllers.provider.readBuy);
+
+router.get('/providers/rent', controllers.provider.readRent);
+
+router.get('/providers/free', controllers.provider.readFree);
+
 module.exports = router;
