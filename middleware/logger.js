@@ -21,7 +21,7 @@ const getLoggerByStatusCode = status => {
 const logger = (req, res, next) => {
   req.requestId = shortId.generate();
 
-  console.info(`${getPrefix(req)} ${req.method} ${req.originalUrl}`);
+  res.on('close', () => console.warn(`${getPrefix(req)} Request aborted by client`));
 
   res.on('finish', () => {
     getLoggerByStatusCode(res.statusCode)(
