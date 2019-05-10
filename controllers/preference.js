@@ -6,7 +6,6 @@ const { Preference } = require('../models');
  * @returns
  */
 const getPreferences = (req, res) => {
-  console.log(req.params.id);
   Preference.findOne({ userId: req.params.id }, (err, preferences) => {
     if (err) {
       res.json({ error: err });
@@ -38,8 +37,6 @@ const getPreferences = (req, res) => {
  * @returns {object} preference
  */
 const updatePreference = (req, res) => {
-  console.log(req.body.newPrefs);
-
   Preference.findOneAndUpdate({ userId: req.params.id }, req.body.newPrefs, err => {
     if (err) {
       res.json({ error: err });
