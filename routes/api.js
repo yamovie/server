@@ -35,9 +35,6 @@ router.patch('/preferences/:id', controllers.preference.updatePreference);
  * GET requests for providers
  */
 router.get('/providers', controllers.provider.readAll);
-router.get('/providers/stream', controllers.provider.readStream);
-router.get('/providers/buy', controllers.provider.readBuy);
-router.get('/providers/rent', controllers.provider.readRent);
-router.get('/providers/free', controllers.provider.readFree);
+router.get('/providers/:type', controllers.provider.readByMonetization);
 
 module.exports = router;

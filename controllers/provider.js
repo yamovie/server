@@ -12,25 +12,9 @@ const readAll = async (req, res) => {
   return res ? res.json(allProviders) : allProviders;
 };
 
-const readStream = async (req, res) => {
-  const providers = await Provider.find({ 'monetization_types': 'flatrate' });
-  return res.json(providers);
-}
-
-const readBuy = async (req, res) => {
-  const providers = await Provider.find({ 'monetization_types': 'buy' });
-  return res.json(providers);
-}
-
-const readRent = async (req, res) => {
-  const providers = await Provider.find({ 'monetization_types': 'rent' });
-  return res.json(providers);
-}
-
-const readFree = async (req, res) => {
-  const providers = await Provider.find({ 'monetization_types': 'free' });
-  return res.json(providers);
-}
+const readByMonetization = async (req, res) => res.json(await Provider.find({
+  'monetization_types': req.params.type
+}));
 
 /**
  * Returns promise to find provider based on key
@@ -49,11 +33,7 @@ const count = () => Provider.estimatedDocumentCount();
 
 module.exports = {
   readAll,
-  // readByMonetization,
-  readStream,
-  readBuy,
-  readRent,
-  readFree,
+  readByMonetization,
   insertMany,
   readOneByKey,
   count,
