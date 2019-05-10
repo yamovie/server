@@ -38,10 +38,9 @@ const getPreferences = (req, res) => {
  * @returns {object} preference
  */
 const updatePreference = (req, res) => {
-  console.log(req);
-  const query = req.body.preferences;
+  console.log(req.body.newPrefs);
 
-  Preference.findOneAndUpdate({ userId: req.body.userId }, query, err => {
+  Preference.findOneAndUpdate({ userId: req.params.id }, req.body.newPrefs, err => {
     if (err) {
       res.json({ error: err });
     }
