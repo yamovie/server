@@ -64,10 +64,11 @@ function login(req, res) {
 }
 
 function watchlist(req, res) {
+  const { userId, movieId } = req.body;
   // add to set.
-  User.findByIdAndUpdate(req.body.userId, { $addToSet: { watchlist: req.body.movieId } } )
+  User.findByIdAndUpdate(userId, { $addToSet: { watchlist: movieId } } )
     .exec()
-    return res.status(200).json({message: 'added to watchlist'})
+    .then(res.status(200).json({message: 'added to watchlist'}))
     .catch(err => res.status(401).json(err));
 }
 
