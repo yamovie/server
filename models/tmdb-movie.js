@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
-const { paginate } = require('../configs');
+const configs = require('../configs');
 
 const movieSchema = new mongoose.Schema(
   {
@@ -118,7 +118,7 @@ mongoosePaginate.paginate.options = {
   limit: 20,
   lean: true,
   leanWithId: true,
-  customLabels: paginate.labels,
+  customLabels: configs.models.labels,
 };
 
 movieSchema.plugin(mongoosePaginate);

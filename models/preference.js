@@ -7,33 +7,34 @@ const preferenceSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    genres: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Genre',
-      },
-    ],
+    genres: {
+      type: Map,
+      of: Boolean,
+    }, // genres: { [id]: Boolean }
     currMood: String,
     animated: Boolean,
     foreign: Boolean,
     indie: Boolean,
-    certifications: [String],
-    streamingServices: {
-      hulu: Boolean,
-      netflix: Boolean,
-    },
+    certifications: {
+      type: Map,
+      of: Boolean,
+    }, // certifications: { [certName]: Boolean }
+    providers: {
+      type: Map,
+      of: Boolean,
+    }, // providers: { [id]: Boolean }
     ratings: {
       imdb: {
-        minRating: String,
-        maxRating: String,
+        minRating: Number,
+        maxRating: Number,
       },
       rottenTomatoes: {
-        minRating: String,
-        maxRating: String,
+        minRating: Number,
+        maxRating: Number,
       },
       metacritic: {
-        minRating: String,
-        maxRating: String,
+        minRating: Number,
+        maxRating: Number,
       },
     },
     release: {

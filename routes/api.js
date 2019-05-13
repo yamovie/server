@@ -15,9 +15,7 @@ router.get('/movies', controllers.movie.readAll);
  * @return      movie details
  */
 router.get('/movies/:id', controllers.movie.readOne);
-
 router.get('/movies/genre/:id', controllers.movie.readByGenre);
-
 router.post('/movies/recommend', controllers.movie.readByRecommendation);
 
 
@@ -26,7 +24,18 @@ router.post('/movies/recommend', controllers.movie.readByRecommendation);
  * @return  array of genres
  */
 router.get('/genres', controllers.genre.readAll);
-
 router.get('/genres/:id', controllers.genre.readOne);
+
+/**
+ * GET/PATCH requests for preferences
+ */
+router.get('/preferences/:id', controllers.preference.getPreferences);
+router.patch('/preferences/:id', controllers.preference.updatePreference);
+
+/**
+ * GET requests for providers
+ */
+router.get('/providers', controllers.provider.readAll);
+router.get('/providers/:type', controllers.provider.readByMonetization);
 
 module.exports = router;

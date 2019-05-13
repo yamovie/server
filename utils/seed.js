@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const controllers = require('../controllers');
 const services = require('../services');
 const configs = require('../configs');
@@ -36,9 +38,7 @@ const seedMovies = async () => {
   await setState(seed);
 
   const data = await services.getMovieData(seed.results);
-  const movies = await Promise.all(
-    data.map(movie => transformers.movie(movie, config)),
-  );
+  const movies = await Promise.all(data.map(movie => transformers.movie(movie, config)));
 
   await controllers.movie.insertMany(movies);
 
@@ -49,9 +49,7 @@ const seedGenres = async () => {
   console.log('Genres seeding...');
 
   const seed = await services.getGenres();
-  const genres = await Promise.all(
-    seed.map(genre => transformers.genre(genre)),
-  );
+  const genres = await Promise.all(seed.map(genre => transformers.genre(genre)));
   await controllers.genre.insertMany(genres);
 
   console.log('Genres seeded.');
