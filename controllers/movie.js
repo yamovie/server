@@ -2,15 +2,7 @@ const { Movie } = require('../models');
 const { recommendations } = require('../configs');
 
 const readBySearch = async (req, res) => {
-  // const conditions = {
-  //   title: new RegExp(req.query.title, 'i'),
-  // };
-
-  // const conditions = Movie
-  //   .find({$text: {$search: new RegExp(req.query.searchInput, 'gi')}}, {score: {$meta: 'textScore'}})
-  //   .sort({score: {$meta: 'textScore'}})
-
-  const regex = new RegExp(req.query.searchInput, 'i')
+  const regex = new RegExp(req.query.searchInput, 'gi')
   const conditions = Movie.find({$or: [{'title': regex}, {'credits.cast.name': regex}, {'credits.crew.name': regex}]})
 
   const options = { page: req.query.page || 1 };
