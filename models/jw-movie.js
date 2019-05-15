@@ -80,6 +80,7 @@ mongoosePaginate.paginate.options = {
 };
 
 movieSchema.plugin(mongoosePaginate);
+movieSchema.index({'title': 'text', 'credits.crew.name': 'text', 'credits.cast.name': 'text'})
 
 const JW_Movie = mongoose.model('JW_Movie', movieSchema);
 module.exports = JW_Movie;
