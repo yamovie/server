@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 const { Preference, User, Movie } = require('../models');
-const ObjectId = require('mongodb').ObjectId;
-
 
 const { SECRET } = process.env;
 
@@ -63,7 +61,7 @@ function login(req, res) {
     .catch(err => res.status(401).json(err));
 }
 
-function watchlist(req, res) {
+const addMovieToWatchlist = (req, res) => {
   const { userId, movieId } = req.body;
   // add to set.
   User.findByIdAndUpdate(userId, { $addToSet: { watchlist: movieId } } )
@@ -74,39 +72,32 @@ function watchlist(req, res) {
 
 // Gets all the watchlist movies from a user
 const getWatchlistMovies = async (req, res) => {
-  const user = await User.findById(req.body.userId);
+  const user = await User.findById(req.params.id);
   const movies = await Movie.find({_id: {$in: user.watchlist} })
-  .select('_id images.poster')
-  .catch(e => {
-    if (e) {
-      res.json({error: e})
-    } 
-  })
-
+  .catch(e => res.json({error: e}))
   res.status(200).json(movies);
 }
 
 // Deletes a selected watchlist movie
 const deleteWatchlistMovie = (req, res) => {
   const movieId = req.body.movieId;
-  const userId = req.body.userId
+  const userId = req.params.id
 
-  try {
-    User.findOneAndUpdate(
-      { _id: userId },
-      { $pull: { watchlist: { $in: [movieId] } } },
-      { multi: true }
-    )
-    .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
-  } catch(e) {
-    res.status(500).json({error: e});
-  }
+
+  console.log(`the body is.... ${req.body}`);
+
+  User.findOneAndUpdate(
+    { _id: userId },
+    { $pull: { watchlist: movieId } },
+  )
+  .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
+  .catch(e => { console.log(`potato............ ${e}`); res.status(500).json({error: e})});
 }
 
 module.exports = {
   login,
   signup,
-  watchlist,
+  addMovieToWatchlist,
   getWatchlistMovies,
   deleteWatchlistMovie,
 };
