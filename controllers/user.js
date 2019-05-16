@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { Preference, User } = require('../models');
+const { Preference, User, Movie } = require('../models');
 
 const { SECRET } = process.env;
 
@@ -17,30 +17,29 @@ function createJWT(user) {
  * @param {string} res token
  */
 const signup = async (req, res) => {
-  const newPreference = await new Preference();
-
-  const newUser = await new User({
+  const newPreference = new Preference();
+  const newUser = new User({
     fullName: req.body.fullName,
     email: req.body.email,
     password: req.body.password,
-    preference: newPreference,
+    preferenceId: newPreference._id,
     watchlist: [],
   });
 
   newPreference.userId = newUser._id;
 
   Promise.all([newPreference.save(), newUser.save()])
-    .then(savedObjects => {
-      res.json({
-        message: 'Saved',
-        data: savedObjects,
-        token: createJWT(newUser),
-      });
-    })
-    .catch(err => {
-      res.status(400).json(err);
+  .then(savedObjects => {
+    res.json({
+      message: 'Saved',
+      data: savedObjects,
+      token: createJWT(newUser),
     });
-};
+  })
+  .catch(err => {
+    res.status(400).json(err);
+  });
+}
 
 /**
  * Checks user credentials
@@ -62,16 +61,43 @@ function login(req, res) {
     .catch(err => res.status(401).json(err));
 }
 
-function watchlist(req, res) {
+const addMovieToWatchlist = (req, res) => {
+  const { userId, movieId } = req.body;
   // add to set.
-  User.findByIdAndUpdate(req.body.userId, { $addToSet: { watchlist: req.body.movieId } } )
+  User.findByIdAndUpdate(userId, { $addToSet: { watchlist: movieId } } )
     .exec()
-    return res.status(200).json({message: 'added to watchlist'})
+    .then(res.status(200).json({message: 'added to watchlist'}))
     .catch(err => res.status(401).json(err));
+}
+
+// Gets all the watchlist movies from a user
+const getWatchlistMovies = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  const movies = await Movie.find({_id: {$in: user.watchlist} })
+  .catch(e => res.json({error: e}))
+  res.status(200).json(movies);
+}
+
+// Deletes a selected watchlist movie
+const deleteWatchlistMovie = (req, res) => {
+  const movieId = req.body.movieId;
+  const userId = req.params.id
+
+
+  console.log(`the body is.... ${req.body}`);
+
+  User.findOneAndUpdate(
+    { _id: userId },
+    { $pull: { watchlist: movieId } },
+  )
+  .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
+  .catch(e => { console.log(`potato............ ${e}`); res.status(500).json({error: e})});
 }
 
 module.exports = {
   login,
   signup,
-  watchlist,
+  addMovieToWatchlist,
+  getWatchlistMovies,
+  deleteWatchlistMovie,
 };

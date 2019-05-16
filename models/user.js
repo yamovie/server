@@ -23,7 +23,7 @@ const userSchema = mongoose.Schema(
     preferenceId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Preference',
-      required: false,
+      required: true,
     },
     googleId: String,
     password: String,
