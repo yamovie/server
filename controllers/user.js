@@ -73,18 +73,17 @@ const addMovieToWatchlist = (req, res) => {
 // Gets all the watchlist movies from a user
 const getWatchlistMovies = async (req, res) => {
   const user = await User.findById(req.params.id);
-  const movies = await Movie.find({_id: {$in: user.watchlist} })
+  Movie.find({_id: {$in: user.watchlist} }).populate(
+    'genres offers.buy.provider offers.rent.provider offers.stream.provider',
+  )
+  .then(movies => res.status(200).json(movies))
   .catch(e => res.json({error: e}))
-  res.status(200).json(movies);
 }
 
 // Deletes a selected watchlist movie
 const deleteWatchlistMovie = (req, res) => {
   const movieId = req.body.movieId;
   const userId = req.params.id
-
-
-  console.log(`the body is.... ${req.body}`);
 
   User.findOneAndUpdate(
     { _id: userId },
