@@ -13,6 +13,10 @@ const providerSchema = new mongoose.Schema(
     domains: Array,
     icon_url: String,
     slug: String,
+    monetization_types: {
+      type: Array,
+      required: true,
+    },
     external_ids: {
       jw_id: {
         type: Object,
