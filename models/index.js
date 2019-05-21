@@ -16,7 +16,6 @@ mongoose.connect(`${DB_SCHEME}${DB_HOST}${DB_NAME}`, {
   user: DB_USER,
   pass: DB_KEY,
   appname: 'YaMovie Server',
-
   keepAlive: true,
   retryWrites: true,
   useNewUrlParser: true,
