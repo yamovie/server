@@ -15,9 +15,12 @@ const userSchema = mongoose.Schema(
     streamingService: Object,
     watchlist: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Movie',
-        required: false,
+        watched: Boolean,
+        movieId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'JW_Movie',
+          required: false,
+        }  
       }
     ],
     preferenceId: {
