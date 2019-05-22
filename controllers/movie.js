@@ -1,9 +1,15 @@
 const { Movie } = require('../models');
-const { recommendations } = require('../configs');
+const { recommendations, requests } = require('../configs');
 
 const readBySearch = async (req, res) => {
-  const regex = new RegExp(req.query.searchInput, 'gi')
-  const conditions = Movie.find({$or: [{'title': regex}, {'credits.cast.name': regex}, {'credits.crew.name': regex}]})
+  const regex = new RegExp(req.query.searchInput, 'gi');
+  const conditions = Movie.find({
+    $or: [
+      { title: regex },
+      { 'credits.cast.name': regex },
+      { 'credits.crew.name': regex },
+    ],
+  });
 
   const options = { page: req.query.page || 1 };
 
@@ -49,9 +55,7 @@ const readByGenre = async (req, res) => {
 const readByRecommendation = async (req, res) => {
   console.log(req.body);
 
-  const applicableCerts = recommendations.getCertifications(
-    req.body.certification,
-  );
+  const applicableCerts = recommendations.getCertifications(req.body.certification);
 
   const conditions = {
     genres: { $in: req.body.genres },
@@ -67,6 +71,7 @@ const readByRecommendation = async (req, res) => {
 
   const foundMovies = await Movie.paginate(conditions, {
     page: req.query.page || 1,
+    limit: req.body.max_recs || requests.JW_SEARCH.data.page_size,
   });
   res.json(foundMovies);
 };
