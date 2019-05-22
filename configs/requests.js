@@ -15,7 +15,7 @@ module.exports = {
       providers: null,
       genres: null,
       languages: 'en',
-      release_year_from: 2017,
+      release_year_from: 1992,
       release_year_until: 2018,
       monetization_types: null,
       min_price: null,

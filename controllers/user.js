@@ -73,6 +73,7 @@ const addMovieToWatchlist = (req, res) => {
 // Gets all the watchlist movies from a user
 const getWatchlistMovies = async (req, res) => {
   let movieIds = [];
+  console.log(req.query);
   const watchlist = await User.findById(req.params.id).select('watchlist');
   watchlist.watchlist.forEach(movie => movieIds.push(movie.movieId));
   
@@ -92,7 +93,7 @@ const deleteWatchlistMovie = (req, res) => {
 
   User.findOneAndUpdate(
     { _id: userId },
-    { $pull: { watchlist: movieId } },
+    { $pull: { watchlist: { movieId } } },
   )
   .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
   .catch(e => { console.log(`potato............ ${e}`); res.status(500).json({error: e})});
