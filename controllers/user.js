@@ -62,28 +62,59 @@ function login(req, res) {
 }
 
 const addMovieToWatchlist = (req, res) => {
-  const { userId, movieId } = req.body;
+  console.log('.....Added...');
+  const { userId } = req.params;
+  const { movieId } = req.body;
+
+  console.log(userId, movieId);
   // add to set.
-  User.findByIdAndUpdate(userId, { $addToSet: { watchlist: {movieId, watched: false} }  } )
-    .exec()
+  User.findByIdAndUpdate(userId, { $addToSet: { watchlist: {movieId: movieId, favorite: true, watched: false} }  } )
     .then(res.status(200).json({message: 'added to watchlist'}))
     .catch(err => res.status(401).json(err));
 }
 
 // Gets all the watchlist movies from a user
 const getWatchlistMovies = async (req, res) => {
-  let movieIds = [];
-  console.log(req.query);
-  const watchlist = await User.findById(req.params.id).select('watchlist');
-  watchlist.watchlist.forEach(movie => movieIds.push(movie.movieId));
+  User.findById(req.params.userId)
+  .populate('watchlist.movieId')
+  .select('watchlist')
+  .then(movies => res.json(movies.watchlist));
+  // watchlist.watchlist.forEach(movie => movieIds.push(movie.movieId));
   
   Movie.find({ _id: { $in: movieIds } } )
   .select('images.poster _id')
-  .then(movies => res.status(200).json(movies))
+  .then(movies => {
+    console.log(movies);
+    res.status(200).json(movies)
+  })
   .catch(e => res.status(500).json({error: e}));
   
-
   // watchlistMovies.populate('genres offers.buy.provider offers.rent.provider offers.stream.provider')
+}
+
+// const getWatchlistMovies = async (req, res) => {
+//   let movieIds = [];
+//   const watchlist = await User.findById(req.params.userId).select('watchlist');
+//   watchlist.watchlist.forEach(movie => movieIds.push(movie.movieId));
+  
+//   Movie.find({ _id: { $in: movieIds } } )
+//   .select('images.poster _id')
+//   .then(movies => res.status(200).json(movies))
+//   .catch(e => res.status(500).json({error: e}));
+  
+//   // watchlistMovies.populate('genres offers.buy.provider offers.rent.provider offers.stream.provider')
+// }
+
+const updateWatchlistItem = async (req, res) => {
+  const { userId, movieId } = req.params;
+  const { watched, favorite } = req.body.data;
+  console.log(req.body);
+
+  User.update( 
+    { _id: userId, "watchlist.movieId" : movieId }, 
+    { $set: { 'watchlist.$.watched': watched, 'watchlist.$.favorite': favorite,  } },
+  )
+  .then(something => res.json(something));
 }
 
 // Deletes a selected watchlist movie
@@ -105,6 +136,7 @@ module.exports = {
   addMovieToWatchlist,
   getWatchlistMovies,
   deleteWatchlistMovie,
+  updateWatchlistItem,
 };
 
 //[{watched: false, movieId: '123251gdsg'}, {watched: false, movieId: '123251gdsg'}]

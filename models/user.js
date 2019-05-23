@@ -16,6 +16,7 @@ const userSchema = mongoose.Schema(
     watchlist: [
       {
         watched: Boolean,
+        favorite: Boolean,
         movieId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'JW_Movie',
