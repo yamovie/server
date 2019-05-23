@@ -55,19 +55,26 @@ const readByGenre = async (req, res) => {
 const readByRecommendation = async (req, res) => {
   console.log(req.body);
 
-  const applicableCerts = recommendations.getCertifications(req.body.certification);
+  const { certifications, genres, release, ratings, foreign } = req.body;
+  // const applicableCerts = recommendations.getCertifications(req.body.certification);
+  const applicableCerts = Object.keys(certifications).filter(
+    certKey => certifications[certKey],
+  );
+  const applicableGenres = Object.keys(genres).filter(genreKey => genres[genreKey]);
 
+  // TODO: add provider checking?
   const conditions = {
-    genres: { $in: req.body.genres },
+    genres: { $in: applicableGenres },
     certification: { $in: applicableCerts },
-    release_year: { $gte: req.body.min_year, $lte: req.body.max_year },
-    'ratings.rotten_tomatoes.value': { $gte: req.body.rotten_tomatoes },
-    'ratings.imdb.value': { $gte: req.body.imdb },
+    release_year: { $gte: release.minYear, $lte: release.maxYear },
+    'ratings.rotten_tomatoes.value': {
+      $gte: ratings.rottenTomatoes.minRating,
+      $lte: ratings.rottenTomatoes.maxRating,
+    },
+    'ratings.imdb.value': { $gte: ratings.imdb.minRating, $lte: ratings.imdb.maxRating },
   };
 
-  if (!req.body.foreign) conditions.original_language = 'en';
-  if (req.body.indie)
-    conditions.budget = { $lte: recommendations.INDIE_BUDGET_THRESHOLD };
+  if (!foreign) conditions.original_language = 'en';
 
   const foundMovies = await Movie.paginate(conditions, {
     page: req.query.page || 1,
