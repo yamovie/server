@@ -54,15 +54,14 @@ const readByGenre = async (req, res) => {
 
 const readByRecommendation = async (req, res) => {
   console.log(req.body);
+  const { certifications, genres, release, ratings, providers, foreign } = req.body;
 
-  const { certifications, genres, release, ratings, foreign } = req.body;
   // const applicableCerts = recommendations.getCertifications(req.body.certification);
   const applicableCerts = Object.keys(certifications).filter(
     certKey => certifications[certKey],
   );
   const applicableGenres = Object.keys(genres).filter(genreKey => genres[genreKey]);
 
-  // TODO: add provider checking?
   const conditions = {
     genres: { $in: applicableGenres },
     certification: { $in: applicableCerts },
@@ -73,8 +72,12 @@ const readByRecommendation = async (req, res) => {
     },
     'ratings.imdb.value': { $gte: ratings.imdb.minRating, $lte: ratings.imdb.maxRating },
   };
-
   if (!foreign) conditions.original_language = 'en';
+  // TODO: add provider checking?
+  // if (providers) {
+  //   const applicableProviders = Object.keys(providers).filter(provKey => providers[provKey]);
+  //   conditions['offers.stream[??].provider._id'] = { $in: applicableProviders };
+  // }
 
   const foundMovies = await Movie.paginate(conditions, {
     page: req.query.page || 1,
