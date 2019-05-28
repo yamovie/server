@@ -79,15 +79,13 @@ const getWatchlistMovies = async (req, res) => {
   .populate('watchlist.movieId')
   .select('watchlist')
   .then(movies => res.json(movies.watchlist));
-  // watchlist.watchlist.forEach(movie => movieIds.push(movie.movieId));
-  
-  Movie.find({ _id: { $in: movieIds } } )
-  .select('images.poster _id')
-  .then(movies => {
-    console.log(movies);
-    res.status(200).json(movies)
-  })
-  .catch(e => res.status(500).json({error: e}));
+  // Movie.find({ _id: { $in: movieIds } } )
+  // .select('images.poster _id')
+  // .then(movies => {
+  //   console.log(movies);
+  //   res.status(200).json(movies)
+  // })
+  // .catch(e => res.status(500).json({error: e}));
   
   // watchlistMovies.populate('genres offers.buy.provider offers.rent.provider offers.stream.provider')
 }
@@ -108,10 +106,10 @@ const getWatchlistMovies = async (req, res) => {
 const updateWatchlistItem = async (req, res) => {
   const { userId, movieId } = req.params;
   const { watched, favorite } = req.body.data;
-  console.log(req.body);
+  console.log(req.body.data);
 
   User.update( 
-    { _id: userId, "watchlist.movieId" : movieId }, 
+    { _id: userId, "watchlist._id": movieId }, 
     { $set: { 'watchlist.$.watched': watched, 'watchlist.$.favorite': favorite,  } },
   )
   .then(something => res.json(something));
