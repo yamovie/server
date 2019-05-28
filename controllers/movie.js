@@ -81,7 +81,7 @@ const readByRecommendation = async (req, res) => {
 
   const foundMovies = await Movie.paginate(conditions, {
     page: req.query.page || 1,
-    limit: req.body.max_recs || requests.JW_SEARCH.data.page_size,
+    limit: req.body.maxRecs || requests.JW_SEARCH.data.page_size,
   });
   res.json(foundMovies);
 };
