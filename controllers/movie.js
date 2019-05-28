@@ -1,9 +1,39 @@
 const { Movie } = require('../models');
 const { recommendations } = require('../configs');
 
-const readBySearch = async (req, res) => {
+const readBySearchAll = async (req, res) => {
   const regex = new RegExp(req.query.searchInput, 'gi')
   const conditions = Movie.find({$or: [{'title': regex}, {'credits.cast.name': regex}, {'credits.crew.name': regex}]})
+
+  const options = { page: req.query.page || 1 };
+
+  const foundMovie = await Movie.paginate(conditions, options);
+  return res.json(foundMovie);
+};
+
+const readBySearchTitle = async (req, res) => {
+  const regex = new RegExp(req.query.searchInput, 'gi')
+  const conditions = Movie.find({'title': regex})
+
+  const options = { page: req.query.page || 1 };
+
+  const foundMovie = await Movie.paginate(conditions, options);
+  return res.json(foundMovie);
+};
+
+const readBySearchCast = async (req, res) => {
+  const regex = new RegExp(req.query.searchInput, 'gi')
+  const conditions = Movie.find({'credits.cast.name': regex})
+
+  const options = { page: req.query.page || 1 };
+
+  const foundMovie = await Movie.paginate(conditions, options);
+  return res.json(foundMovie);
+};
+
+const readBySearchCrew = async (req, res) => {
+  const regex = new RegExp(req.query.searchInput, 'gi')
+  const conditions = Movie.find({'credits.crew.name': regex})
 
   const options = { page: req.query.page || 1 };
 
@@ -83,5 +113,8 @@ module.exports = {
   readByRecommendation,
   create,
   insertMany,
-  readBySearch,
+  readBySearchAll,
+  readBySearchTitle,
+  readBySearchCast,
+  readBySearchCrew,
 };
