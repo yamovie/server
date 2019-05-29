@@ -79,6 +79,7 @@ const getWatchlistMovies = async (req, res) => {
   .populate('watchlist.movieId')
   .select('watchlist')
   .then(movies => res.json(movies.watchlist));
+  
   // Movie.find({ _id: { $in: movieIds } } )
   // .select('images.poster _id')
   // .then(movies => {
