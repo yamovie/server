@@ -7,4 +7,4 @@ router.post('/watchlist', controllers.user.addMovieToWatchlist);
 router.get('/watchlist/:id', controllers.user.getWatchlistMovies);
 router.delete('/watchlist/:id', controllers.user.deleteWatchlistMovie);
 
-module.exports = router; 
+module.exports = router;

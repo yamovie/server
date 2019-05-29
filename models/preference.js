@@ -11,10 +11,6 @@ const preferenceSchema = new mongoose.Schema(
       type: Map,
       of: Boolean,
     }, // genres: { [id]: Boolean }
-    currMood: String,
-    animated: Boolean,
-    foreign: Boolean,
-    indie: Boolean,
     certifications: {
       type: Map,
       of: Boolean,
@@ -41,6 +37,11 @@ const preferenceSchema = new mongoose.Schema(
       minYear: Number,
       maxYear: Number,
     },
+    maxRecs: Number,
+    currMood: String,
+    animated: Boolean,
+    foreign: Boolean,
+    indie: Boolean,
   },
   { collection: 'preferences' },
 );

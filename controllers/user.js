@@ -29,17 +29,17 @@ const signup = async (req, res) => {
   newPreference.userId = newUser._id;
 
   Promise.all([newPreference.save(), newUser.save()])
-  .then(savedObjects => {
-    res.json({
-      message: 'Saved',
-      data: savedObjects,
-      token: createJWT(newUser),
+    .then(savedObjects => {
+      res.json({
+        message: 'Saved',
+        data: savedObjects,
+        token: createJWT(newUser),
+      });
+    })
+    .catch(err => {
+      res.status(400).json(err);
     });
-  })
-  .catch(err => {
-    res.status(400).json(err);
-  });
-}
+};
 
 /**
  * Checks user credentials
@@ -64,34 +64,33 @@ function login(req, res) {
 const addMovieToWatchlist = (req, res) => {
   const { userId, movieId } = req.body;
   // add to set.
-  User.findByIdAndUpdate(userId, { $addToSet: { watchlist: movieId } } )
+  User.findByIdAndUpdate(userId, { $addToSet: { watchlist: movieId } })
     .exec()
-    .then(res.status(200).json({message: 'added to watchlist'}))
+    .then(res.status(200).json({ message: 'added to watchlist' }))
     .catch(err => res.status(401).json(err));
-}
+};
 
 // Gets all the watchlist movies from a user
 const getWatchlistMovies = async (req, res) => {
   const user = await User.findById(req.params.id);
-  Movie.find({_id: {$in: user.watchlist} }).populate(
-    'genres offers.buy.provider offers.rent.provider offers.stream.provider',
-  )
-  .then(movies => res.status(200).json(movies))
-  .catch(e => res.json({error: e}))
-}
+  Movie.find({ _id: { $in: user.watchlist } })
+    .populate('genres offers.buy.provider offers.rent.provider offers.stream.provider')
+    .then(movies => res.status(200).json(movies))
+    .catch(e => res.json({ error: e }));
+};
 
 // Deletes a selected watchlist movie
 const deleteWatchlistMovie = (req, res) => {
   const movieId = req.body.movieId;
-  const userId = req.params.id
+  const userId = req.params.id;
 
-  User.findOneAndUpdate(
-    { _id: userId },
-    { $pull: { watchlist: movieId } },
-  )
-  .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
-  .catch(e => { console.log(`potato............ ${e}`); res.status(500).json({error: e})});
-}
+  User.findOneAndUpdate({ _id: userId }, { $pull: { watchlist: movieId } })
+    .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
+    .catch(e => {
+      console.log(`potato............ ${e}`);
+      res.status(500).json({ error: e });
+    });
+};
 
 module.exports = {
   login,
