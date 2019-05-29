@@ -5,6 +5,8 @@ const path = require('path');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
+const MongoStore = require('connect-mongo')(session);
+const mongoose = require('mongoose');
 const { logger } = require('./middleware');
 const { seed } = require('./utils');
 
@@ -22,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
+    store: new MongoStore({mongooseConnection: mongoose.connection }),
     secret: `${SECRET}`,
     resave: false,
     saveUninitialized: true,
