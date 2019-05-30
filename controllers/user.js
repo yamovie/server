@@ -68,9 +68,68 @@ const addMovieToWatchlist = (req, res) => {
 
   console.log(userId, movieId);
   // add to set.
-  User.findByIdAndUpdate(userId, { $addToSet: { watchlist: {movieId: movieId, favorite: true, watched: false} }  } )
-    .then(res.status(200).json({message: 'added to watchlist'}))
-    .catch(err => res.status(401).json(err));
+  // User.findByIdAndUpdate(userId, { $addToSet: { watchlist: {movieId: movieId, favorite: true, watched: false} }  } )
+  //   .then(res.status(200).json({message: 'added to watchlist'}))
+  //   .catch(err => res.status(401).json(err));
+  
+  // User.findByIdAndUpdate(userId, 
+  //   { 'watchlist.movieId': { $ne: { movieId } }},
+  //   {$push: {movieId, favorite: true, watched: false }})
+  //   .then(res.status(200).json({message: 'added to watchlist'}))
+  //   .catch(err => {
+  //     console.log(err);
+  //     res.status(401).json(err);
+  //   })
+
+    const newMovie = { 
+      movieId, 
+      favorite: true, 
+      watched: false 
+    }
+
+    User.find({_id: userId, "watchlist.movieId": movieId })
+    .then(movies => {
+      if (!movies.length) {
+        User.findOneAndUpdate(
+          {_id: userId, "watchlist.movieId" : {$ne : movieId }},
+          { $addToSet: { watchlist: newMovie } },
+          { upsert: false, new: true }
+        )
+        .then(res.status(200).json('Watchlist updated'))
+       } else {
+         console.log('You should get status 304')
+        res.status(304).json('The movie all ready exists');
+      }
+    })
+
+    // User.findOneAndUpdate(
+    //   {_id: userId, "watchlist.movieId" : {$ne : movieId }},
+    //   { $addToSet: { watchlist: newMovie } },
+    //   { upsert: false, new: true },
+    //   (err, result) => {
+    //     if (err) {
+    //       res.status(400).json(err);
+    //     } else {
+    //       res.status(200).json(result);
+    //     }
+    //   }
+    // )
+    // .then(response => { 
+    //   console.log(response);
+    //   res.json(response);
+    // })
+    // .catch(err => { 
+    //   console.log(err);
+    //   res.status(400).json(err);
+    // });
+
+       // .then(res => res.status(200).json({movie: res}))
+    // .catch(e => res.status(400).json({error: e}));
+
+    // Group.update(
+    //   {name: 'admin', 'users.uid': {$ne: user.uid}}, 
+    //   {$push: {users: user}},
+    //   function(err, numAffected) { ... });
 }
 
 // Gets all the watchlist movies from a user
