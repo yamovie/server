@@ -8,4 +8,4 @@ router.get('/:userId/watchlist/', controllers.user.getWatchlistMovies);
 router.delete('/watchlist/:id', controllers.user.deleteWatchlistMovie);
 router.put('/:userId/watchlist/:movieId', controllers.user.updateWatchlistItem);
 
-module.exports = router; 
+module.exports = router;

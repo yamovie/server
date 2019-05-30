@@ -29,17 +29,17 @@ const signup = async (req, res) => {
   newPreference.userId = newUser._id;
 
   Promise.all([newPreference.save(), newUser.save()])
-  .then(savedObjects => {
-    res.json({
-      message: 'Saved',
-      data: savedObjects,
-      token: createJWT(newUser),
+    .then(savedObjects => {
+      res.json({
+        message: 'Saved',
+        data: savedObjects,
+        token: createJWT(newUser),
+      });
+    })
+    .catch(err => {
+      res.status(400).json(err);
     });
-  })
-  .catch(err => {
-    res.status(400).json(err);
-  });
-}
+};
 
 /**
  * Checks user credentials
@@ -62,32 +62,16 @@ function login(req, res) {
 }
 
 const addMovieToWatchlist = (req, res) => {
-  console.log('.....Added...');
   const { userId } = req.params;
   const { movieId } = req.body;
 
-  console.log(userId, movieId);
-  // add to set.
-  // User.findByIdAndUpdate(userId, { $addToSet: { watchlist: {movieId: movieId, favorite: true, watched: false} }  } )
-  //   .then(res.status(200).json({message: 'added to watchlist'}))
-  //   .catch(err => res.status(401).json(err));
-  
-  // User.findByIdAndUpdate(userId, 
-  //   { 'watchlist.movieId': { $ne: { movieId } }},
-  //   {$push: {movieId, favorite: true, watched: false }})
-  //   .then(res.status(200).json({message: 'added to watchlist'}))
-  //   .catch(err => {
-  //     console.log(err);
-  //     res.status(401).json(err);
-  //   })
+  const newMovie = {
+    movieId,
+    favorite: true,
+    watched: false
+  }
 
-    const newMovie = { 
-      movieId, 
-      favorite: true, 
-      watched: false 
-    }
-
-    User.find({_id: userId, "watchlist.movieId": movieId })
+  User.find({_id: userId, "watchlist.movieId": movieId })
     .then(movies => {
       if (!movies.length) {
         User.findOneAndUpdate(
@@ -95,97 +79,43 @@ const addMovieToWatchlist = (req, res) => {
           { $addToSet: { watchlist: newMovie } },
           { upsert: false, new: true }
         )
-        .then(res.status(200).json('Watchlist updated'))
-       } else {
-         console.log('You should get status 304')
+          .then(res.status(200).json('Watchlist updated'))
+      } else {
         res.status(304).json('The movie all ready exists');
       }
     })
-
-    // User.findOneAndUpdate(
-    //   {_id: userId, "watchlist.movieId" : {$ne : movieId }},
-    //   { $addToSet: { watchlist: newMovie } },
-    //   { upsert: false, new: true },
-    //   (err, result) => {
-    //     if (err) {
-    //       res.status(400).json(err);
-    //     } else {
-    //       res.status(200).json(result);
-    //     }
-    //   }
-    // )
-    // .then(response => { 
-    //   console.log(response);
-    //   res.json(response);
-    // })
-    // .catch(err => { 
-    //   console.log(err);
-    //   res.status(400).json(err);
-    // });
-
-       // .then(res => res.status(200).json({movie: res}))
-    // .catch(e => res.status(400).json({error: e}));
-
-    // Group.update(
-    //   {name: 'admin', 'users.uid': {$ne: user.uid}}, 
-    //   {$push: {users: user}},
-    //   function(err, numAffected) { ... });
 }
 
 // Gets all the watchlist movies from a user
 const getWatchlistMovies = async (req, res) => {
   User.findById(req.params.userId)
-  .populate('watchlist.movieId')
-  .select('watchlist')
-  .then(movies => res.json(movies.watchlist));
-  
-  // Movie.find({ _id: { $in: movieIds } } )
-  // .select('images.poster _id')
-  // .then(movies => {
-  //   console.log(movies);
-  //   res.status(200).json(movies)
-  // })
-  // .catch(e => res.status(500).json({error: e}));
-  
-  // watchlistMovies.populate('genres offers.buy.provider offers.rent.provider offers.stream.provider')
+    .populate('watchlist.movieId')
+    .select('watchlist')
+    .then(movies => res.json(movies.watchlist));
 }
-
-// const getWatchlistMovies = async (req, res) => {
-//   let movieIds = [];
-//   const watchlist = await User.findById(req.params.userId).select('watchlist');
-//   watchlist.watchlist.forEach(movie => movieIds.push(movie.movieId));
-  
-//   Movie.find({ _id: { $in: movieIds } } )
-//   .select('images.poster _id')
-//   .then(movies => res.status(200).json(movies))
-//   .catch(e => res.status(500).json({error: e}));
-  
-//   // watchlistMovies.populate('genres offers.buy.provider offers.rent.provider offers.stream.provider')
-// }
 
 const updateWatchlistItem = async (req, res) => {
   const { userId, movieId } = req.params;
   const { watched, favorite } = req.body.data;
-  console.log(req.body.data);
 
-  User.update( 
-    { _id: userId, "watchlist._id": movieId }, 
+  User.update(
+    { _id: userId, "watchlist._id": movieId },
     { $set: { 'watchlist.$.watched': watched, 'watchlist.$.favorite': favorite,  } },
   )
-  .then(something => res.json(something));
+    .then(something => res.json(something));
 }
 
 // Deletes a selected watchlist movie
 const deleteWatchlistMovie = (req, res) => {
-  const movieId = req.body.movieId;
-  const userId = req.params.id
+  const {movieId} = req.body;
+  const userId = req.params.id;
 
   User.findOneAndUpdate(
     { _id: userId },
     { $pull: { watchlist: { movieId } } },
   )
-  .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
-  .catch(e => { console.log(`potato............ ${e}`); res.status(500).json({error: e})});
+    .then(res.status(200).json(`Movie ${movieId} succesfully deleted from watchlist`))
+    .catch(e => res.status(500).json({error: e}));
 }
 
 module.exports = {
@@ -197,4 +127,4 @@ module.exports = {
   updateWatchlistItem,
 };
 
-//[{watched: false, movieId: '123251gdsg'}, {watched: false, movieId: '123251gdsg'}]
+// [{watched: false, movieId: '123251gdsg'}, {watched: false, movieId: '123251gdsg'}]
