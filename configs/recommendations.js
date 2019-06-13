@@ -37,7 +37,6 @@ const certifications = [
 ];
 
 module.exports = {
-  INDIE_BUDGET_THRESHOLD: 1000000,
   getCertifications: target => {
     const foundCert = certifications.find(
       cert => cert.certification === target,
